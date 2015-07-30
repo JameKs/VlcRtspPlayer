@@ -1,0 +1,23 @@
+
+<div class="info_one" id="${id}" style="width: ${width};height:${height}">
+	<div class="info_L" style="width: 100%">
+		<div class="info_title" style="text-align: right;">
+			<h2 style="margin-left: 50%;">${header}</h2>
+			<span>xxx123456789</span>
+		</div>
+		<div class="info_main">${content}</div>
+	</div>
+</div>
+<script>
+$("#${id}").ready(function(){
+	var $info_title=$("#${id}").find('.info_title');
+	var $h2=$info_title.find('h2');
+	var $info_title_w=$info_title.width();
+	var h2_w= $h2.width();
+	var left=($info_title_w-h2_w)/2
+	$h2.css('margin-left',left);
+	
+	//var h = $("#${id}").height()-$("#${id} div.info_L").height();
+	//$("#${id} div.info_main").height(h)
+});
+</script>

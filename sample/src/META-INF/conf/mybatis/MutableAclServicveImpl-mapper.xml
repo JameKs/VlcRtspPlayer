@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qm.frame.security.acl.service.impl.MutableAclServiceImpl">
+   <select id="createAcl" resultMap="vos.fbrpSecAclSidVO" parameterType="java.util.Map">
+    SELECT * FROM fbrp_sec_acl_sid WHERE sid = #{sid} AND principal = #{principal} 
+  </select>
+  
+  <insert id="insert" parameterType="com.qm.frame.security.acl.vo.FbrpSecAclObjectIdentity">
+    INSERT INTO fbrp_sec_acl_object_identity(id,object_id_identity,object_id_class,parent_object,owner_sid,entries_inheriting,ext1,ext2,ext3)
+    VALUES(#{id},#{objectIdIdentity},#{objectIdClass},#{parentObject,jdbcType=VARCHAR},#{ownerSid},#{entriesInheriting},#{ext1,jdbcType=VARCHAR},#{ext2,jdbcType=VARCHAR},#{ext3,jdbcType=VARCHAR})
+  </insert>
+  
+  <select id="isExit" resultType="java.lang.String" parameterType="java.util.Map">
+   SELECT identityvo.id FROM fbrp_sec_acl_class classvo,fbrp_sec_acl_object_identity identityvo 
+   WHERE classvo.class LIKE #{className} AND classvo.id = identityvo.object_id_class AND identityvo.object_id_identity = #{objectIdIdentity}
+  </select>
+  
+  <select id="deleteAcl" resultMap="vos.fbrpSecAclObjectIdentityVO" parameterType="java.util.Map">
+    SELECT classvo.*,objectidentityvo.* FROM fbrp_sec_acl_class classvo, fbrp_sec_acl_object_identity objectidentityvo 
+    WHERE classvo.class LIKE #{className} AND objectidentityvo.object_id_identity = #{objectIdIdentity} and classvo.id = objectidentityvo.object_id_class 
+  </select>
+  
+  <delete id="deleteIdentityVoAndEntries1" parameterType="java.lang.String">
+   DELETE FROM fbrp_sec_acl_entry WHERE acl_object_identity = #{aclObjectIdentity}
+  </delete>
+  
+  <delete id="deleteIdentityVoAndEntries2" parameterType="java.lang.String">
+   DELETE FROM fbrp_sec_acl_object_identity WHERE id= #{id}
+  </delete>
+  
+  <update id="updateAcl" parameterType="java.util.Map">
+    UPDATE fbrp_sec_acl_object_identity SET parent_object = #{parentObject},owner_sid = #{ownerSid}, entries_inheriting = #{entriesInheriting} WHERE id = #{id}
+  </update>
+  
+  <select id="getSid" resultMap="vos.fbrpSecAclSidVO">
+    SELECT * FROM fbrp_sec_acl_sid WHERE principal = #{principal} AND sid = #{sid} 
+  </select>
+  
+  <insert id="insert2" parameterType="com.qm.frame.security.acl.vo.FbrpSecAclSid">
+    INSERT INTO fbrp_sec_acl_sid(id,principal,sid,ext1,ext2,ext3)
+    VALUES(#{id},#{principal},#{sid},#{ext1,jdbcType=VARCHAR},#{ext2,jdbcType=VARCHAR},#{ext3,jdbcType=VARCHAR})
+  </insert>
+  
+</mapper>

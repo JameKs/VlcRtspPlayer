@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE mapper
+	    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+	    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.icanft.cdgl.dao.ICdxxDao">
+	<resultMap id="cdxxMapper" type="Cdxx">
+		<result column="ID" property="id" />
+		<result column="CD_DM" property="cdDm" />
+		<result column="CN_NAME" property="cnName" />
+		<result column="EN_NAME" property="enName" />
+		<result column="URL" property="url" />
+		<result column="IMAGE_URL" property="imageUrl" />
+		<result column="P_ID" property="pId" />
+		<result column="CCSD" property="ccsd" />
+		<result column="CCSX" property="ccsx" />
+		<result column="SORT_NO" property="sortNo" />
+		<result column="LEAF" property="leaf" />
+		<result column="CJR" property="cjr" />
+		<result column="CJ_SJ" property="cjSj" />
+		<result column="XGR" property="xgr" />
+		<result column="XG_SJ" property="xgSj" />
+	</resultMap>
+	
+	<resultMap type="User" id="userMapper">
+		<result column="ID" property="id" />
+		<result column="LOGIN_ID" property="loginId" />
+		<result column="PASSWORD" property="password" />
+		<result column="USER_NAME" property="userName" />
+		<result column="BM_DM" property="bmDm" />
+		<result column="PHONE" property="phone" />
+		<result column="EMAIL" property="email" />
+		<result column="GW_ID" property="gwId" />
+		<result column="DEPT_ID" property="deptId" />
+		<result column="STATUS" property="status" />
+		<result column="ACTIVE" property="active" />
+		<result column="SESSION_OUT_JXJY_TIME" property="sessionOutTime" />
+		<result column="CJR" property="cjr" />
+		<result column="CJ_SJ" property="cjSj" />
+		<result column="XGR" property="xgr" />
+		<result column="XG_SJ" property="xgSj" />
+	</resultMap>
+	
+	<resultMap type="Dept" id="deptMapper">
+		<result column="ID" property="id" />
+		<result column="DEPT_DM" property="deptDm" />
+		<result column="DEPT_MC" property="deptMc" />
+		<result column="CJR" property="cjr" />
+		<result column="CJ_SJ" property="cjSj" />
+		<result column="XGR" property="xgr" />
+		<result column="XG_SJ" property="xgSj" />
+	</resultMap>
+	
+	<resultMap type="Gw" id="gwMapper">
+		<result column="ID" property="id" />
+		<result column="GW_DM" property="gwDm" />
+		<result column="GW_MC" property="gwMc" />
+		<result column="DEPT_ID" property="deptId" />
+		<result column="CJR" property="cjr" />
+		<result column="CJ_SJ" property="cjSj" />
+		<result column="XGR" property="xgr" />
+		<result column="XG_SJ" property="xgSj" />
+	</resultMap>
+
+	<insert id="insert" parameterType="Cdxx">
+		insert into T_JXJY_CDXX
+		(CD_DM,CN_NAME, EN_NAME,URL,P_ID,CCSD,CCSX,LEAF,CJR,SORT_NO)
+		values (#{cdDm}, #{cnName}, #{enName}, #{url}, #{pId}, #{ccsd},
+		#{ccsx}, #{leaf},#{cjr},#{ccsd}*#{ccsx},)
+	</insert>
+
+	<delete id="delete" parameterType="string">
+		delete from T_JXJY_CDXX where id = #{id}
+	</delete>
+
+	<update id="update" parameterType="Cdxx">
+		update T_JXJY_CDXX set xgr = #{xgr} ,xg_sj = sysdate,
+			CN_NAME=#{cnName},EN_NAME=#{enName} ,
+			URL=#{url} ,CCSD=#{ccsd},CCSX=#{ccsx},
+			SORT_NO=#{ccsd}*#{ccsx},LEAF=#{leaf}
+		where id = #{id}
+	</update>
+
+	<select id="findById" parameterType="string" resultMap="cdxxMapper">
+		SELECT * FROM T_JXJY_CDXX where id = #{id}
+	</select>
+
+	<select id="findAll" parameterType="string" resultMap="cdxxMapper">
+		SELECT * FROM T_JXJY_CDXX 
+		<where>
+			<if test="_parameter =='treeHasNoRoot'">
+				p_id != '0'
+			</if>
+		</where>
+	</select>
+	
+	<select id="findAllUserMenu" parameterType="string"
+		resultMap="cdxxMapper">
+		select c.*
+		from T_JXJY_CDXX C, T_JXJY_ROLE ROLE, T_JXJY_USER_ROLE RR, T_JXJY_ROLE_CD rc
+		where rr.role_ID = role.ID
+			and role.ID = rc.role_ID
+			and C.ID = rc.CD_ID
+			and c.p_id != '0'
+			and rr.USER_ID = #{userId}
+			order by c.sort_no
+	</select>
+
+	<!-- 查询当前菜单的子菜单个数 -->
+	<select id="getNodesByIdAndUserId" parameterType="hashMap"
+		resultMap="cdxxMapper">
+		select c.*
+		from T_JXJY_CDXX C, T_JXJY_ROLE ROLE, T_JXJY_USER_ROLE RR, T_JXJY_ROLE_CD rc
+		where rr.role_ID = role.ID
+			and role.ID = rc.role_ID
+			and C.ID = rc.CD_ID
+			and C.P_ID = #{pId}
+			and rr.USER_ID = #{userId}
+			order by c.ccsd,c.ccsx
+	</select>
+
+	<!-- 查询当前菜单的子菜单 -->
+	<select id="getChildrenNodes" parameterType="string" resultMap="cdxxMapper">
+		select * from T_JXJY_CDXX where P_ID= #{pId} order by ccsx
+	</select>
+
+	<!-- 查询当前菜单的子菜单个数 -->
+	<select id="getWdscjByUserId" parameterType="string" resultMap="cdxxMapper">
+		select cd.*
+		from T_JXJY_CDXX CD ,T_JXJY_WDSCJ W
+		where W.CD_ID = CD.ID
+		and W.USER_ID = #{userId}
+		order by cd.ccsd,cd.ccsx
+	</select>
+	
+	<!-- 查询当前菜单的子菜单个数 -->
+	<select id="getAllDept" parameterType="string" resultMap="deptMapper">
+		select * from T_JXJY_DEPT
+	</select>
+	
+	<!-- 查询当前菜单的子菜单个数 -->
+	<select id="getAllGw" resultMap="gwMapper">
+		select * from T_JXJY_GW
+	</select>
+	
+	<!-- 查询当前菜单的子菜单个数 -->
+	<select id="getAllUser" resultMap="userMapper">
+		select * from T_JXJY_USER
+	</select>
+
+</mapper>

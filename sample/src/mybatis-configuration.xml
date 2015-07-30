@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.icanft.xtgl.yhgl.vo.User" alias="User" />
+		<typeAlias type="com.icanft.cdgl.vo.Cdxx" alias="Cdxx" />
+		<typeAlias type="com.icanft.cdgl.vo.Dept" alias="Dept" />
+		<typeAlias type="com.icanft.cdgl.vo.Gw" alias="Gw" />
+		<typeAlias type="com.icanft.cdgl.vo.Menu" alias="Menu" />
+		<typeAlias type="com.icanft.jsgl.vo.Role" alias="Role" />
+		<typeAlias type="com.icanft.jssq.vo.CdxxRole" alias="CdxxRole" />
+		<typeAlias type="com.icanft.jssq.vo.RoleCd" alias="RoleCd" />
+		<typeAlias type="com.icanft.qjgl.vo.Qjxx" alias="Qjxx" />
+		<typeAlias type="com.icanft.common.wf.rw.vo.WfRw" alias="WfRw" />
+		<typeAlias type="com.icanft.common.wf.rw.vo.WfSpyj" alias="Spyj" />
+	</typeAliases>
+
+</configuration>

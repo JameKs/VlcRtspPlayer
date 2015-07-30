@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/aop 
+           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd  
+           http://www.springframework.org/schema/tx 
+           http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+           
+	<bean id="wfRwService" class="com.icanft.common.wf.rw.service.impl.WfRwServiceImpl">
+		<property name="wfRwDao" ref ="wfRwDao" />
+		<property name="runtimeService" ref ="runtimeService" />
+		<property name="repositoryService" ref ="repositoryService" />
+		<property name="taskService" ref ="taskService" />
+		<property name="historyService" ref ="historyService" />
+	</bean>
+	
+	<bean id="loginService" class="com.icanft.common.login.service.impl.LoginServiceImpl">
+		<property name="userDao" ref="userDao" />
+	</bean>
+	
+	<bean id="ehcacheCacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation">
+			<value>classpath:ehcache.xml</value>
+		</property>
+	</bean>
+	
+	<!-- 
+	<bean id="ryxxServiceCache" class="com.icanft.rygl.service.impl.RyxxServiceCacheImpl">
+		<property name="ryxxService">
+			<ref bean="ryxxService" />
+		</property>
+		<property name="cacheManager" ref="ehcacheCacheManager" />
+	</bean>
+	 -->
+	<bean id="userService" class="com.icanft.xtgl.yhgl.service.impl.UserServiceImpl">
+		<property name="userDao" ref="userDao" />
+	</bean>
+	
+	<bean id="cdxxService" class="com.icanft.cdgl.service.impl.CdxxServiceImpl">
+		<property name="cdxxDao" ref="cdxxDao" />
+	</bean>
+	
+	<bean id="roleService" class="com.icanft.jsgl.service.impl.RoleServiceImpl">
+		<property name="roleDao" ref="roleDao" />
+	</bean>
+	
+	<bean id="jssqService" class="com.icanft.jssq.service.impl.JssqServiceImpl">
+		<property name="jssqDao" ref="jssqDao" />
+	</bean>
+	
+	<bean id="lcglService" class="com.icanft.xtgl.lcgl.service.impl.LcglServiceImpl">
+		<property name="repositoryService" ref ="repositoryService" />
+		<property name="runtimeService" ref ="runtimeService" />
+		<property name="managementService" ref ="managementService" />
+	</bean>
+	
+	<bean id="qjglService" class="com.icanft.qjgl.service.impl.QjglServiceImpl">
+		<property name="qjglDao" ref ="qjglDao" />
+		<property name="wfRwService" ref ="wfRwService" />
+	</bean>
+	
+	<bean id="processManageService" class="com.icanft.common.wf.service.impl.ProcessManageServiceImpl">
+		<property name="repositoryService" ref ="repositoryService" />
+		<property name="runtimeService" ref ="runtimeService" />
+		<property name="historyService" ref ="historyService" />
+		<property name="taskService" ref ="taskService" />
+		<property name="userService" ref ="userService" />
+		<property name="roleService" ref ="roleService" />
+	</bean>
+	
+</beans>

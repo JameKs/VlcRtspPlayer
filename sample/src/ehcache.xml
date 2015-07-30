@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+	<diskStore path="java.io.tmpdir"/>
+	<!-- 纳税人信息缓存区，预计支持5万纳税人，超时时间为1个小时 -->
+	<cache name="user" maxElementsInMemory="5000"
+		maxElementsOnDisk="0" eternal="false" overflowToDisk="true"
+		timeToIdleSeconds="3600"
+		timeToLiveSeconds="3600" diskExpiryThreadIntervalSeconds="240" memoryStoreEvictionPolicy="LFU" />
+		
+	<!-- 省内手机号码，预计支持3万手机号码段，超时时间为5小时 -->
+	<cache name="snsjhm" maxElementsInMemory="30000"
+		maxElementsOnDisk="0" eternal="false" overflowToDisk="true"
+		timeToIdleSeconds="18000"
+		timeToLiveSeconds="18000" diskExpiryThreadIntervalSeconds="240" memoryStoreEvictionPolicy="LFU" />
+		
+    <defaultCache
+            maxElementsInMemory="5000"
+            eternal="false"
+            timeToIdleSeconds="30"
+            timeToLiveSeconds="30"
+            overflowToDisk="true"
+            maxElementsOnDisk="1000"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="240"
+            memoryStoreEvictionPolicy="LRU"
+            />
+</ehcache>

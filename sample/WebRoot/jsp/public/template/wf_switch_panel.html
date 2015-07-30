@@ -1,0 +1,28 @@
+<div id="${id}" style="width: ${width};height:${height}" class="option_car">
+	<div class="option_carT">
+		<ul class="tab">
+			<!-- <li class="current"><a href="#"><span>营业税</span></a></li> -->
+		</ul>
+		<div class="filterItemDiv">
+        
+        </div>
+        <ul class="ui-table-toolbar">
+        	
+        </ul> 
+	</div>
+	<div class="option_carM option_carM_lw" style=" overflow: hidden;">
+	${contents}
+	</div>
+</div>
+
+
+<script>
+var ${id}_ip = {
+		ctx:'${ctx}',
+		items:${items},
+		onSwitch:${onSwitch}
+};
+var ${id} = new FbrpSwitchPanel("${id}",${id}_ip);
+${id}.init();
+
+</script>

@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qm.frame.security.staff.service.impl.StaffServiceImpl">
+  	
+  	<sql id="common_condition1">
+			and r.del_flag = #{delFlag}
+			<if test="staffCode!=null">
+			and r.code like #{staffCode}
+			</if>
+			<if test="staffName!=null">
+			and r.name like #{staffName}
+			</if>
+			<if test="loginId!=null">
+				and r.login_id like #{loginId}
+			</if>
+			<if test="adminStaffId!=null">
+			and r.id != #{adminStaffId}
+			</if>	
+	</sql>
+   	
+   	<sql id="common_condition2">
+			where r.del_flag = #{delFlag} AND r.code != 'SUPADMIN' AND NVL(e.status, '1') &lt;&gt; '0'
+			AND e.accountname=r.code 
+			AND r.status = '1'
+			<if test="staffCode!=null">
+			and r.code like #{staffCode}
+			</if>
+			<if test="staffName!=null">
+			and r.name like #{staffName}
+			</if>
+			<if test="loginId!=null and accLoginFlag!=null">
+				and r.login_id = #{loginId}
+			</if>
+			<if test="loginId!=null and accLoginFlag==null">
+				and r.login_id like #{loginId}
+			</if>
+			<if test="adminStaffId!=null">
+			and r.id != #{adminStaffId}
+			</if>
+			<if test="roleId!=null">
+			and r.id in (select rm.staff_id from fbrp_sec_role_member rm where rm.role_id=#{roleId})
+			</if>	
+			<if test="orgId!=null">
+			and r.id in (select rm.staff_id from fbrp_sec_org_member rm where rm.org_id=#{orgId})
+			</if>
+			<if test="orgCode!=null and orgCode!=''  ">
+		     AND e.orgcode IN ( SELECT  tsp_.orgcode  FROM  t_gy_uuv_org tsp_   START  WITH  tsp_.orgcode =#{orgCode}  CONNECT BY PRIOR  tsp_.orgcode = tsp_.parentcode) 
+	        </if>	
+   	</sql>
+	
+	<select id="queryByParamfilter" parameterType="java.util.Map" resultMap="vos.fbrpSecStaffVO">
+		select r from fbrp_sec_staff r where r.id in(
+			select om.staff_id from fbrp_sec_org_member om where  om.org_id=#{orgId} and om.relation_type='0'
+			)
+			<include refid="common_condition1"/>
+			order by r.created_Time desc
+	</select>
+	
+	<select id="queryByParamfilter_count" parameterType="java.util.Map" resultType="java.lang.Long">
+		select count(*) from fbrp_sec_staff r where r.id in(
+			select om.staff_id from fbrp_sec_org_member om where  om.org_id=#{orgId} and om.relation_type='0'
+			)
+		<include refid="common_condition1"/>
+	</select>
+	
+	<select id="queryStaffByGrantOrg" parameterType="java.util.Map" resultMap="vos.fbrpSecStaffVO">
+		select * from fbrp_sec_staff r where r.id in(
+			select om.staff_id from fbrp_sec_org_member om where  om.org_id=#{orgId} and om.relation_type='0'
+			)
+		<include refid="common_condition1"/>
+	</select>
+	
+	<select id="queryStaffByGrantOrg_count" parameterType="java.util.Map" resultType="java.lang.Long">
+		select count(*) from fbrp_sec_staff r where r.id in(
+			select om.staff_id from fbrp_sec_org_member om where  om.org_id=#{orgId} and om.relation_type='0'
+			)
+		<include refid="common_condition1"/>
+	</select>
+	
+	<select id="queryStaffNoContainOrg" parameterType="java.util.Map" resultMap="vos.fbrpSecStaffVO">
+	   select * from fbrp_sec_staff r where r.id not in(select om.staff_id from fbrp_sec_org_member om 
+	     where ((om.relation_type='0') or (om.org_id= #{orgId} and om.relation_type='1'))) and r.id <![CDATA[<>]]> #{staffId}
+	     <include refid="common_condition1"/>
+	</select>
+	
+	<select id="queryStaffNoContainOrg_count" parameterType="java.util.Map" resultType="java.lang.Long">
+	   select count(*) from fbrp_sec_staff r where r.id not in(select om.staff_id from fbrp_sec_org_member om 
+	     where ((om.relation_type='0') or (om.org_id= #{orgId} and om.relation_type='1'))) and r.id <![CDATA[<>]]>  #{staffId}
+	     <include refid="common_condition1"/>
+	</select>
+
+	<select id="queryStaffByContainOrg" parameterType="java.util.Map" resultMap="vos.fbrpSecStaffVO">
+	  select * from fbrp_sec_staff r where r.id in(select om.staff_id from fbrp_sec_org_member om 
+	  where om.org_id = #{orgId}  and om.relation_type='0')
+	  <include refid="common_condition1"/>
+	</select>
+	
+	<select id="queryStaffByContainOrg_count" parameterType="java.util.Map" resultType="java.lang.Long">
+	  select count(*) from fbrp_sec_staff r where r.ID in(select om.staff_id from fbrp_sec_org_member om 
+	  where om.ORG_ID = #{orgId}  and om.RELATION_TYPE='0')
+	  <include refid="common_condition1"/>
+	</select>
+		
+	<select id="queryStaffNOGrantOrg" parameterType="java.util.Map" resultMap="vos.fbrpSecStaffVO">
+	  select * from fbrp_sec_staff r where r.ID not in(select om.staff_id from fbrp_sec_org_member om 
+	  where  om.ORG_ID= #{orgId}) and r.ID <![CDATA[<>]]> #{staffId}
+	  <include refid="common_condition1"/>
+	</select>
+		
+	<select id="queryStaffNOGrantOrg_count" parameterType="java.util.Map" resultType="java.lang.Long">
+	  select count(*) from fbrp_sec_staff r where r.ID not in(select om.staff_id from fbrp_sec_org_member om 
+	  where  om.org_id= #{orgId}) and r.id <![CDATA[<>]]> #{staffId}
+	  <include refid="common_condition1"/>
+	</select> 
+	
+	<select id="queryStaffByOrg" parameterType="java.util.Map" resultMap="vos.fbrpSecStaffVO">
+	 select r.* from fbrp_sec_staff r, fbrp_sec_org_member om where r.ID=om.staff_id
+	 <if test="orgId!=null">and om.org_id = #{orgId}</if>
+	 <include refid="common_condition1"/>
+	</select>
+	
+	<select id="queryStaffByOrg_count" parameterType="java.util.Map" resultType="java.lang.Long">
+	 select count(*) from fbrp_sec_staff r, fbrp_sec_org_member om where r.ID=om.staff_id
+	 <include refid="common_condition1"/>
+	</select>
+	
+	<select id="select_byParam" parameterType="java.util.Map" resultMap="vos.fbrpSecStaffVO">
+	  SELECT r.id, r.code, r.name, r.login_id, r.sex, r.email, r.tel, 
+	  r.sjssjg_dm,(SELECT DECODE(NVL(U.PARENTNAMES, '1'), '1', U.ORGNAME, U.PARENTNAMES || '-' || U.ORGNAME)
+             FROM T_GY_UUV_ORG U WHERE U.ORGCODE = E.ORGCODE) as orgName, u.orgcode
+	  FROM Fbrp_Sec_Staff r,t_gy_uuv_user e
+	  LEFT JOIN t_gy_uuv_org u ON e.orgcode=u.orgcode
+	 <include refid="common_condition2"/>
+	</select>
+	
+	<select id="select_byParam_count" parameterType="java.util.Map" resultType="Long">
+	  SELECT count(1) FROM fbrp_sec_staff r,t_gy_uuv_user e 
+	 <include refid="common_condition2"/>
+	</select>
+	
+	<select id="selectMemberById" parameterType="com.qm.frame.security.staff.vo.FbrpSecStaff" resultMap="vos.fbrpSecStaffVO">
+		SELECT staff.id, staff.code,staff.name,staff.sjssjg_dm as orgCode,u.parentnames|| '-' || u.orgname as orgName
+		FROM fbrp_sec_staff staff
+		INNER JOIN t_gy_uuv_user e ON e.accountname = staff.code 
+        LEFT JOIN t_gy_uuv_org u ON staff.sjssjg_dm =u.orgcode
+		WHERE (NOT EXISTS 
+		(SELECT 1 
+		FROM fbrp_sec_role_member rm
+        WHERE rm.staff_id = staff.id AND rm.role_id = #{roleid})) AND staff.code != 'SUPADMIN'
+        AND e.status = '1'
+        AND staff.status = '1'
+	    <include refid="common_condition4"/>
+	</select>
+	
+	<select id="selectMemberById_count" parameterType="com.qm.frame.security.staff.vo.FbrpSecStaff" resultType="Long">
+		SELECT COUNT(1)
+		FROM fbrp_sec_staff staff 
+		INNER JOIN t_gy_uuv_user e ON e.accountname = staff.code 
+		LEFT JOIN t_gy_uuv_org u ON staff.sjssjg_dm =u.orgcode
+		WHERE (NOT EXISTS 
+		(SELECT 1 
+		FROM fbrp_sec_role_member rm
+        WHERE rm.staff_id = staff.id AND rm.role_id = #{roleid})) AND staff.code != 'SUPADMIN'
+        AND e.status = '1'
+        AND staff.status = '1'
+	  	<include refid="common_condition4"/>
+	</select>
+	
+ 	<sql id="common_condition4">
+	    <if test="code!=null and code!=''"> AND staff.code LIKE CONCAT(CONCAT('%',#{code}),'%')</if>
+		<if test="name!=null and name!=''"> AND staff.name LIKE CONCAT(CONCAT('%',#{name}),'%')</if>
+	     <if test="orgCode!=null and orgCode!=''  ">
+		    AND staff.sjssjg_dm = ANY( SELECT  tsp_.orgcode  FROM  t_gy_uuv_org tsp_   START  WITH  tsp_.orgcode =#{orgCode}  CONNECT BY PRIOR  tsp_.orgcode = tsp_.parentcode) 
+		 </if>
+	</sql>
+	
+	<sql id="common_condition5">
+	    <if test="roleid!=null and roleid!=''"> AND rm.role_id = #{roleid}</if>
+	    <if test="code!=null and code!=''"> AND staff.code LIKE CONCAT(CONCAT('%',#{code}),'%')</if>
+		<if test="name!=null and name!=''"> AND staff.name LIKE CONCAT(CONCAT('%',#{name}),'%')</if>
+	     <if test="orgCode!=null and orgCode!=''  ">
+		    AND staff.sjssjg_dm = ANY( SELECT  tsp_.orgcode  FROM  t_gy_uuv_org tsp_   START  WITH  tsp_.orgcode =#{orgCode}  CONNECT BY PRIOR  tsp_.orgcode = tsp_.parentcode) 
+		 </if>
+	</sql>
+	
+	<select id="selectExistedMemberById" parameterType="com.qm.frame.security.staff.vo.FbrpSecStaff" resultMap="vos.fbrpSecStaffVO">
+	 SELECT a.*,b.parentnames|| '-' || b.orgname as orgName FROM 
+	 (SELECT staff.id, staff.code, staff.name,staff.sjssjg_dm as orgCode
+    FROM fbrp_sec_staff staff ,fbrp_sec_role_member rm 
+    WHERE staff.id = rm.staff_id 
+    AND staff.status = '1'
+    <include refid="common_condition5"/>
+    ) a 
+    LEFT JOIN t_gy_uuv_org b ON a.orgCode =b.orgcode
+	</select>
+	
+	<select id="selectExistedMemberById_count" parameterType="com.qm.frame.security.staff.vo.FbrpSecStaff" resultType="Long">
+	  SELECT count(1) 
+	  FROM fbrp_sec_staff staff ,fbrp_sec_role_member rm 
+	  WHERE staff.id = rm.staff_id 
+	  AND staff.status = '1'
+	  <include refid="common_condition5"/>
+	</select>
+		
+	<insert id="addMember" parameterType="com.qm.frame.security.role.vo.FbrpSecRoleMember">
+		INSERT INTO fbrp_sec_role_member t (t.id,t.role_id,t.staff_id,t.status,t.del_flag) VALUES (#{id},#{roleId},#{staffId},'1','n')
+	</insert>
+	
+	<delete id="deleteMember" parameterType="com.qm.frame.security.role.vo.FbrpSecRoleMember">
+		DELETE FROM fbrp_sec_role_member t WHERE t.role_id=#{roleId} AND t.staff_id=#{staffId}
+	</delete>
+	
+	<insert id="addUser" parameterType="com.qm.frame.security.staff.vo.StaffUumVO">
+		INSERT INTO t_gy_uuv_user t 
+		(t.userid,t.accountname,t.username,t.fullname,t.email,
+		t.officephone,t.mobile,t.idno,t.birthday,t.sex,t.orgcode,
+		t.status,t.createdate,t.cjr_dm,t.cjsj)
+		VALUES
+		(#{userId, jdbcType=VARCHAR},#{accountName, jdbcType=VARCHAR},#{userName, jdbcType=VARCHAR},
+		#{fullName, jdbcType=VARCHAR},#{email, jdbcType=VARCHAR},#{officephone, jdbcType=VARCHAR},
+		#{mobile, jdbcType=VARCHAR},#{idNo, jdbcType=VARCHAR},#{birthday, jdbcType=TIMESTAMP},
+		#{sex, jdbcType=VARCHAR},#{orgCode, jdbcType=VARCHAR},'1',SYSDATE,#{cjrDm, jdbcType=VARCHAR},SYSDATE)
+	</insert>
+	
+	<!-- 同步添加人员 -->
+	<insert id="addUserOfChange" parameterType="java.lang.String">
+		INSERT INTO t_gy_uuv_user t 
+		(t.userid,t.accountname,t.username,t.fullname,t.email,t.orgid,
+		t.officephone,t.mobile,t.idno,t.birthday,t.sex,t.orgcode,t.showorder,
+		t.dutyid,t.internalcode,t.pwdupdate,t.freezetime,t.creater,
+		t.userlevel,t.mailsize,t.servicelevel,t.leader,t.orgname,
+		t.lastlogin,t.lastmodify,t.status,t.createdate,t.cjr_dm,t.cjsj)
+		SELECT t1.userid,t1.accountname,t1.username,t1.fullname,t1.email,t1.orgid,
+		t1.officephone,t1.mobile,t1.idno,t1.birthday,t1.sex,t1.orgcode,t1.ord,
+		t1.dutyid,t1.internalcode,t1.pwdupdate,t1.freezetime,t1.createrid,
+		t1.userlevel,t1.mailsize,t1.servicelevel,t1.leaderid,o.orgname,
+		t1.lastlogin,t1.lastmodify,DECODE(t1.status, '2', '1', t1.status) AS status,
+		t1.createdate,t1.creatercode,SYSDATE
+		FROM t_gy_uuv_user_uum t1
+		LEFT JOIN t_gy_uuv_org o ON t1.orgcode = o.orgcode
+		WHERE t1.id = #{id}
+	</insert>
+	
+	<select id="selectUserOrg" parameterType="com.qm.frame.security.staff.vo.StaffOAVO" resultType="java.lang.Long">
+		SELECT COUNT(1) FROM t_gy_uuv_user t
+		WHERE t.accountname = #{accountName}
+		AND t.orgcode = #{orgCode}
+	</select>
+	
+	<insert id="addUserOfChangeToMov" parameterType="com.qm.frame.security.staff.vo.StaffOAVO">
+		UPDATE t_gy_uuv_user t SET
+		(t.orgid,t.orgcode,t.orgname,t.xgr_dm,t.xgsj)
+		= (SELECT t1.orgid,t1.orgcode,o.orgname,#{xgrDm},SYSDATE
+		FROM t_gy_uuv_user_uum t1
+		LEFT JOIN t_gy_uuv_org o ON t1.orgcode = o.orgcode
+		WHERE t1.id = #{id})
+		WHERE t.accountname = #{accountName}
+	</insert>
+	
+	<!-- 同步修改人员 -->
+	<update id="updateUserOfChange" parameterType="java.util.Map">
+		UPDATE t_gy_uuv_user t SET
+		(t.accountname,t.username,t.fullname,t.email,t.orgid,t.showorder,
+		t.officephone,t.mobile,t.idno,t.birthday,t.sex,t.orgcode,
+		t.dutyid,t.internalcode,t.pwdupdate,t.freezetime,t.creater,
+		t.userlevel,t.mailsize,t.servicelevel,t.leader,t.orgname,
+		t.lastlogin,t.lastmodify,t.status,t.createdate,t.xgr_dm,t.xgsj)
+		= (SELECT t1.accountname,t1.username,t1.fullname,t1.email,t1.orgid,t1.ord,
+		t1.officephone,t1.mobile,t1.idno,t1.birthday,t1.sex,t1.orgcode,
+		t1.dutyid,t1.internalcode,t1.pwdupdate,t1.freezetime,t1.createrid,
+		t1.userlevel,t1.mailsize,t1.servicelevel,t1.leaderid,o.orgname,
+		t1.lastlogin,t1.lastmodify,DECODE(t1.status, '2', '1', t1.status) AS status,
+		t1.createdate,#{xgrDm},SYSDATE
+		FROM t_gy_uuv_user_uum t1
+		LEFT JOIN t_gy_uuv_org o ON t1.orgcode = o.orgcode
+		WHERE t1.id = #{id})
+		WHERE t.accountname = #{accountName}
+	</update>
+	
+	<update id="updateStaffOfChange" parameterType="java.util.Map">
+		UPDATE fbrp_sec_staff t SET
+		(t.email,t.tel,t.mobile_tel,t.id_number,t.birthday,t.sex,
+		t.status,t.xgr_dm,t.xgsj)
+		= (SELECT t1.email,t1.officephone,t1.mobile,t1.idno,t1.birthday,t1.sex,
+		DECODE(t1.status, '2', '1', t1.status) AS status,#{xgrDm},SYSDATE
+		FROM t_gy_uuv_user_uum t1
+		LEFT JOIN t_gy_uuv_org o ON t1.orgcode = o.orgcode
+		WHERE t1.id = #{id})
+		WHERE t.code = #{accountName}
+	</update>
+	
+	<!-- 同步移动人员 -->
+	<update id="updateUserOfChangeMov" parameterType="com.qm.frame.security.staff.vo.StaffOAVO">
+		UPDATE t_gy_uuv_user t SET
+		(t.orgid,t.orgcode,t.orgname,t.xgr_dm,t.xgsj)
+		= (SELECT t1.orgid AS orgid,
+		t1.orgcode AS orgcode,o.orgname,#{xgrDm},SYSDATE
+		FROM t_gy_uuv_user_uum t1
+		LEFT JOIN t_gy_uuv_org o ON t1.orgcode = o.orgcode
+		WHERE t1.id = #{id})
+		WHERE t.accountname = #{accountName}
+	</update>
+	
+	<update id="updateStaffMov" parameterType="com.qm.frame.security.staff.vo.StaffOAVO">
+		UPDATE fbrp_sec_staff s SET
+		(s.sjssjg_dm,s.xgr_dm,s.xgsj)
+		= (SELECT u.orgcode AS sjssjg_dm,#{xgrDm},SYSDATE
+		FROM t_gy_uuv_user u
+		WHERE u.accountname = #{accountName}
+		AND u.orgcode IN (SELECT orgcode FROM t_gy_uuv_org))
+		WHERE s.code = #{accountName}
+	</update>
+	
+	<update id="updateYhqxjgMov" parameterType="com.qm.frame.security.staff.vo.StaffOAVO">
+		UPDATE t_admin_yhqxjg SET (ID,accountname,orgcode,zswjgbz,deptcode,xgr_dm,xgsj)
+      	= (SELECT t1.userid,t1.accountname,
+      	F_MAIN_GLZN_BYORGCODE(t1.orgcode) AS orgcode,'1' AS zswjgbz,
+      	t1.orgcode,#{xgrDm},SYSDATE
+      	FROM t_gy_uuv_user t1 
+      	WHERE t1.accountname = #{accountName}
+		AND t1.orgcode IN (SELECT orgcode FROM t_gy_uuv_org))
+		WHERE accountname = #{accountName}
+		AND zswjgbz = '1'
+	</update>
+	
+	<delete id="deleteRoleMember" parameterType="java.lang.String">
+		DELETE FROM fbrp_sec_role_member t 
+		WHERE t.staff_id = 
+		(SELECT s.id FROM fbrp_sec_staff s
+		WHERE s.code = #{accountname})
+	</delete>
+	
+	<!-- 添加用户权限机构信息 -->
+	<insert id="insertYhqxjg" parameterType="java.lang.String">
+		INSERT INTO t_admin_yhqxjg(ID,accountname,orgcode,zswjgbz,deptcode,cjsj)
+      	SELECT t1.userid,t1.accountname,F_MAIN_GLZN_BYORGCODE(t1.orgcode) AS orgcode,'1' AS zswjgbz,t1.orgcode,SYSDATE
+      	FROM t_gy_uuv_user t1 
+      	WHERE t1.accountname = #{accountName}
+		AND t1.orgcode IN (SELECT orgcode FROM t_gy_uuv_org)
+	</insert>
+	
+	<!-- 排重同步用户信息 -->
+	<sql id="conditionSQL">
+		WITH user_uum AS (SELECT a.accountname,max(a.logid) AS logid
+		FROM t_gy_uuv_user_uum a 
+		WHERE a.actiontype = #{actionType} 
+		<if test="actionType != null and actionType != '' and actionType == 'ADD'">
+		AND a.status != '0'
+		AND a.flag = '1'
+		</if>
+		GROUP BY a.accountname)
+	</sql>
+	
+	<!-- 查询同步用户信息 -->
+	<select id="selectUser" parameterType="java.util.Map" resultMap="vos.staffOAVO">
+		<include refid="conditionSQL"/>
+		SELECT t.id,t.logid,t.logtime,t.actiontype,t.userid,t.username,t.accountname,t.fullname,t.email,t.orgid,
+			   t.orgcode,t.dutyid,t.dutycode,t.leaderid,t.idno,t.birthday,t.mailsize,t.servicelevel,t.ord,t.status,
+			   t.createdate,t.createrid,t.creatercode,t.freezetime,t.pwdupdate,t.lastlogin,t.lastmodify,t.description,
+			   t.officephone,t.mobile,t.userlevel,t.sex,t.internalcode,t.fromorgId,t.fromorgcode
+		FROM t_gy_uuv_user_uum t,
+		user_uum u
+		<where>
+		t.accountname = u.accountname
+		AND t.logid = u.logid
+		AND t.actiontype = #{actionType}
+		AND t.accountname = #{accountName}
+		AND t.flag = '1'
+		</where>
+	</select>
+	
+	<!-- 查询同步用户信息 -->
+	<select id="selectUserOfChange" parameterType="java.util.Map" resultMap="vos.staffOAVO">
+		<include refid="conditionSQL"/>
+		SELECT t.id,t.logid,t.logtime,t.actiontype,t.userid,t.username,t.accountname,t.fullname,t.email,t.orgid,
+			   t.orgcode,t.dutyid,t.dutycode,t.leaderid,t.idno,t.birthday,t.mailsize,t.servicelevel,t.ord,t.status,
+			   t.createdate,t.createrid,t.creatercode,t.freezetime,t.pwdupdate,t.lastlogin,t.lastmodify,t.description,
+			   t.officephone,t.mobile,t.userlevel,t.sex,t.internalcode,t.fromorgId,t.fromorgcode,o.orgname,
+			   o1.orgname AS fromorgname 
+		FROM t_gy_uuv_user_uum t 
+		LEFT JOIN t_gy_uuv_org o ON t.orgcode = o.orgcode
+		LEFT JOIN t_gy_uuv_org o1 ON t.fromorgcode = o1.orgcode,
+		user_uum u
+		<if test="sxFlag==1">,t_admin_task_db_detail dblb</if>
+		<where>
+		t.accountname = u.accountname
+		AND t.logid = u.logid
+		AND t.actiontype = #{actionType}
+		<if test="code != null and code != ''">
+		AND t.accountname = #{code}
+		</if>
+		<if test="name != null and name != ''">
+		AND INSTR(t.username, #{name}) &gt;= 1
+		</if>
+		AND t.orgcode IN 
+		(SELECT org.orgcode FROM t_gy_uuv_org org
+		START WITH org.orgcode = #{sjssjgDm}
+		    CONNECT BY PRIOR org.orgcode = org.parentcode)
+		AND t.flag = '1'
+		<if test="sxFlag==1">AND dblb.ywsj_id = t.id AND dblb.task_ly = #{task_ly} AND dblb.swry_dm = #{rwjsrwDm} AND dblb.zxfk='1'</if>
+		</where>
+	</select>
+	
+	<select id="selectUserOfChange_count" parameterType="java.util.Map" resultType="java.lang.Long">
+		<include refid="conditionSQL"/>
+		SELECT COUNT(1) 
+		FROM t_gy_uuv_user_uum t,
+		user_uum u <if test="sxFlag==1">,t_admin_task_db_detail dblb</if>
+		<where>
+		t.accountname = u.accountname
+		AND t.logid = u.logid
+		AND t.actiontype = #{actionType}
+		<if test="code != null and code != ''">
+		AND t.accountname = #{code}
+		</if>
+		<if test="name != null and name != ''">
+		AND INSTR(t.username, #{name}) &gt;= 1
+		</if>
+		AND t.orgcode IN 
+		(SELECT org.orgcode FROM t_gy_uuv_org org
+		START WITH org.orgcode = #{sjssjgDm}
+		    CONNECT BY PRIOR org.orgcode = org.parentcode)
+		AND t.flag = '1'
+		<if test="sxFlag==1">AND dblb.ywsj_id = t.id AND dblb.task_ly = #{task_ly} AND dblb.swry_dm = #{rwjsrwDm} AND dblb.zxfk='1'</if>
+		</where>
+	</select>
+	
+	<!-- 检查本地数据库中是否存在该信息 -->
+	<select id="checkOwn" parameterType="java.lang.String" resultType="java.lang.Long">
+		SELECT COUNT(1)
+		FROM t_gy_uuv_user t,
+		fbrp_sec_staff f
+		<where>
+		t.accountname = #{accountName}
+		AND f.code = #{accountName}
+		</where>
+	</select>
+	
+	<update id="updateUserUum" parameterType="java.util.Map">
+		UPDATE t_gy_uuv_user_uum t 
+		<set>
+		t.flag = '0',
+		t.xgsj = SYSDATE
+		</set>
+		<where>
+		t.accountname = #{accountName}
+		AND t.actiontype = #{actionType}
+		</where>
+	</update>
+	
+	<!-- 更新“同步人员数据”待办任务为已办 -->
+    <update id="updateTaskZxfk" parameterType="hashMap">
+    	 UPDATE T_ADMIN_TASK_DB_DETAIL SET ZXFK='3'
+		 <where>
+		   TASK_LY=#{task_ly} AND 
+    		ywsj_id IN <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+				</foreach>
+		</where>    	
+    </update>
+    
+    <!-- 查询机关代码 -->
+    <select id="findOrg" parameterType="java.lang.String" resultMap="vos.gyUuvOrg">
+    	SELECT t.orgcode,t.parentcode,t.orgname,t.shortname,t.swbm_bj FROM t_gy_uuv_org t
+    	WHERE t.orgcode = #{orgCode} 
+    	OR t.parentcode = #{orgCode}
+    	ORDER BY t.showorder
+    </select>
+    
+    <select id="findChildrenOrg" parameterType="java.lang.String" resultMap="vos.gyUuvOrg">
+    	SELECT t.orgcode,t.parentcode,t.orgname,t.shortname,t.swbm_bj FROM t_gy_uuv_org t
+    	WHERE t.parentcode = #{orgCode}
+    	ORDER BY t.showorder
+    </select>
+    
+    <select id="findChildrenOrg_count" parameterType="java.lang.String" resultType="java.lang.Long">
+    	SELECT COUNT(1) FROM t_gy_uuv_org t
+    	WHERE t.parentcode = #{orgCode}
+    </select>
+    
+    <select id="selectYhqxjg" parameterType="java.lang.String" resultType="java.util.Map">
+    	SELECT t.orgcode AS "orgCode",o.orgname AS "orgName",t.zswjgbz AS "zswjgbz" 
+    	FROM t_admin_yhqxjg t, t_gy_uuv_org o
+    	WHERE t.orgcode = o.orgcode
+    	AND t.accountname = #{accountName}
+    </select>
+    
+    <select id="selectMainOrgForGlznbz" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT o.orgcode
+		FROM t_gy_uuv_org o
+		WHERE o.glznbz='1'
+		AND ROWNUM = 1
+		START WITH o.ORGCODE = #{code}
+		CONNECT BY PRIOR o.PARENTCODE = o.ORGCODE
+    </select>
+    
+    <select id="selectAdminOwn" parameterType="java.util.Map" resultType="java.lang.Long">
+		SELECT COUNT(1) 
+		FROM t_gy_uuv_org a
+        WHERE a.orgcode = #{orgCode}
+        START WITH a.orgcode IN (
+		SELECT DECODE(t.orgcode, '244000000', '24400000000', t.orgcode) 
+		FROM t_admin_yhqxjg t WHERE t.accountname = #{accountName} 
+		)
+        CONNECT BY PRIOR a.orgcode = a.parentcode
+	</select>
+	
+	<delete id="deleteYhqxjg" parameterType="java.lang.String">
+		DELETE FROM t_admin_yhqxjg t
+		WHERE t.accountname = #{accountName}
+		AND t.zswjgbz = '0'
+	</delete>
+	
+	<insert id="insertYhqxjgOfStaff" parameterType="java.util.Map" >
+		INSERT INTO t_admin_yhqxjg(id,accountname,orgcode,zswjgbz,cjsj,deptcode)
+		VALUES(#{id}, #{accountName}, #{orgCode}, '0', SYSDATE, #{deptCode})
+	</insert>
+	
+	<select id="checkStaffGrant" parameterType="java.util.Map" resultType="java.lang.Long">
+		SELECT COUNT(1) FROM
+		fbrp_sec_acl_entry fsae,
+		fbrp_sec_acl_object_identity ide,
+		fbrp_sec_acl_class cls,
+		fbrp_sec_acl_sid sid,
+		fbrp_sec_role r,
+		fbrp_infra_menu m
+		<where>
+		fsae.sid = sid.id
+		AND fsae.acl_object_identity = ide.id
+		AND sid.sid = r.id
+		AND ide.object_id_identity = m.id
+		AND r.id IN (
+		SELECT r.id
+        FROM fbrp_sec_role_member rm, fbrp_sec_role r
+        WHERE rm.role_id = r.id
+        AND rm.staff_id = (SELECT s.id FROM fbrp_sec_staff s WHERE s.code = #{accountName})
+        AND rm.del_flag = 'n'
+        AND r.del_flag = 'n'
+		)
+		AND (INSTR(m.url, #{url}) &gt;= 1
+		<if test="url2 != null and url2 != ''">
+		OR INSTR(m.url, #{url2}) &gt;= 1
+		</if>
+		)
+		</where>
+	</select>
+	
+	<select id="selectUserOldOrgCode" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT u.orgcode FROM t_gy_uuv_user u WHERE u.accountname = #{accountname}
+	</select>
+	
+	<select id="selectPassword" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT s.passwd FROM fbrp_sec_staff s 
+		<where>
+		s.code = #{accountname}
+		</where>
+	</select>
+	
+	<delete id="deleteYhqxjgForSame" parameterType="java.lang.String">
+		DELETE FROM t_admin_yhqxjg t
+		WHERE t.id IN (SELECT t.id FROM t_admin_yhqxjg t,(SELECT
+      	F_MAIN_GLZN_BYORGCODE(t1.orgcode) AS orgcode,
+      	t1.orgcode AS deptcode
+      	FROM t_gy_uuv_user t1 
+      	WHERE t1.accountname = #{accountName}
+		AND t1.orgcode IN (SELECT orgcode FROM t_gy_uuv_org)) t2
+		WHERE t.orgcode = t2.orgcode
+		AND t.deptcode = t2.deptcode
+		AND t.accountname = #{accountName}
+		AND t.zswjgbz = '0')
+	</delete>
+	
+</mapper>

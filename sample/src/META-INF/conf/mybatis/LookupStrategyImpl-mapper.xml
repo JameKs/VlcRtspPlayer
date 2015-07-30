@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qm.frame.security.acl.service.impl.LookupStrategyImpl">
+  
+  <select id="getAcls" resultMap="vos.fbrpSecAclObjectIdentityVO" parameterType="java.util.Map">
+    SELECT t2.*,t3.* FROM fbrp_sec_acl_class t1,fbrp_sec_acl_object_identity t2, fbrp_sec_acl_sid t3 
+    WHERE t2.object_id_class = t1.id AND t3.id = t2.owner_sid AND t1.class = #{className} AND t2.object_id_identity in
+    <foreach item="id"  collection="list" open="("  separator="," close=")">#{id}</foreach>
+  </select>
+  
+   <select id="setAces" resultMap="vos.fbrpSecAclEntryVO" parameterType="java.util.Map">
+    SELECT entryvo.*,sidvo.id,sidvo.principal,sidvo.sid as sidx,sidvo.ext1,sidvo.ext2,sidvo.ext3 FROM fbrp_sec_acl_entry entryvo,fbrp_sec_acl_sid sidvo 
+    WHERE entryvo.sid = sidvo.id and entryvo.acl_object_identity in 
+    <foreach item="id"  collection="list" open="("  separator="," close=")">#{id}</foreach>
+    order by entryvo.ace_order asc
+  </select>  
+  
+  <select id="readaclById1" resultMap="vos.fbrpSecAclObjectIdentityVO" parameterType="java.util.Map">
+    SELECT objectidentityvo.* FROM fbrp_sec_acl_class classvo,fbrp_sec_acl_object_identity objectidentityvo 
+    WHERE objectidentityvo.object_id_class = classvo.id AND classvo.class = #{className} AND objectidentityvo.object_id_identity = #{objectIdIdentity}
+  </select>
+  
+  <select id="findById" resultMap="vos.fbrpSecAclSidVO" parameterType="java.lang.String">
+    SELECT * FROM fbrp_sec_acl_sid WHERE id = #{id}
+  </select>
+  
+  <select id="readaclById2" resultMap="vos.fbrpSecAclEntryVO" parameterType="java.util.Map">
+    SELECT entryvo.*,sidvo.id,sidvo.principal,sidvo.sid as sidx,sidvo.ext1,sidvo.ext2,sidvo.ext3 FROM FBRP_SEC_ACL_ENTRY entryvo,FBRP_SEC_ACL_SID sidvo 
+    WHERE entryvo.ACL_OBJECT_IDENTITY = #{id} AND entryvo.SID = sidvo.ID order by entryvo.ACE_ORDER asc
+  </select>
+  
+  <select id="getParentAcl" resultMap="vos.fbrpSecAclObjectIdentityVO" parameterType="java.lang.String">
+    SELECT classvo.CLASS,objectidentityvo.OBJECT_ID_IDENTITY FROM fbrp_sec_acl_class classvo,fbrp_sec_acl_object_identity objectidentityvo 
+    WHERE objectidentityvo.object_id_class = classvo.id AND objectidentityvo.id = #{id}
+  </select>
+  
+</mapper>

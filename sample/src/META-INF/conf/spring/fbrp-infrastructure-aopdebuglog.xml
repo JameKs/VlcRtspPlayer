@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:security="http://www.springframework.org/schema/security"	
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<!--     
+	<bean id="fbrp_common_logAfter" class="com.qm.frame.infrastructure.aopdebuglog.LogAfterAdvice"/>
+	<bean id="fbrp_common_logBefore" class="com.qm.frame.infrastructure.aopdebuglog.LogBeforeAdvice"/>
+	<bean id="fbrp_common_logThrow" class="com.qm.frame.infrastructure.aopdebuglog.LogThrowAdvice"/> 
+	<bean id="fbrp_common_logTime" class="com.qm.frame.infrastructure.aopdebuglog.LogMethodTimeAdvice"/>  
+
+	<aop:config>
+		<aop:pointcut id="serviceOperation-logAfter"
+			expression="execution(* com.foresee..*Service.*(..))"/>
+		<aop:advisor pointcut-ref="serviceOperation-logAfter" advice-ref="fbrp_common_logAfter"  />   
+	</aop:config>
+	
+	<aop:config>
+		<aop:pointcut id="serviceOperation-logBefore"
+			expression="execution(* com.foresee..*Service.*(..))"/>
+		<aop:advisor pointcut-ref="serviceOperation-logBefore" advice-ref="fbrp_common_logBefore"  /> 
+	</aop:config>
+	
+	<aop:config>
+		<aop:pointcut id="serviceOperation-logThrow"
+			expression="execution(* com.foresee..*Service.*(..))"/>
+		<aop:advisor pointcut-ref="serviceOperation-logThrow" advice-ref="fbrp_common_logThrow"  /> 
+	</aop:config>
+	
+	<aop:config>   
+        <aop:advisor id="serviceOperation-logMethodTime" advice-ref="fbrp_common_logTime" 
+        	pointcut="execution(* com.foresee..*Service.*(..))"/>  
+    </aop:config>
+	-->
+	    
+</beans>

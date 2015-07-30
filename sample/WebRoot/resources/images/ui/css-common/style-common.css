@@ -1,0 +1,42 @@
+@charset "utf-8";
+body { height:100%; margin: 0; padding: 0; text-align: center;}
+table,td {font-family: "宋体";font-size: 12px;color: #333;}
+
+body, div, p, ul, ol, li, h1, h2, h3, h4, h5, h6, form,dl, dt, dd, pre, code, 
+fieldset, legend, input, button, textarea, blockquote, th, td{ padding: 0; margin: 0;}
+body { line-height: 1.5;}
+ol,ul { list-style: none;}
+table { border-collapse: collapse; border-spacing: 0;}
+caption, th{ text-align: left;}
+sup,sub { font-size: 100%; vertical-align: baseline;}
+fieldset, img { border: 0;}
+address,caption,cite,code,dfn,em,strong,th,var,optgroup { font-style: normal; font-weight: normal;}
+h1,h2,h3,h4,h5,h6 { font-size: 100%; font-weight: normal;}
+abbr,acronym { border: 0; font-variant: normal;}
+input,button,textarea,select,optgroup, option { font-family: inherit; font-weight: inherit; font-size: inherit; font-style: inherit;}
+input,button,textarea,select { *font-size: 100%;}
+:link,:visited,:hover { text-decoration: none;}
+:focus { outline: 0;}
+blockquote, q { quotes: none;}
+blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none;}
+ins { text-decoration: none;}
+del { text-decoration: line-through;}
+
+html { font-size: 12px; font-family: Verdana, Arial, Helvetica, sans-serif;}
+body { line-height: 1.8; background: #fff; text-align: center;}
+h1,h2,h3,h4,h5,h6 { font-weight: bold; color: #fff;}
+h1 { font-size: 18px;}
+h2 { font-size: 13px;}
+h3,h4,h5 { font-size: 12px;}
+a { text-decoration: none; outline: none;}
+a:action { star:expression(this.onFocus=this.blur());}
+a:focus { outline:0;}
+input { border: none; padding: 1px 2px;}
+img { border: none; margin: 0; padding: 0; vertical-align: middle;}
+table,tbody,tfoot,thead,tr,th,td,caption { margin: 0; padding: 0; border: 0; outline: 0;}
+checkbox { border: none; background: none;}
+
+select { font-family: "宋体"; vertical-align: middle; font-size: 12px; cursor: hand; *border: none; border: none\9;}
+
+
+

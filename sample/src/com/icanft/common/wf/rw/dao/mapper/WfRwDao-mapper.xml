@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE mapper
+	    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+	    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.icanft.common.wf.rw.dao.IWfRwDao">
+	<resultMap type="WfRw" id="wfRwMapper">
+		<result column="ID" property="id" />
+		<result column="YHRW_ID" property="yhrwId" />
+		<result column="RWLX_DM" property="rwlxDm" />
+		<result column="ZX_ZT" property="zxZt" />
+		<result column="USER_ID" property="userId" />
+		<result column="PROC_INS_ID" property="procInsId" />
+		
+		<result column="CJR" property="cjr" />
+		<result column="CJ_SJ" property="cjSj" />
+		<result column="XGR" property="xgr" />
+		<result column="XG_SJ" property="xgSj" />
+		
+		<result column="ID_" property="taskId" />
+		<result column="NAME_" property="name" />
+		<result column="PROC_DEF_ID_" property="procDefId" />
+		<result column="OWNER_" property="owner" />
+		<result column="ASSIGNEE_" property="assignee" />
+		<result column="PRIORITY_" property="priority" />
+		<result column="CREATE_TIME_" property="createTime" />
+		<result column="DUE_DATE_" property="dueDate" />
+	
+	</resultMap>
+	
+	<resultMap type="Spyj" id="spyjMapper">
+		<result column="ID" property="id" />
+		<result column="YHRW_ID" property="yhrwId" />
+		<result column="SPYJ" property="spyj" />
+		<result column="CJR" property="cjr" />
+		<result column="CJ_SJ" property="cjSj" />
+		<result column="XGR" property="xgr" />
+		<result column="XG_SJ" property="xgSj" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="WfRw">
+		<selectKey resultType="String" keyProperty = "id" order="BEFORE">
+			select SYS_GUID() FROM DUAL
+		</selectKey>
+        insert into T_JXJY_WF_RW(ID, YHRW_ID, USER_ID, RWLX_ID, ZX_ZT, CJR )
+        values(#{id}, #{yhrwId}, #{userId}, #{rwlxId}, #{zxZt}, #{cjr} )
+    </insert>
+    
+    <update id="update" parameterType="WfRw">
+        update T_JXJY_WF_RW set XG_SJ = sysdate, xgr = #{xgr}
+        <if test="procInsId != null and procInsId != ''">
+        	,PROC_INS_ID = #{procInsId}
+        </if>
+        <if test="zxZt != null or zxZt != ''">
+        	,ZX_ZT = #{zxZt} 
+        </if>
+        where ID = #{id}
+    </update>
+    
+    <update id="updateById" parameterType="hashMap">
+        update T_JXJY_WF_RW set XG_SJ = SYSDATE ,xgr = #{xgr}
+        <if test="procInsId != procInsId and procInsId != ''">
+        	,PROC_INS_ID = #{procInsId}
+        </if>
+        <if test="zxZt == null or zxZt == ''">
+        	,ZX_ZT = #{zxZt} 
+        </if>
+        where ID = #{id}
+    </update>
+    
+    <select id="findById" parameterType="string" resultMap="wfRwMapper">
+        select * from T_JXJY_WF_RW T WHERE T.ID = #{id}
+    </select>
+    
+    <select id="findList" parameterType="WfRw" resultMap="wfRwMapper">
+        select * from T_JXJY_WF_RW T WHERE T.ZX_ZT != '1'
+        	AND T.USER_ID = #{userId} 
+        	and T.RWLX_ID = #{rwlxId}
+    </select>
+    
+    <select id="findListCount" parameterType="WfRw" resultType="long">
+        select count(1) from T_JXJY_WF_RW T 
+        WHERE T.ZX_ZT != '1' 
+        AND T.USER_ID = #{userId} 
+        and T.RWLX_ID = #{rwlxId}
+    </select>
+    
+    <insert id="insertSpyj" parameterType="Spyj">
+        insert into T_JXJY_WF_SPYJ(YHRW_ID , SPYJ, USER_ID, CJR)
+        values(#{yhrwId}, #{spyj}, #{userId}, #{cjr} )
+    </insert>
+    
+    <update id="updateSpyj" parameterType="Spyj" >
+        UPDATE T_JXJY_WF_SPYJ SET SPYJ = #{spyj} WHERE ID = #{id}
+    </update>
+    
+    <select id="findSpyjByYhrwId" parameterType="string" resultMap="spyjMapper">
+        select * from T_JXJY_WF_SPYJ WHERE yhrw_id = #{yhrwId} order by cj_sj
+    </select>
+    
+    <!-- 查询用户待办的流程任务（还有一类任务不需要走流程） -->
+    <select id="findUserDbTask" parameterType="hashMap" resultMap="wfRwMapper">
+        select RES.id_,
+	       RES.rev_,
+	       RES.execution_id_,
+	       RES.proc_inst_id_,
+	       RES.proc_def_id_,
+	       RES.name_,
+	       RES.parent_task_id_,
+	       RES.description_,
+	       RES.task_def_key_,
+	       RES.owner_,
+	       RES.assignee_,
+	       RES.delegation_,
+	       RES.priority_,
+	       RES.create_time_,
+	       RES.due_date_,
+	       RES.category_,
+	       RES.suspension_state_,
+	       RES.tenant_id_,
+	       RES.form_key_,
+	       RW.ID ,
+	       RW.YHRW_ID,
+	       RW.CJR,
+	       RW.RWLX_DM
+	  from ACT_RU_TASK RES
+	  left join ACT_RU_IDENTITYLINK I
+	    on I.TASK_ID_ = RES.ID_
+	  inner join T_JXJY_WF_RW RW
+	    ON RW.PROC_INS_ID = RES.PROC_INST_ID_
+	 WHERE (
+	 	RES.ASSIGNEE_ = #{userId} 
+	 	or
+	    (RES.ASSIGNEE_ is null 
+	       and
+	       (I.USER_ID_ = #{userId} or
+	       I.GROUP_ID_ IN (select g.GROUP_ID_
+	                            from ACT_ID_MEMBERSHIP g
+	                           where g.USER_ID_ = #{userId})
+	       )
+	    )
+	  )
+	  <if test="rwlxDm != null and rwlxDm != ''">
+	  	AND RW.RWLX_DM = #{rwlxDm}
+	  </if>
+    </select>
+	
+</mapper>

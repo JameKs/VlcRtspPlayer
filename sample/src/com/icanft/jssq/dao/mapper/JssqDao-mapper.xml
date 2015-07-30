@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE mapper
+	    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+	    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.icanft.jssq.dao.IJssqDao">
+	
+	<resultMap id="cdxxRoleMapper" type="CdxxRole" >
+		<result column="ID" property="id" />
+		<result column="CD_DM" property="cdDm" />
+		<result column="CN_NAME" property="cnName" />
+		<result column="EN_NAME" property="enName" />
+		<result column="URL" property="url" />
+		<result column="P_ID" property="pId" />
+		<result column="CCSD" property="ccsd" />
+		<result column="CCSX" property="ccsx" />
+		<result column="LEAF" property="leaf" />
+		<result column="GX_ID" property="gxId" />
+		<result column="ROLE_ID" property="roleId" />
+		<result column="CJR" property="cjr" />
+		<result column="CJ_SJ" property="cjSj" />
+		<result column="XGR" property="xgr" />
+		<result column="XG_SJ" property="xgSj" />
+	</resultMap>
+	
+	<resultMap id="roleMapper" type="Role" >
+		<result column="ID" property="id" />
+		<result column="ROLE_DM" property="roleDm" />
+		<result column="ROLE_NAME" property="roleName" />
+		<result column="BZ" property="bz" />
+		<result column="XY_BZ" property="xyBz" />
+		<result column="CJR" property="cjr" />
+		<result column="CJ_SJ" property="cjSj" />
+		<result column="XGR" property="xgr" />
+		<result column="XG_SJ" property="xgSj" />
+	</resultMap>
+	
+	<resultMap id="gxMapper" type="RoleCd" >
+		<result column="ID" property="id" />
+		<result column="ROLE_ID" property="roleId" />
+		<result column="CD_ID" property="cdId" />
+	</resultMap>
+	
+	<resultMap id="menuMapper" type="Menu" >
+		<result column="ID" property="id" />
+		<result column="P_ID" property="pId" />
+		<result column="CN_NAME" property="name" />
+		<result column="BZ" property="bz" />
+		<result column="TITLE" property="title" />
+		<result column="CHECKED" property="checked" />
+	</resultMap>
+	
+		
+	<select id="findList" parameterType="Role" resultType="Role">
+		SELECT *
+		FROM T_JXJY_ROLE
+		where yx_bz = '1'
+		<if test="roleDm != null and roleDm != ''">
+			and ROLE_DM = #{roleDm}
+		</if>
+		<if test="roleName != null and roleName != ''">
+			and ROLE_NAME = #{roleName}
+		</if>
+	</select>
+	
+	<select id="findListCount" parameterType="Role" resultType="int">
+		SELECT count(1)
+		FROM T_JXJY_ROLE
+		where yx_bz = '1'
+		<if test="roleDm != null and roleDm != ''">
+			and ROLE_DM = #{roleDm}
+		</if>
+		<if test="roleName != null and roleName != ''">
+			and ROLE_NAME = #{roleName}
+		</if>
+	</select>
+	
+	<!-- 查询当前菜单的子菜单个数 
+    <select id="getChildrenNodes" parameterType="CdxxRole" resultMap="cdxxRoleMapper">
+	select c.* ,b.gx_ID,b.role_ID
+	from T_JXJY_CDXX c
+	left join
+		(select gx.id gx_id,gx.ROLE_ID,gx.CD_ID 
+			from T_JXJY_role_cd gx 
+			<where>
+				<if test="roleId != null and roleId !=''">
+				gx.ROLE_ID = #{roleId}
+				</if>
+			</where>
+		) b
+		on c.id = b.CD_ID
+	where c.P_ID= #{id}
+	order by c.ccsx 
+    </select>-->
+    
+    <!-- 查询当前菜单的子菜单个数 -->
+    <select id="getAllNodes" parameterType="string" resultMap="cdxxRoleMapper">
+	select c.* ,b.gx_ID,b.role_ID
+	from T_JXJY_CDXX c
+	left join
+		(select gx.id gx_id,gx.ROLE_ID,gx.CD_ID 
+			from T_JXJY_role_cd gx where gx.ROLE_ID = #{roleId} 
+		) b
+		on c.id = b.CD_ID
+	order by c.ccsx 
+    </select>
+    
+    <!-- 查询当前菜单的子菜单个数 -->
+    <select id="findRoleMenuZtree" parameterType="string" resultMap="menuMapper">
+	select c.id, c.p_id, c.cn_name name, '' title,decode(b.gx_ID,null,'false','true') checked
+	  from T_JXJY_CDXX c
+	  left join
+	    (select gx.id gx_id,gx.ROLE_ID,gx.CD_ID 
+	      from T_JXJY_role_cd gx where gx.ROLE_ID = #{roleId} 
+	    ) b
+	    on c.id = b.CD_ID
+	  order by c.ccsx 
+    </select>
+    
+	<insert id="insert" parameterType="RoleCd">
+		insert into T_JXJY_ROLE_CD (ROLE_ID,CD_ID,CJR)
+		values ( #{roleId}, #{cdId},#{cjr})
+	</insert>
+	
+	<delete id="delete" parameterType="RoleCd">
+		delete from T_JXJY_ROLE_CD
+		where ROLE_ID = #{roleId}
+	</delete>
+	
+</mapper>
