@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE mapper
+	    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+	    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.icanft.xtgl.yhgl.dao.impl.UserDaoImpl">
+
+	<resultMap type="User" id="UserMapper">
+		<result column="ID" property="id" />
+		<result column="LOGIN_ID" property="loginId" />
+		<result column="PASSWORD" property="password" />
+		<result column="USER_NAME" property="userName" />
+		<result column="BM_DM" property="bmDm" />
+		<result column="PHONE" property="phone" />
+		<result column="EMAIL" property="email" />
+		<result column="STATUS" property="status" />
+		<result column="ACTIVE" property="active" />
+		<result column="SESSION_OUT_TIME" property="sessionOutTime" />
+		<result column="CJR" property="cjr" />
+		<result column="CJ_SJ" property="cjSj" />
+		<result column="XGR" property="xgr" />
+		<result column="XG_SJ" property="xgSj" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="User">
+		insert into T_JXJY_USER (LOGIN_ID,PASSWORD, USER_NAME, BM_DM, PHONE, EMAIL,CJR)
+		values (#{loginId}, #{password}, #{userName}, #{bmDm}, #{phone}, #{email}, #{cjr})
+	</insert>
+	
+	<delete id="delete" parameterType="string">
+		delete from T_JXJY_USER where id = #{id}
+	</delete>
+	
+	<update id="update" parameterType="User">
+		update T_JXJY_USER set USER_NAME=#{userName},PASSWORD=#{password} where id=#{id}
+	</update>
+	
+	<select id="findById" parameterType="string" resultMap="UserMapper">
+		select * from T_JXJY_USER where id = #{id}
+	</select>
+	
+	<select id="findByLoginId" parameterType="string" resultMap="UserMapper">
+		select * from T_JXJY_USER where LOGIN_ID = #{loginId}
+	</select>
+	
+	<select id="findList" parameterType="User" resultMap="UserMapper">
+        select *
+        from T_JXJY_USER
+		<where>
+			<if test="loginId != null and loginId != ''">
+				and LOGIN_ID =#{loginId}
+			</if>
+			<if test="userName != null and userName != ''">
+				and USER_NAME =#{userName}
+			</if>
+		</where>
+        order by id
+    </select>
+    
+    <select id="findListCount" parameterType="User" resultType="long">
+        select count(1) 
+        from T_JXJY_USER 
+        <where>
+			<if test="loginId != null and loginId != ''">
+				and LOGIN_ID =#{loginId}
+			</if>
+			<if test="userName != null and userName != ''">
+				and USER_NAME =#{userName}
+			</if>
+		</where>
+    </select>
+    
+    <!-- 登录的查询方法 -->
+    <select id="login" parameterType="hashmap" resultMap="UserMapper">
+        select * from T_JXJY_USER 
+        where LOGIN_ID = #{loginId}
+        and PASSWORD = #{password}
+    </select>
+	
+</mapper>

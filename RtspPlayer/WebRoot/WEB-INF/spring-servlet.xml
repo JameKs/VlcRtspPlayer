@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   
+             http://www.springframework.org/schema/beans/spring-beans-3.1.xsd   
+             http://www.springframework.org/schema/context    
+             http://www.springframework.org/schema/context/spring-context-3.1.xsd   
+             http://www.springframework.org/schema/aop    
+             http://www.springframework.org/schema/aop/spring-aop-3.1.xsd   
+             http://www.springframework.org/schema/tx    
+             http://www.springframework.org/schema/tx/spring-tx-3.1.xsd   
+             http://www.springframework.org/schema/mvc    
+             http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd   
+             http://www.springframework.org/schema/context    
+             http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+             
+	<!-- 启用spring mvc 注解 -->
+	<context:annotation-config />
+
+	<!-- 设置使用注解的类所在的jar包 -->
+	<context:component-scan base-package="com.icanft">
+		<context:include-filter type="regex"
+			expression=".*.controller.*Controller" />
+	</context:component-scan>
+	
+	
+	<!-- 主要作用于@Controller，激活该模式，下面是一种简写形式，完全可以手动配置替代这种简写形式，它会自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter，是spring 
+		MVC为@Controllers分发请求所必须的 <mvc:annotation-driven> <mvc:message-converters> 
+		<bean class="com.icanft.common.util.UTF8StringHttpMessageConverter" /> </mvc:message-converters> 
+		</mvc:annotation-driven> <mvc:annotation-driven/>
+	-->
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<constructor-arg value="UTF-8" />
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	 <!--启用spring mvc 注解 <mvc:annotation-driven> <mvc:message-converters> <bean 
+		id="jsonConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"> 
+		<property name="supportedMediaTypes"> <list> <value>text/html;charset=utf-8</value> 
+		</list> </property> </bean> </mvc:message-converters> </mvc:annotation-driven> -->
+
+
+	<!-- 定义首页 <mvc:view-controller path="/" view-name="redirect:/login?dl" /> -->
+
+	<!-- 配置js,css等静态文件直接映射到对应的文件夹，不被DispatcherServlet处理 <mvc:resources mapping="/login/**" 
+		location="/login/" /> -->
+
+	<mvc:resources mapping="/**" location="/" />
+
+
+	<!-- 完成请求和注解POJO的映射 <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" 
+		/> -->
+
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+		<property name="definitions">
+			<value>/jsp/**/tiles.xml</value>
+		</property>
+	</bean>
+
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="order" value="1" />
+	  	<property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"/>
+	</bean>
+	
+	
+	<!-- JSP视图解析器
+	<bean id="jspViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix">
+			<value>/jsp/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+		<property name="viewClass">
+			<value>org.springframework.web.servlet.view.JstlView</value>
+		</property>
+		
+		<property name="order" value="2" />
+	</bean> 	-->
+
+	<!-- SpringMVC文件上传 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 解析request的编码 ，Default is ISO-8859-1 -->
+		<property name="defaultEncoding">
+			<value>UTF-8</value>
+		</property>
+		<!-- 设置上传文件最大20MB -->
+		<property name="maxUploadSize">
+			<value>20971520</value>
+		</property>
+		<property name="maxInMemorySize">
+			<value>4096</value>
+		</property>
+	</bean>
+
+	<!-- 国际化资源配置 <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"> 
+		<property name="basename" value="classpath:message"/> <property name="fileEncodings" 
+		value="UTF-8"/> <property name="cacheSeconds" value="5"/> </bean> -->
+
+	<!-- 国际化拦截器 -->
+	<bean id="localeChangeInterceptor"
+		class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"></bean>
+		
+	<!-- JSON转换器 
+	<bean id="mappingJacksonHttpMessageConverter"
+		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>application/json;charset=UTF-8</value>
+				<value>text/html;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>-->
+	
+	<!-- XML转换器
+	<bean id="marshallingConverter"
+		class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+		<constructor-arg ref="jaxbMarshaller" />
+		<property name="supportedMediaTypes">
+			<list>
+				<value>application/xml;charset=UTF-8</value>
+				<value>text/html;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="jaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="classesToBeBound">
+			<list>
+				<value>springmvc3.bean.Student</value>
+				<value>springmvc3.bean.StudentList</value>
+			</list>
+		</property>
+	</bean>
+    -->
+	<bean id="exceptionResolver" class="com.icanft.common.util.MyExceptionHandler"></bean>
+	<!-- 异常处理器 <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver"> 
+		定义默认的异常处理页面，当该异常类型的注册时使用 <property name="defaultErrorView" > <value>error</value> 
+		</property> 定义异常处理页面用来获取异常信息的变量名，默认名为exception <property name="exceptionAttribute" 
+		value="ex"></property> 设置日志输出级别，不定义则默认不输出警告等错误日志信息 <property name="warnLogCategory" 
+		value="WARN"></property> <property name="exceptionMappings"> <props> <prop 
+		key="java.lang.Exception">error</prop> <prop key="java.lang.NullPointerException">error</prop> 
+		</props> </property> </bean> -->
+
+	<mvc:interceptors>
+		<bean class="com.icanft.common.interceptor.RequestTimeInterceptor"></bean>
+	</mvc:interceptors>
+
+
+</beans>

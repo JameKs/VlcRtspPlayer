@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qm.frame.common.auditlog.service.impl.AuditLogServiceImpl">
+    <insert id="insert" parameterType="com.qm.frame.common.auditlog.vo.FbrpCommonAuditLog">
+       INSERT INTO fbrp_common_audit_log
+       (ID,OPER_CODE,OPER_NAME,IP_ADDR,BIZ_TYPE,LOG_TYPE,LOG_INFO,CREATED_TIME,CJR_DM,CJSJ)
+        VALUES (#{id},#{opCode},#{opName},#{ipAddr},#{bizType},#{logType},#{logInfo},#{cjsj,jdbcType=TIMESTAMP},#{cjrDm},#{cjsj,jdbcType=TIMESTAMP})
+    </insert>
+
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qm.frame.security.synchro.impl.SynInfoFromThirdPartyImpl">
+  <delete id="delete" parameterType="java.util.Map">
+   delete from FBRP_SEC_ROLE_MEMBER where STAFF_ID = #{staffId} and EXT1 = #{ext1} and ROLE_ID in
+    <foreach item="id"  collection="list" open="("  separator="," close=")">#{id}</foreach>
+  </delete>
+  
+  <select id="find" parameterType="java.util.Map" resultMap="vos.fbrpSecStaffVO">
+    select * from FBRP_SEC_ROLE t where t.ext1 = #{ext1} and t.ext2 = #{ext2} 
+  </select>
+  
+  <select id="findFbrpStaff"  parameterType="java.util.Map" resultMap="vos.fbrpSecStaffVO">
+    select * from FBRP_SEC_STAFF where LOGIN_ID = #{loginId} and DEL_FLAG = #{delFlag}
+  </select>
+  
+  <insert id="insert1" parameterType="com.qm.frame.security.role.vo.FbrpSecRoleMember">
+   insert into FBRP_SEC_ROLE_MEMBER(ID,ROLE_ID,STAFF_ID,STATUS,CREATOR_ID,CREATED_TIME,LAST_MODIFIER_ID,LAST_MODIFIED_TIME,DEL_FLAG,EXT1,EXT2,EXT3)
+   values(#{id},#{roleId},#{staffId},#{status},#{creatorId},#{createdTime},#{lastModifierId},#{lastModifiedTime},#{delFlag},#{ext1},#{ext2},#{ext3})
+  </insert>
+  
+  <insert id="insert2" parameterType="com.qm.frame.security.role.vo.FbrpSecRole">
+   insert into FBRP_SEC_ROLE(ID,CODE,NAME,STATUS,REMARK,CREATOR_ID,CREATED_TIME,LAST_MODIFIER_ID,LAST_MODIFIED_TIME,DEL_FLAG,EXT1,EXT2,EXT3)
+   values(#{id},#{code},#{name},#{status},#{remark},#{creatorId},#{createdTime},#{lastModifierId},#{lastModifiedTime},#{delFlag},#{ext1},#{ext2},#{ext3})
+  </insert>
+  
+  <insert id="insert3" parameterType="com.qm.frame.security.staff.vo.FbrpSecStaff">
+   insert into FBRP_SEC_STAFF
+   (ID,CODE,NAME,STATUS,ID_NUMBER,BIRTHDAY,SEX,TEL,MOBILE_TEL,EMAIL,ADDRESS,LOGIN_ID,PASSWD,FAILED_LOGIN_COUNT,MAX_FAILED_LOGIN_COUNT,PASSWD_EXPIRE_DAYS,PASSWD_EXPIRE_TIME,ACCOUNT_EXPIRE_TIME,LAST_LOGIN_IP,LAST_LOGIN_TIME,LOGIN_IP,LOGIN_TIME,ONLINE_COUNT,EXT1,EXT2,EXT3,EXT4,EXT5,EXT6,EXT7,EXT8,EXT9,CREATOR_ID,CREATED_TIME,LAST_MODIFIER_ID,LAST_MODIFIED_TIME,DEL_FLAG)
+   values(#{id},#{code},#{name},#{status},#{idNumber},#{birthday},#{sex},#{tel},#{mobileTel},#{email},#{address},#{loginid},#{passwd},#{failedLoginCount},#{maxFailedLoginCount},#{passwdExpireTime},#{accountExpireTime},#{lastLoginIp},#{lastLoginTime},#{loginIp},#{loginTime},#{onlineCount},#{ext1},#{ext2},#{ext3},#{ext4},#{ext5},#{ext6},#{ext7},#{ext8},#{ext9},#{creatorId},#{createdTime},#{lastModifierId},#{lastModifiedTime},#{delFlag})
+  </insert>
+  
+  
+  	
+  
+</mapper>

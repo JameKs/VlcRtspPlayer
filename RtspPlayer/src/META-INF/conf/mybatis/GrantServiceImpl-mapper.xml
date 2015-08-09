@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qm.frame.security.acl.service.impl.GrantServiceImpl">
+
+  <select id="getAppAdminRole" resultType="com.qm.frame.security.role.vo.FbrpSecRole" parameterType="java.lang.String">
+    SELECT r.* FROM fbrp_sec_role r,fbrp_sec_staff s,fbrp_sec_role_member rm  
+    where r.id=rm.role_id and s.id = rm.staff_id AND s.code=#{code}
+  </select>
+  
+  <select id="getAppAdminRole2" resultType="com.qm.frame.security.role.vo.FbrpSecRole" parameterType="java.util.Map">
+    SELECT r.* FROM fbrp_sec_role r,fbrp_sec_staff s,fbrp_sec_role_member rm  
+    WHERE r.id=rm.role_id AND s.id = rm.staff_id and and s.code = #{code} and r.id=#{roleId}
+  </select>
+  
+  <select id="getGrantsByTypeAndPrincipals" resultType="java.lang.String" parameterType="java.lang.String">
+    SELECT t2.id FROM fbrp_sec_acl_class t1,fbrp_sec_acl_object_identity t2
+    WHERE t1.class=#{objectClassName} AND t1.id=t2.object_id_class
+  </select>
+  
+  <select id="getParentGrants" resultType="java.lang.Object" parameterType="java.util.Map">
+    SELECT * FROM #{entity} WHERE id = #{id}
+  </select>
+
+	<select id="findGrantEntryByRoleId" parameterType="java.lang.String" resultType="hashmap" >
+		select t.id as "id",idt.object_id_identity as "objId" ,sd.id as "sid"
+		    from FBRP_SEC_ACL_ENTRY           t,
+		         fbrp_sec_acl_sid             sd,
+		         fbrp_sec_role                r,
+		         fbrp_sec_acl_object_identity idt
+		   where t.sid = sd.id
+		     and sd.sid = r.id
+		     and r.id = #{roleId}
+		     and t.acl_object_identity = idt.id
+	</select>
+	
+	<delete id="deleteGrantEntryByIds" parameterType="java.util.Map" >
+		delete from FBRP_SEC_ACL_ENTRY t where t.id in 
+		<foreach item="id"  collection="list" open="("  separator="," close=")">#{id}</foreach>
+	</delete>
+	
+	<select id="findSidByRoleId" resultType="java.lang.String" parameterType="java.lang.String">
+	    select sd.id from fbrp_sec_acl_sid sd,fbrp_sec_role r where sd.sid = r.id and r.id=#{roldId}
+	 </select>
+  
+	<select id="findIdentityByObjIds" parameterType="java.util.Map" resultType="hashmap" >
+		select t.object_id_identity as "objId", t.id as "identityId" from fbrp_sec_acl_object_identity t 
+		where t.object_id_identity in 
+		<foreach item="id"  collection="list" open="("  separator="," close=")">#{id}</foreach>
+	</select>
+	
+	<select id="findAclClass" resultType="hashmap" >
+		SELECT t.class as "clsName",t.id as "clsId" FROM fbrp_sec_acl_class t
+	</select>
+	
+	<insert id="insertIndentity" parameterType="com.qm.frame.security.acl.vo.FbrpSecAclObjectIdentity">
+	    INSERT INTO fbrp_sec_acl_object_identity(id,object_id_identity,object_id_class,parent_object,owner_sid,entries_inheriting,ext1,ext2,ext3)
+	    VALUES(#{id},#{objectIdIdentity},#{objectIdClass},#{parentObject,jdbcType=VARCHAR},#{ownerSid},#{entriesInheriting},#{ext1,jdbcType=VARCHAR},#{ext2,jdbcType=VARCHAR},#{ext3,jdbcType=VARCHAR})
+    </insert>
+	
+   <insert id="insertEntry" parameterType="com.qm.frame.security.acl.vo.FbrpSecAclEntry">
+    	INSERT INTO fbrp_sec_acl_entry (id, acl_object_identity, ace_order, sid, mask, granting, audit_success, audit_failure)
+		VALUES (#{id}, #{aclObjectIdentity}, #{aceOrder,jdbcType=NUMERIC}, #{sid}, #{mask,jdbcType=NUMERIC}, #{granting,jdbcType=NUMERIC}, #{auditSuccess,jdbcType=NUMERIC}, #{auditFailure,jdbcType=NUMERIC})
+   </insert>
+  
+</mapper>

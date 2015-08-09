@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:security="http://www.springframework.org/schema/security"	
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<security:global-method-security
+		pre-post-annotations="enabled">
+		<security:expression-handler ref="fbrp_security_expressionHandler" />
+	</security:global-method-security>
+
+	<bean id="fbrp_security_expressionHandler"
+		class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler">
+		<property name="permissionEvaluator" ref="fbrp_security_aclPermissionEvaluator" />
+	</bean>
+
+	<bean id="fbrp_security_aclPermissionEvaluator"
+		class="com.qm.frame.security.acl.service.impl.AclPermissionEvaluator">
+		<constructor-arg ref="fbrp_security_mutableAclService" />
+		<property name="permissionFactory" ref="fbrp_security_permissionFactory" />
+		<property name="grantService" ref="fbrp_security_grantService" />
+	</bean>
+
+	<bean id="fbrp_security_ehCacheBasedAclCache"
+		class="org.springframework.security.acls.domain.EhCacheBasedAclCache">
+		<constructor-arg ref="fbrp_common_dataCacheBackend" />
+	</bean>
+
+	<bean id="fbrp_security_consoleAuditLogger"
+		class="org.springframework.security.acls.domain.ConsoleAuditLogger" />
+
+	<bean id="fbrp_security_aclAuthorizationStrategy"
+		class="com.qm.frame.security.acl.service.impl.AclAuthorizationStrategyImpl" />
+
+	<bean id="fbrp_security_lookupStrategy"
+		class="com.qm.frame.security.acl.service.impl.LookupStrategyImpl"
+		parent="fbrp_infrastructure_defaultService">
+		<property name="aclCache" ref="fbrp_security_ehCacheBasedAclCache" />
+		<property name="aclAuthorizationStrategy" ref="fbrp_security_aclAuthorizationStrategy" />
+		<property name="auditLogger" ref="fbrp_security_consoleAuditLogger" />
+		<property name="permissionFactory" ref="fbrp_security_permissionFactory" />
+	</bean>
+
+	<bean id="fbrp_security_permissionFactory"
+		class="com.qm.frame.security.acl.service.impl.UserPermissionFactory"
+		init-method="init" />
+
+	<bean id="fbrp_security_mutableAclService"
+		class="com.qm.frame.security.acl.service.impl.MutableAclServiceImpl"
+		parent="fbrp_infrastructure_defaultService">
+		<property name="aclCache" ref="fbrp_security_ehCacheBasedAclCache" />
+		<property name="lookupStrategy" ref="fbrp_security_lookupStrategy" />
+	</bean>
+
+	<bean id="fbrp_security_grantService"
+		class="com.qm.frame.security.acl.service.impl.GrantServiceImpl"
+		parent="fbrp_infrastructure_defaultService">
+		<property name="mutableAclService" ref="fbrp_security_mutableAclService" />
+		<property name="securityStrategyService" ref="fbrp_security_securityStrategyService" />
+		<property name="permissionFactory" ref="fbrp_security_permissionFactory" />
+	</bean>
+
+	<bean id="fbrp_security_principalByRole"
+		class="com.qm.frame.security.acl.extendpoint.impl.PrincipalByRole"
+		parent="fbrp_infrastructure_defaultService">
+		<property name="roleService" ref="fbrp_security_roleService" />
+	</bean>
+
+	<bean id="fbrp_security_principalByStaff"
+		class="com.qm.frame.security.acl.extendpoint.impl.PrincipalByStaff"
+		parent="fbrp_infrastructure_defaultService">
+		<property name="staffService" ref="fbrp_security_staffService" />
+	</bean>
+	
+	<!-- 临时增加的两个配置，需要与上面的进行整合 -->
+	<bean id="fbrp_security_principalByRoleNew"
+		class="com.qm.frame.security.acl.extendpoint.impl.PrincipalByRoleNew" 
+		parent="fbrp_infrastructure_defaultService">
+		<property name="roleService" ref="fbrp_security_roleService" />
+	</bean>
+
+	<bean id="fbrp_security_principalByStaffNew"
+		class="com.qm.frame.security.acl.extendpoint.impl.PrincipalByStaffNew"
+		parent="fbrp_infrastructure_defaultService">
+		<property name="staffService" ref="fbrp_security_staffService" />
+	</bean>
+	
+	<bean id="fbrp_security_funGrantedExtendPoint"
+		class="com.qm.frame.security.function.extendpoint.impl.FunctionGrantedExtendPointImpl">
+		<property name="functionService" ref="fbrp_security_functionService" />
+	</bean>
+
+</beans>

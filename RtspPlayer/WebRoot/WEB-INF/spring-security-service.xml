@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:security="http://www.springframework.org/schema/security"	
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<bean id="fbrp_security_functionService"
+		class="com.qm.frame.security.function.service.impl.FunctionServiceImpl"
+		parent="fbrp_infrastructure_defaultService" init-method="init">
+		<property name="dataCacheService" rcef="${defaultDataCacheService}" />
+		<property name="logService" ref="fbrp_common_auditLogService" />
+		<property name="grantService" ref="fbrp_security_grantService" />
+	</bean>
+
+	<bean id="fbrp_security_securityStrategyService"
+		class="com.qm.frame.security.service.impl.SecurityStrategyServiceImpl">
+		<property name="codeValueService" ref="fbrp_common_codeValueService" />
+	</bean>
+
+	<bean id="sessionRegistry"
+		class="com.qm.frame.security.service.impl.UserSessionRegistryImpl"
+		init-method="resetLoginAccount">
+		<property name="simpleJdbcTemplate" ref="simpleJdbcTemplate" />
+	</bean>
+
+	<bean id="fbrp_security_concurrentSessionFilter"
+		class="org.springframework.security.web.session.ConcurrentSessionFilter">
+		<property name="sessionRegistry" ref="fbrp_security_sessionRegistry" />
+	</bean>
+
+	<bean id="fbrp_security_concurrentSessionControlStrategy"
+		class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+		<constructor-arg ref="fbrp_security_sessionRegistry" />
+		<property name="maximumSessions" value="-1" />
+		<property name="exceptionIfMaximumExceeded" value="false" />
+	</bean>
+
+	<bean id="fbrp_security_springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
+		<security:filter-chain-map path-type="ant">
+			<security:filter-chain
+				filters="fbrp_security_concurrentSessionFilter, fbrp_security_securityContextPersistenceFilter, fbrp_security_securityContextHolderAwareRequestFilter, fbrp_security_logoutFilter, fbrp_security_exceptionTranslationFilter"
+				pattern="/j_spring_security_logout" />
+			<security:filter-chain
+				filters="fbrp_security_concurrentSessionFilter, fbrp_security_securityContextPersistenceFilter, fbrp_security_securityContextHolderAwareRequestFilter, fbrp_security_fbrpAuthenticationProcessingFilter, fbrp_security_exceptionTranslationFilter"
+				pattern="/j_spring_*" />
+			<security:filter-chain
+				filters="fbrp_security_concurrentSessionFilter, fbrp_security_securityContextPersistenceFilter, fbrp_security_securityContextHolderAwareRequestFilter, fbrp_security_exceptionTranslationFilter, fbrp_security_filterInvocationInterceptor"
+				pattern="/**/*.jsp" />
+			<security:filter-chain
+				filters="fbrp_security_concurrentSessionFilter, fbrp_security_securityContextPersistenceFilter, fbrp_security_sessionTimeoutFilter, fbrp_security_securityContextHolderAwareRequestFilter, fbrp_security_exceptionTranslationFilter, fbrp_security_filterInvocationInterceptor"
+				pattern="/**/*.jsf" />
+			<security:filter-chain
+				filters="fbrp_security_concurrentSessionFilter, fbrp_security_securityContextPersistenceFilter, fbrp_security_sessionTimeoutFilter, fbrp_security_securityContextHolderAwareRequestFilter, fbrp_security_exceptionTranslationFilter, fbrp_security_filterInvocationInterceptor"
+				pattern="/**/*.do" />
+			<security:filter-chain filters="fbrp_security_concurrentSessionFilter, fbrp_security_securityContextPersistenceFilter, fbrp_security_securityContextHolderAwareRequestFilter, fbrp_security_exceptionTranslationFilter" 
+				pattern="/gateway/get"/>
+		</security:filter-chain-map>
+	</bean>
+
+	<bean id="fbrp_security_sessionTimeoutFilter" class="com.qm.frame.security.FbrpSessionTimeoutFilter"/>
+
+	<bean id="fbrp_security_securityContextPersistenceFilter"
+		class="org.springframework.security.web.context.SecurityContextPersistenceFilter" />
+
+	<bean id="fbrp_security_securityContextHolderAwareRequestFilter"
+		class="org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter" />
+
+	<bean id="fbrp_security_exceptionTranslationFilter"
+		class="com.qm.frame.security.FbrpExceptionTranslationFilter">
+		<property name="authenticationEntryPoint" ref="fbrp_security_fbrpAuthenticationEntryPoint" />
+		<property name="accessDeniedHandler">
+			<bean
+				class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
+				<property name="errorPage"
+					value="/pages/fbrp/security/authorization/grantNo.jsp" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="fbrp_security_fbrpAuthenticationEntryPoint"
+		class="com.qm.frame.security.FbrpAuthenticationEntryPoint">
+		<property name="loginUrlAuthenticationEntryPoint"
+			ref="fbrp_security_loginUrlAuthenticationEntryPoint" />
+	</bean>
+
+	<bean id="fbrp_security_loginUrlAuthenticationEntryPoint"
+		class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+			<property name="loginFormUrl" value="/login.jsp" /> 
+	</bean>
+
+	<bean id="fbrp_security_rememberMeProcessingFilter"
+		class="org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
+		<property name="authenticationManager" ref="fbrp_security_authenticationManager" />
+		<property name="rememberMeServices" ref="fbrp_security_rememberMeServices" />
+	</bean>
+
+	<bean id="fbrp_security_fbrpAuthenticationProcessingFilter"
+		class="com.qm.frame.security.FbrpAuthenticationProcessingFilter">
+		<property name="fbrpUsernamePasswordAuthenticationFilter"
+			ref="fbrp_security_fbrpUsernamePasswordAuthenticationFilter" />
+		<property name="authenticationManager" ref="fbrp_security_authenticationManager" />
+	</bean>
+
+	<bean id="fbrp_security_fbrpUsernamePasswordAuthenticationFilter"
+		class="com.qm.frame.security.FbrpUsernamePasswordAuthenticationFilter">
+		<property name="staffService" ref="fbrp_security_staffService" />
+		<property name="filterProcessesUrl" value="/j_spring_security_check" />
+		<property name="authenticationManager" ref="fbrp_security_authenticationManager" />
+		<property name="rememberMeServices" ref="fbrp_security_rememberMeServices" />
+		<property name="sessionAuthenticationStrategy"
+			ref="fbrp_security_concurrentSessionControlStrategy" />
+		<property name="authenticationSuccessHandler">
+			<bean class="com.qm.frame.security.FbrpAuthenticationSuccessHandler">
+				<property name="menuService" ref="fbrp_admin_menuService"/>
+				<property name="alwaysUseDefaultTargetUrl" value="true"/>
+				<property name="defaultTargetUrl" value="/"/>
+				<property name="userDetailsService">
+					<ref bean="fbrp_security_userDetailsService" />
+				</property>
+			</bean>
+		</property>
+		<property name="authenticationFailureHandler">
+			<bean class="com.qm.frame.security.FbrpAuthenticationFailureHandler">
+				<property name="defaultFailureUrl" value="/login.jsp" />
+				<property name="userDetailsService" ref="fbrp_security_userDetailsService" />
+				<property name="exceptionMappings">
+					<map>
+						<entry
+							key="org.springframework.security.authentication.BadCredentialsException"
+							value="/login.jsp?login_error=user_not_found" />
+						<entry
+							key="org.springframework.security.authentication.AccountExpiredException"
+							value="/login.jsp?login_error=password_expired" />
+						<entry
+							key="org.springframework.security.authentication.DisabledException"
+							value="/login.jsp?login_error=user_disabled" />
+						<entry
+							key="org.springframework.security.authentication.LockedException"
+							value="/login.jsp?login_error=user_locked" />
+						<entry
+							key="com.qm.frame.security.exception.CaptchaAuthenticationException"
+							value="/login.jsp?login_error=captcha_error" />
+						<entry
+							key="com.qm.frame.security.exception.AuthenticationAdapterAuthenticationException"
+							value="/login.jsp?login_error=authadapter_error" />
+						<entry
+							key="org.springframework.security.web.authentication.session.SessionAuthenticationException"
+							value="/login.jsp?login_error=too_many_user_error" />
+						<entry key="com.qm.frame.security.exception.LicenseException"
+							value="/login.jsp?login_error=lics_expired" />
+					</map>
+				</property>
+			</bean>
+		</property>
+		<property name="fbrpDaoAuthenticationProvider" ref="fbrp_security_fbrpDaoAuthenticationProvider"/>
+		<property name="postOnly" value="false"/>
+	</bean>
+
+	<bean id="fbrp_security_authenticationManager"
+		class="org.springframework.security.authentication.ProviderManager">
+		<property name="providers">
+			<list>
+				<ref bean="fbrp_security_fbrpDaoAuthenticationProvider" />
+				<ref local="fbrp_security_rememberMeAuthenticationProvider" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="fbrp_security_fbrpDaoAuthenticationProvider"
+		class="com.qm.frame.security.FbrpDaoAuthenticationProvider">
+		<property name="userDetailsService" ref="fbrp_security_userDetailsService"/>
+		<property name="forcePrincipalAsString" value="true"/>
+		<property name="passwordEncoder" ref="${password.encoder}"/>
+		<property name="saltSource" ref="${salt.source}"/>
+	</bean>
+
+	<bean id="fbrp_security_md5PasswordEncoder" name="MD5加密(Base64)" class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" >
+		<property name="encodeHashAsBase64" value="true"/>
+	</bean>	
+	<bean id="fbrp_security_shaPasswordEncoder" name="SHA加密" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
+	<bean id="fbrp_security_plaintextPasswordEncoder" name="不加密" class="com.qm.frame.security.FbrpPlaintextPasswordEncoder" />
+		
+	<bean id="fbrp_security_systemWideSaltSource" class="org.springframework.security.authentication.dao.SystemWideSaltSource">
+		<property name="systemWideSalt" value="${systemWideSaltSource.systemWideSalt}"/>
+	</bean>
+		
+	<bean id="fbrp_security_reflectionSaltSource" class="org.springframework.security.authentication.dao.ReflectionSaltSource">
+		<property name="userPropertyToUse" value="${reflectionSaltSource.userPropertyToUse}"/>
+	</bean>
+		
+	<bean id="fbrp_security_userDetailsService" class="com.qm.frame.security.service.impl.UserDetailsServiceImpl"
+		parent="fbrp_infrastructure_defaultService">
+		<property name="passwordEncoder" ref="${password.encoder}"/>
+		<property name="saltSource" ref="${salt.source}"/>
+		<property name="roleService" ref="fbrp_security_roleService"/>
+		<property name="grantService" ref="fbrp_security_grantService"/>
+		<property name="securityStrategyService" ref="fbrp_security_securityStrategyService"/>
+        <property name="synInfoFromThirdParty" ref="fbrp_security_synInfoFromThirdParty"/>
+	</bean>
+
+	<bean id="fbrp_security_logoutFilter"
+		class="org.springframework.security.web.authentication.logout.LogoutFilter">
+		<!-- <constructor-arg value="/login.jsp" /> -->
+		<constructor-arg value="/logout.html" />
+		<constructor-arg>
+			<list>
+				<bean
+					class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+				<ref local="fbrp_security_rememberMeServices" />
+			</list>
+		</constructor-arg>
+		<property name="filterProcessesUrl" value="/j_spring_security_logout" />
+	</bean>
+
+	<bean id="fbrp_security_rememberMeAuthenticationProvider"
+		class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
+		<property name="key" value="fbrp" />
+	</bean>
+
+	<bean id="fbrp_security_rememberMeServices"
+		class="org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
+		<property name="userDetailsService" ref="fbrp_security_userDetailsService" />
+		<property name="key" value="fbrp" />
+	</bean>
+
+	<bean id="fbrp_security_filterInvocationInterceptor"
+		class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+		<property name="validateConfigAttributes" value="true" />
+		<property name="authenticationManager" ref="fbrp_security_authenticationManager" />
+		<property name="accessDecisionManager" ref="fbrp_security_urlAccessDecisionManager" />
+		<property name="securityMetadataSource" ref="fbrp_security_fbrpSecurityMetadataSource" />
+	</bean>
+
+	<bean id="fbrp_security_urlAccessDecisionManager"
+		class="org.springframework.security.access.vote.AffirmativeBased">
+		<property name="allowIfAllAbstainDecisions" value="false" />
+		<property name="decisionVoters">
+			<list>
+				<ref bean="fbrp_security_adminVoter" />
+				<ref bean="fbrp_security_urlVoter" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="fbrp_security_fbrpSecurityMetadataSource" class="com.qm.frame.security.FbrpSecurityMetadataSource">
+		<property name="uncheckUrlList">
+			<list>
+				<value>login.jsp</value>
+				<value>logout.html</value>
+				<value>${unCheckUrl_1}</value>
+				<value>${unCheckUrl_2}</value>
+				<value>${unCheckUrl_3}</value>
+				<value>${unCheckUrl_4}</value>
+				<value>${unCheckUrl_5}</value>
+				<value>${unCheckUrl_6}</value>
+				<value>grantNo.jsp</value>
+				<value>securityDebugInfo.jsp</value>
+				<value>session.jsp</value>
+				<value>dzbssxsp.jsp</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="fbrp_security_urlVoter" class="com.qm.frame.security.voter.UrlVoter"
+		parent="fbrp_infrastructure_defaultService">
+		<property name="enabled" value="true" />
+		<property name="uncheckUrlList">
+			<list>
+				<value>fbrp.jsp</value>
+				<value>/frame.jsp</value>
+				<value>/header.do</value>
+				<value>/left.do</value>
+				<value>/split.jsp</value>
+				<value>/main.jsp</value>
+				<value>/home.jsp</value>
+				<value>/home.do</value>
+				<value>/ldpage.do</value>
+				<value>/lyxtJc.do</value>
+				<value>zyTree.do</value>
+				<value>/footer.jsp</value>
+				<value>logout.do</value>
+				<value>/public-access/</value>
+			</list>
+		</property>
+		<property name="urlListExceptSupAdmin">
+			<list>
+				<value>appSysEdit.jsf</value>
+				<value>appSys.jsf</value>
+			</list>
+		</property>
+		<property name="grantService" ref="fbrp_security_grantService" />
+		<property name="menuService" ref="fbrp_admin_menuService" />
+	</bean>
+
+	<bean id="fbrp_security_adminVoter" class="com.qm.frame.security.voter.AdminVoter" />
+
+	<bean id="fbrp_security_orgService"
+		class="com.qm.frame.security.org.service.impl.OrgServiceImpl"
+		parent="fbrp_infrastructure_defaultService">
+	</bean>
+
+	<bean id="fbrp_security_roleService"
+		class="com.qm.frame.security.role.service.impl.RoleServiceImpl"
+		parent="fbrp_infrastructure_defaultService">
+		<property name="grantService" ref="fbrp_security_grantService" />
+	</bean>
+
+	<bean id="fbrp_security_roleMemberService"
+		class="com.qm.frame.security.role.service.impl.RoleMemberServiceImpl"
+		parent="fbrp_infrastructure_defaultService">
+		<property name="roleService" ref="fbrp_security_roleService"/>
+	</bean>
+
+	<bean id="fbrp_security_staffService"
+		class="com.qm.frame.security.staff.service.impl.StaffServiceImpl"
+		parent="fbrp_infrastructure_defaultService">
+		<property name="securityStrategyService" ref="fbrp_security_securityStrategyService" />
+		<property name="userDetailService" ref="fbrp_security_userDetailsService" />
+		<property name="orgService" ref="fbrp_security_orgService" />
+		<property name="roleMemberService" ref="fbrp_security_roleMemberService" />
+		<property name="sqlExecutionEngineService" ref="fbrp_dbtool_sqlExecutionEngineService" />
+	</bean>
+	
+	<bean id="fbrp_security_synInfoFromThirdParty" class="com.qm.frame.security.synchro.impl.SynInfoFromThirdPartyImpl"
+		parent="fbrp_infrastructure_defaultService">
+		<property name="sqlExecutionEngineService" ref="fbrp_dbtool_sqlExecutionEngineService"/>
+	</bean>
+	
+	<bean class="com.qm.frame.infrastructure.util.ConfigItem">
+		<constructor-arg name="config" ref="fbrp_infrastructure_fbrpConfigInfo"/>
+		<constructor-arg name="key" value="authType"/>
+		<constructor-arg name="value" value="${authType}"/>
+		<constructor-arg name="defaultValue" value="fbrp_security_localDBAuthAp"/>
+	</bean>
+	
+</beans>
