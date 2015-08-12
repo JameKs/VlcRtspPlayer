@@ -1,0 +1,8 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"/>
+   <soap:Body>
+      <ns1:doServiceResponse xmlns:ns1="http://cn.gov.chinatax.etax.service/">
+         <return>22</return>
+      </ns1:doServiceResponse>
+   </soap:Body>
+</soap:Envelope>

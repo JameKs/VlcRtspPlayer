@@ -9,7 +9,6 @@ import java.security.Signature;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -18,6 +17,7 @@ import com.mqm.frame.util.InternationalizationUtil;
 import com.mqm.frame.util.license.CollectMacAddress;
 import com.mqm.frame.util.license.LicenseColl;
 import com.mqm.frame.util.license.LicenseInfo;
+import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 /**
  * <pre>
@@ -69,8 +69,8 @@ public class ValidateLicense {
 				sig.initVerify(pubKey);
 				sig.update(InternationalizationUtil.getBytes(data));
 				// 验证License
-				boolean verifies = sig.verify(Base64.decodeBase64(InternationalizationUtil
-						.getBytes(signature)));
+				boolean verifies = sig.verify(Base64.decode((InternationalizationUtil
+						.getBytes(signature))));
 				if (verifies) {
 					Date evalDate = DateTimeUtil.parseDate(expirationDate);
 					if (evalDate.before(new Date())) {
