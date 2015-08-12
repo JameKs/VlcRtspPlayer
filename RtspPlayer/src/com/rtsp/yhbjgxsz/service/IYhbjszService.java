@@ -4,9 +4,7 @@
  */
 package com.rtsp.yhbjgxsz.service;
 
-import java.util.List;
-
-import com.rtsp.yhbjgxsz.vo.YhBjVo;
+import com.mqm.frame.common.IDefaultService;
 
 /**
  * <pre>
@@ -15,14 +13,7 @@ import com.rtsp.yhbjgxsz.vo.YhBjVo;
  * @author meihu2007@sina.com
  * 2015年5月27日
  */
-public interface IYhbjszService {
+public interface IYhbjszService<T> extends IDefaultService<T> {
 
-	public abstract void insert(YhBjVo yhBjVo);
-
-	public abstract void delete(YhBjVo yhBjVo);
-
-	public abstract List findList(YhBjVo yhBjVo);
-	
-	public abstract int findListCount(YhBjVo yhBjVo);
 	
 }

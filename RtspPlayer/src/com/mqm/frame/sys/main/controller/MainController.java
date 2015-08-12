@@ -1,4 +1,4 @@
-package com.mqm.frame.common.main.controller;
+package com.mqm.frame.sys.main.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +23,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.mqm.frame.common.DefaultController;
 import com.mqm.frame.infrastructure.util.ContextUtil;
-import com.mqm.frame.sys.menu.service.ICdxxService;
+import com.mqm.frame.sys.menu.service.IMenuService;
 import com.mqm.frame.sys.menu.vo.Cdxx;
 import com.mqm.frame.sys.menu.vo.JsonTree;
 import com.mqm.frame.sys.user.vo.User;
@@ -49,7 +49,7 @@ public class MainController extends DefaultController {
 	private static final Log log = LogFactory.getLog(MainController.class);
 
 	@Resource
-	private ICdxxService cdxxService;
+	private IMenuService cdxxService;
 
 	/**
 	 * 框架入口。

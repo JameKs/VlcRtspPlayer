@@ -39,7 +39,7 @@ public class UserController extends DefaultController {
 	
 	@RequestMapping(value="yhgl.do" , params="delete")
 	public String delete(String id , ModelMap map , HttpServletRequest req){
-		userService.delete(id);
+		userService.deleteById(id);
 		return "{success:true,msg:'添加成功！'}";
 	}
 	
@@ -53,7 +53,7 @@ public class UserController extends DefaultController {
 	
 	@RequestMapping(value="yhgl.do" , params="findById")
 	public String findById(String id , ModelMap map , HttpServletRequest req){
-		User user = userService.findById(id);
+		User user = (User)userService.findById(id);
 		map.put("user", user );
 		return "{success:true,msg:'添加成功！'}";
 	}
@@ -63,7 +63,7 @@ public class UserController extends DefaultController {
 	public String find(User user , ModelMap map , HttpServletRequest req){
 		int pageIndex = super.getPageIndex(req);
 		int pageSize = super.getPageSize(req);
-        List list = userService.findList(user,pageIndex,pageSize);
+        List list = userService.findPageList(user,pageIndex,pageSize);
         long count = userService.findListCount(user);
         String jsonStr = StringUtil.pageListToJson(list, count);
 		return jsonStr;

@@ -4,9 +4,7 @@
  */
 package com.rtsp.sxtgl.dao;
 
-import java.util.List;
-
-import com.rtsp.sxtgl.vo.Sxt;
+import com.mqm.frame.common.IDefaultDao;
 
 /**
  * <pre>
@@ -15,37 +13,7 @@ import com.rtsp.sxtgl.vo.Sxt;
  * @author meihu2007@sina.com
  * 2015年5月27日
  */
-public interface ISxtglDao {
-
-	/**
-	 * @param qjxx
-	 */
-	void insert(Sxt sxt);
-	
-	/**
-	 * @param qjxx
-	 */
-	void delete(Sxt sxt);
-
-	/**
-	 * @param qjxx
-	 */
-	int update(Sxt sxt);
-
-	/**
-	 * @param qjxx
-	 */
-	abstract Sxt findById(String id);
-	
-	/**
-	 * @param qjxx
-	 */
-	abstract List findList(Sxt sxt);
-	
-	/**
-	 * @param qjxx
-	 */
-	abstract int findListCount(Sxt sxt);
+public interface ISxtglDao<T> extends IDefaultDao<T>{
 
 
 }

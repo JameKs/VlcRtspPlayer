@@ -138,7 +138,7 @@
 		</property>
 	</bean>
     -->
-	<bean id="exceptionResolver" class="com.icanft.common.util.MyExceptionHandler"></bean>
+	<bean id="exceptionResolver" class="com.mqm.frame.common.handler.MyExceptionHandler"></bean>
 	<!-- 异常处理器 <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver"> 
 		定义默认的异常处理页面，当该异常类型的注册时使用 <property name="defaultErrorView" > <value>error</value> 
 		</property> 定义异常处理页面用来获取异常信息的变量名，默认名为exception <property name="exceptionAttribute" 
@@ -148,7 +148,7 @@
 		</props> </property> </bean> -->
 
 	<mvc:interceptors>
-		<bean class="com.icanft.common.interceptor.RequestTimeInterceptor"></bean>
+		<bean class="com.mqm.frame.common.interceptor.RequestTimeInterceptor"></bean>
 	</mvc:interceptors>
 
 

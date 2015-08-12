@@ -3,17 +3,10 @@ package com.mqm.frame.sys.menu.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.mqm.frame.sys.menu.vo.Cdxx;
+import com.mqm.frame.common.IDefaultDao;
 
-public interface ICdxxDao {
+public interface IMenuDao<T> extends IDefaultDao<T> {
 
-	public void insert(Cdxx cdxx);
-
-	public void delete(String id);
-
-	public void update(Cdxx cdxx);
-
-	public Cdxx findById(String id);
 
 	public List findByParentId(String pId);
 

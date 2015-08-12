@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--
-  - Contacts web application
-  -
-  -->
-
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
@@ -17,14 +12,10 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			/WEB-INF/spring-db-config.xml,
+			classpath*:/META-INF/conf/db/mqm-db-config.xml,
 	    	/WEB-INF/spring-activiti-config.xml,
-	    	/WEB-INF/spring-mybatis-config.xml,
 	    	/WEB-INF/spring-dao-config.xml,
 	    	/WEB-INF/spring-service-config.xml,
-	    	<!-- 
-			classpath:applicationContext-common-business.xml
-			classpath:applicationContext-common-authorization.xml -->
 			classpath:applicationContext-security.xml,
 			classpath*:/META-INF/conf/spring/mqm-*.xml
 		</param-value>
@@ -102,24 +93,10 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
-  <!--
-	- Provides web services endpoint. See remoting-servlet.xml.
-	-->
-	<servlet>
-		<servlet-name>remoting</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<load-on-startup>2</load-on-startup>
-	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>springMVC</servlet-name>
 		<url-pattern>/</url-pattern>
 	 </servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>remoting</servlet-name>
-		<url-pattern>/remoting/*</url-pattern>
-	</servlet-mapping>
 
 	 <welcome-file-list>
 		<welcome-file>login.jsp</welcome-file>

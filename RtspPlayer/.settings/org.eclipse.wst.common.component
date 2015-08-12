@@ -2,6 +2,7 @@
     <wb-module deploy-name="RtspPlayer">
         <wb-resource deploy-path="/" source-path="/WebRoot" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/.apt_generated"/>
         <property name="java-output-path" value="/RtspPlayer/WebRoot/WEB-INF/classes"/>
         <property name="context-root" value="RtspPlayer"/>
     </wb-module>

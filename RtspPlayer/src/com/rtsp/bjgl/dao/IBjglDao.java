@@ -4,9 +4,7 @@
  */
 package com.rtsp.bjgl.dao;
 
-import java.util.List;
-
-import com.rtsp.bjgl.vo.Bj;
+import com.mqm.frame.common.IDefaultDao;
 
 /**
  * <pre>
@@ -15,37 +13,7 @@ import com.rtsp.bjgl.vo.Bj;
  * @author meihu2007@sina.com
  * 2015年5月27日
  */
-public interface IBjglDao {
-
-	/**
-	 * @param qjxx
-	 */
-	void insert(Bj bj);
-	
-	/**
-	 * @param qjxx
-	 */
-	void delete(Bj bj);
-
-	/**
-	 * @param qjxx
-	 */
-	int update(Bj bj);
-
-	/**
-	 * @param qjxx
-	 */
-	abstract Bj findById(String id);
-	
-	/**
-	 * @param qjxx
-	 */
-	abstract List findList(Bj bj);
-	
-	/**
-	 * @param qjxx
-	 */
-	abstract int findListCount(Bj bj);
+public interface IBjglDao<T> extends IDefaultDao<T> {
 
 
 }

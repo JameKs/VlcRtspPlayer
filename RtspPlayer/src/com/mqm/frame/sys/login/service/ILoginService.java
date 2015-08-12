@@ -1,4 +1,4 @@
-package com.mqm.frame.common.login.service;
+package com.mqm.frame.sys.login.service;
 
 import com.mqm.frame.sys.user.vo.User;
 

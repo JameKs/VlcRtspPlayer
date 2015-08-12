@@ -101,8 +101,9 @@ public class BjglController {
 	@ResponseBody
 	public String sc(ModelMap map , Bj bj , HttpServletRequest req,  @ModelAttribute("user") User user){
 		bj.setXgr(user.getLoginId());
-		bjglService.delete(bj);
+		bjglService.deleteById(bj.getId());
 		return "{\"success\":true,\"msg\":\"更新成功\"}";
 	}
+	
 	
 }

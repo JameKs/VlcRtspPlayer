@@ -4,14 +4,9 @@
  */
 package com.rtsp.yhbjgxsz.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import com.mqm.frame.common.DefaultServiceImpl;
 import com.rtsp.yhbjgxsz.dao.IYhbjszDao;
 import com.rtsp.yhbjgxsz.service.IYhbjszService;
 import com.rtsp.yhbjgxsz.vo.YhBjVo;
@@ -23,32 +18,21 @@ import com.rtsp.yhbjgxsz.vo.YhBjVo;
  * @author meihu2007@sina.com
  * 2015年5月27日
  */
-public class YhbjszServiceImpl implements IYhbjszService {
+public class YhbjszServiceImpl extends DefaultServiceImpl<YhBjVo>  implements IYhbjszService<YhBjVo> {
 	
 	private static final Logger log = Logger.getLogger(YhbjszServiceImpl.class);
 	
 	private IYhbjszDao yhbjszDao;
-	
-	@Override
-	public void insert(YhBjVo yhBjVo){
-		yhbjszDao.insert(yhBjVo);
-	}
 
-	@Override
-	public void delete(YhBjVo yhBjVo){
-		yhbjszDao.delete(yhBjVo);
+	/**
+	 * @param yhbjszDao the yhbjszDao to set
+	 */
+	public void setYhbjszDao(IYhbjszDao yhbjszDao) {
+		this.yhbjszDao = yhbjszDao;
 	}
 	
-	@Override
-	public List findList(YhBjVo yhBjVo){
-		List qj = yhbjszDao.findList(yhBjVo);
-		return qj;
-	}
-
-	@Override
-	public int findListCount(YhBjVo yhBjVo){
-		int count = yhbjszDao.findListCount(yhBjVo);
-		return count;
-	}
+	
+	
+	
 	
 }

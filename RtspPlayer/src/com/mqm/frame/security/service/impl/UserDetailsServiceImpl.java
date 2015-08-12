@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.mqm.frame.infrastructure.util.ContextUtil;
 import com.mqm.frame.security.QmUserDetails;
-import com.mqm.frame.security.role.service.IRoleService;
+import com.mqm.frame.sys.role.service.IRoleService;
 import com.mqm.frame.sys.user.service.IUserService;
 import com.mqm.frame.sys.user.vo.User;
 import com.mqm.frame.util.constants.BaseConstants;
@@ -47,7 +47,7 @@ public final class UserDetailsServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException, DataAccessException {
 	
-		User userVO = userService.findByLoginId(username);//此处的username就是loginId
+		User userVO = (User)userService.findByLoginId(username);//此处的username就是loginId
 
 		// 获取当前用户所有所属角色集合
 		List roles = null;//roleService.findByUserLoginId(userVO.getLoginId());

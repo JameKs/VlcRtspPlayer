@@ -101,8 +101,16 @@ public class SxtglController {
 	@ResponseBody
 	public String sc(ModelMap map , Sxt sxt , HttpServletRequest req,  @ModelAttribute("user") User user){
 		sxt.setXgr(user.getLoginId());
-		sxtglService.delete(sxt);
+		sxtglService.deleteById(sxt.getId());
 		return "{\"success\":true,\"msg\":\"更新成功\"}";
 	}
+	/**
+	 * @param sxtglService the sxtglService to set
+	 */
+	public void setSxtglService(ISxtglService sxtglService) {
+		this.sxtglService = sxtglService;
+	}
+	
+	
 	
 }

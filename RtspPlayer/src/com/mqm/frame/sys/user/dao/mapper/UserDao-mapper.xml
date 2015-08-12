@@ -26,7 +26,7 @@
 		values (#{loginId}, #{password}, #{userName}, #{bmDm}, #{phone}, #{email}, #{cjr})
 	</insert>
 	
-	<delete id="delete" parameterType="string">
+	<delete id="deleteById" parameterType="string">
 		delete from T_JXJY_USER where id = #{id}
 	</delete>
 	
@@ -69,11 +69,4 @@
 		</where>
     </select>
     
-    <!-- 登录的查询方法 -->
-    <select id="login" parameterType="hashmap" resultMap="UserMapper">
-        select * from T_JXJY_USER 
-        where LOGIN_ID = #{loginId}
-        and PASSWORD = #{password}
-    </select>
-	
 </mapper>

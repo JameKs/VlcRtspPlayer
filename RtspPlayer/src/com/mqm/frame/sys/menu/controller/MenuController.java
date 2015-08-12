@@ -16,7 +16,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.mqm.frame.sys.menu.service.ICdxxService;
+import com.mqm.frame.sys.menu.service.IMenuService;
 import com.mqm.frame.sys.menu.vo.Cdxx;
 import com.mqm.frame.sys.menu.vo.JsonTree;
 import com.mqm.frame.sys.user.vo.User;
@@ -24,12 +24,12 @@ import com.mqm.frame.util.constants.BaseConstants;
 
 @Controller
 @RequestMapping("/cdxx")
-public class CdxxController {
+public class MenuController {
 
-	private static final Logger logger = Logger.getLogger(CdxxController.class);
+	private static final Logger logger = Logger.getLogger(MenuController.class);
 
 	@Resource(name = "cdxxService")
-	private ICdxxService cdxxService;
+	private IMenuService cdxxService;
 	
 	@RequestMapping(value="cdgl",params="main")
 	public String main(ModelMap map, HttpServletRequest req) {
@@ -73,7 +73,7 @@ public class CdxxController {
 	@RequestMapping(value = "cdgl.do", params = "delete")
 	@ResponseBody
 	public String deleteById(ModelMap map, HttpServletRequest req, String id) {
-		cdxxService.delete(id);
+		cdxxService.deleteById(id);
 		return "{success:true,msg:'删除成功'}";
 	}
 	
@@ -99,7 +99,7 @@ public class CdxxController {
 	 * @param cdxxService
 	 *            the cdxxService to set
 	 */
-	public void setCdxxService(ICdxxService cdxxService) {
+	public void setCdxxService(IMenuService cdxxService) {
 		this.cdxxService = cdxxService;
 	}
 

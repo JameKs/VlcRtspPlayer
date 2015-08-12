@@ -104,7 +104,7 @@ public class YhbjszController {
 	@ResponseBody
 	public String scgx(ModelMap map , YhBjVo yhBjVo , HttpServletRequest req,  @ModelAttribute("user") User user){
 		yhBjVo.setXgr(user.getLoginId());
-		yhbjszService.delete(yhBjVo);
+		yhbjszService.deleteById(yhBjVo.getId());
 		return "{\"success\":true,\"msg\":\"更新成功\"}";
 	}
 	

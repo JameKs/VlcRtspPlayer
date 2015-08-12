@@ -1,4 +1,4 @@
-package com.mqm.frame.common.login.controller;
+package com.mqm.frame.sys.login.controller;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -10,8 +10,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.mqm.frame.common.login.service.ILoginService;
 import com.mqm.frame.infrastructure.util.ContextUtil;
+import com.mqm.frame.sys.login.service.ILoginService;
 import com.mqm.frame.sys.user.vo.User;
 import com.mqm.frame.util.constants.BaseConstants;
 

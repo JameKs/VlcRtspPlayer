@@ -4,9 +4,7 @@
  */
 package com.rtsp.sxtgl.service;
 
-import java.util.List;
-
-import com.rtsp.sxtgl.vo.Sxt;
+import com.mqm.frame.common.IDefaultService;
 
 /**
  * <pre>
@@ -15,18 +13,6 @@ import com.rtsp.sxtgl.vo.Sxt;
  * @author meihu2007@sina.com
  * 2015年5月27日
  */
-public interface ISxtglService {
-
-	public abstract void insert(Sxt sxt);
-	
-	public abstract void delete(Sxt sxt);
-
-	public abstract void update(Sxt sxt);
-
-	public abstract List findList(Sxt sxt);
-	
-	public abstract int findListCount(Sxt sxt);
-	
-	public abstract Sxt findById(String id);
+public interface ISxtglService<T> extends IDefaultService<T> {
 	
 }
