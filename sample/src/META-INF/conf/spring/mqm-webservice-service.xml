@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws" 
+			xsi:schemaLocation="
+                       http://www.springframework.org/schema/beans
+                       http://www.springframework.org/schema/beans/spring-beans.xsd
+                       http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+	<import resource="classpath:META-INF/cxf/cxf.xml"/>
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+	<jaxws:server id="etaxPubilicCxfService" serviceClass="com.mqm.frame.webservice.IEtaxService" address="/etaxservice">
+		<!-- 要暴露的 bean 的引用 -->
+		<jaxws:serviceBean>
+			<ref bean="etaxPublicService" />
+		</jaxws:serviceBean>
+		
+		<jaxws:dataBinding>
+			<bean class="org.apache.cxf.aegis.databinding.AegisDatabinding" />
+		</jaxws:dataBinding>
+		
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor" />
+			<bean class="org.apache.cxf.binding.soap.saaj.SAAJInInterceptor" />
+			<bean id="wss4jInConfiguration" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<constructor-arg>
+					<map>
+						<entry key="action" value="UsernameToken" />
+						<entry key="passwordType" value="PasswordText" />
+						<entry key="passwordCallbackRef">
+							<ref bean="etax_webservice_nfzcptAuthenticationHandler"/>
+						</entry>
+					</map>
+				</constructor-arg>
+			</bean> 
+		</jaxws:inInterceptors>
+		
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingOutInterceptor" />
+			<bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />
+		</jaxws:outInterceptors>
+	</jaxws:server>
+	
+	<!-- 身份安全验证handler -->
+	<bean id="etax_webservice_nfzcptAuthenticationHandler" class="com.mqm.frame.webservice.security.EtaxAuthenticationHandler">
+		<property name="identities">
+			<props><!-- key为用户 value为密码 可以在此添加Header部分用户认证账号 -->
+				<prop key="wsbs">wsbs</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!--webservice接口实现 -->
+	<bean id="etaxPublicService" class="com.mqm.frame.webservice.impl.EtaxService"></bean>
+</beans>
