@@ -34,27 +34,27 @@
 		<selectKey resultType="String" keyProperty = "id" order="BEFORE">
 			select SYS_GUID() FROM DUAL
 		</selectKey>
-        insert into T_JXJY_QJXX(id, kssj, jssj, qjyy, rwlx_dm, USER_ID, cjr)
+        insert into T_RTSP_BJ(id, kssj, jssj, qjyy, rwlx_dm, USER_ID, cjr)
         values(#{id}, #{kssj}, #{jssj}, #{qjyy}, #{rwlxDm}, #{userId}, #{cjr})
     </insert>
     
     <update id="update" parameterType="Bj">
-        update T_JXJY_QJXX set xgr = #{xgr}, xg_sj =sysdate,
+        update T_RTSP_BJ set xgr = #{xgr}, xg_sj =sysdate,
         	kssj = #{kssj}, jssj = #{jssj}, qjyy = #{qjyy},
         	rw_id = #{rwId}, rwlx_dm = #{rwlxDm} 
         where ID = #{id}
     </update>
     
     <select id="findById" parameterType="string" resultMap="bjMapper">
-        select * from T_JXJY_QJXX T WHERE T.ID = #{id}
+        select * from T_RTSP_BJ T WHERE T.ID = #{id}
     </select>
     
     <select id="findList" parameterType="Bj" resultMap="bjMapper">
-        select * from T_JXJY_QJXX T WHERE T.ID = #{id}
+        select * from T_RTSP_BJ T WHERE T.ID = #{id}
     </select>
     
     <select id="findListCount" parameterType="Bj" resultType="long">
-        select count(1) from T_JXJY_QJXX T WHERE T.ID = #{id}
+        select count(1) from T_RTSP_BJ T WHERE T.ID = #{id}
     </select>
     
 </mapper>
