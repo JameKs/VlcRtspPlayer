@@ -24,7 +24,7 @@ import com.mqm.frame.common.Converter.DateConverter;
 import com.mqm.frame.sys.user.vo.User;
 import com.mqm.frame.util.StringUtil;
 import com.rtsp.yhbjgxsz.service.IYhbjszService;
-import com.rtsp.yhbjgxsz.vo.YhBjVo;
+import com.rtsp.yhbjgxsz.vo.YhBjVO;
 
 /**
  * <pre>
@@ -66,7 +66,7 @@ public class YhbjszController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="yhbjsz.do", params="cxgx")
-	public String cxgx(ModelMap map , YhBjVo yhBjVo , HttpServletRequest req){
+	public String cxgx(ModelMap map , YhBjVO yhBjVo , HttpServletRequest req){
 		List list = yhbjszService.findList(yhBjVo);
 		int count = yhbjszService.findListCount(yhBjVo);
 		
@@ -78,7 +78,7 @@ public class YhbjszController {
 	 * @return
 	 */
 	@RequestMapping(value="yhbjsz.do", params="gxmx")
-	public String gxmx(ModelMap map, YhBjVo yhBjVo , HttpServletRequest req){
+	public String gxmx(ModelMap map, YhBjVO yhBjVo , HttpServletRequest req){
 		List list = yhbjszService.findList(yhBjVo);
 		map.put("qjxx", list);
 		return "/admin/qjgl/njmx";
@@ -90,7 +90,7 @@ public class YhbjszController {
 	 */
 	@RequestMapping(value="yhbjsz.do", params="xzgx")
 	@ResponseBody
-	public String xzgx(ModelMap map, YhBjVo yhBjVo , HttpServletRequest req, @ModelAttribute("user") User user){
+	public String xzgx(ModelMap map, YhBjVO yhBjVo , HttpServletRequest req, @ModelAttribute("user") User user){
 		yhBjVo.setCjr(user.getLoginId());
 		yhbjszService.insert(yhBjVo);
 		return "{\"success\":true,\"msg\":\"保存成功\"}";
@@ -102,7 +102,7 @@ public class YhbjszController {
 	 */
 	@RequestMapping(value="yhbjsz.do", params="scgx")
 	@ResponseBody
-	public String scgx(ModelMap map , YhBjVo yhBjVo , HttpServletRequest req,  @ModelAttribute("user") User user){
+	public String scgx(ModelMap map , YhBjVO yhBjVo , HttpServletRequest req,  @ModelAttribute("user") User user){
 		yhBjVo.setXgr(user.getLoginId());
 		yhbjszService.deleteById(yhBjVo.getId());
 		return "{\"success\":true,\"msg\":\"更新成功\"}";

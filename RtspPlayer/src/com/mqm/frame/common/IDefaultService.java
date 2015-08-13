@@ -30,4 +30,6 @@ public interface IDefaultService<T> {
 	public List findPageList(T t , int pageIndex, int pageSize);
 	
 	public int findListCount(T t);
+	
+	public List findAll();
 }

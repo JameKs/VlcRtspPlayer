@@ -30,4 +30,6 @@ public interface IDefaultDao<T> {
 	public List findPageList(String key, T t , int pageIndex, int pageSize);
 	
 	public int findListCount(String key , T t);
+	
+	public List findAll(String key);
 }

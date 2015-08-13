@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import com.mqm.frame.common.DefaultServiceImpl;
 import com.rtsp.yhbjgxsz.dao.IYhbjszDao;
 import com.rtsp.yhbjgxsz.service.IYhbjszService;
-import com.rtsp.yhbjgxsz.vo.YhBjVo;
+import com.rtsp.yhbjgxsz.vo.YhBjVO;
 
 /**
  * <pre>
@@ -18,7 +18,7 @@ import com.rtsp.yhbjgxsz.vo.YhBjVo;
  * @author meihu2007@sina.com
  * 2015年5月27日
  */
-public class YhbjszServiceImpl extends DefaultServiceImpl<YhBjVo>  implements IYhbjszService<YhBjVo> {
+public class YhbjszServiceImpl extends DefaultServiceImpl<YhBjVO>  implements IYhbjszService<YhBjVO> {
 	
 	private static final Logger log = Logger.getLogger(YhbjszServiceImpl.class);
 	

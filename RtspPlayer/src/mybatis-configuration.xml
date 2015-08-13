@@ -4,9 +4,11 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="com.mqm.frame.sys.user.vo.User" alias="User" />
-		<typeAlias type="com.mqm.frame.sys.menu.vo.Cdxx" alias="Cdxx" />
+		<typeAlias type="com.mqm.frame.sys.menu.vo.MenuVO" alias="MenuVO" />
+		<typeAlias type="com.mqm.frame.sys.role.vo.Role" alias="Role" />
 		<typeAlias type="com.rtsp.bjgl.vo.Bj" alias="Bj" />
 		<typeAlias type="com.rtsp.sxtgl.vo.Sxt" alias="Sxt" />
+		<typeAlias type="com.rtsp.yhbjgxsz.vo.YhBjVO" alias="YhBjVO" />
 	</typeAliases>
 
 </configuration>

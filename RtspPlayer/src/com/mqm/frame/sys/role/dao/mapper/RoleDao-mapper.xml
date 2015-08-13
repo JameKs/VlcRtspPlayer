@@ -19,27 +19,27 @@
 		<selectKey resultType="string" order="AFTER" keyProperty="id">  
           SELECT @@IDENTITY
 	    </selectKey>
-		insert into T_JXJY_ROLE (ROLE_DM , ROLE_NAME, BZ, CJR)
+		insert into T_MQM_ROLE (ROLE_DM , ROLE_NAME, BZ, CJR)
 		values (#{roleDm}, #{roleName}, #{bz}, #{cjr})
 	</insert>
 	
 	<delete id="deleteById" parameterType="string">
-		delete from T_JXJY_ROLE where id = #{id}
+		delete from T_MQM_ROLE where id = #{id}
 	</delete>
 	
 	<update id="update" parameterType="Role">
-		update T_JXJY_ROLE set xgr = #{xgr},xgSj = sysdate,
+		update T_MQM_ROLE set xgr = #{xgr},xgSj = sysdate,
 			ROLE_DM=#{roleDm},ROLE_NAME=#{roleName},
 			BZ=#{bz} 
 		where id=#{id}
 	</update>
 	
 	<select id="findById" parameterType="string" resultMap="roleMapper">
-		SELECT * FROM T_JXJY_ROLE where id=#{id}
+		SELECT * FROM T_MQM_ROLE where id=#{id}
 	</select>
 	
 	<select id="findList" parameterType="Role" resultMap="roleMapper">
-		SELECT * FROM T_JXJY_ROLE
+		SELECT * FROM T_MQM_ROLE
 		<where>
 			<if test="roleDm != null and roleDm != ''">
 				and ROLE_DM = #{roleDm}
@@ -54,7 +54,7 @@
 	</select>
 	
 	<select id="findListCount" parameterType="Role" resultType="long">
-		SELECT count(1) FROM T_JXJY_ROLE
+		SELECT count(1) FROM T_MQM_ROLE
 		<where>
 			<if test="roleDm != null and roleDm != ''">
 				and ROLE_DM = #{roleDm}
@@ -70,7 +70,7 @@
 	
 	<select id="findByUserLoginId" parameterType="string" resultMap="roleMapper">
 		SELECT R.* 
-			FROM T_JXJY_USER_ROLE GX,T_JXJY_ROLE R,T_JXJY_USER U
+			FROM T_MQM_USER_ROLE GX,T_MQM_ROLE R,T_MQM_USER U
 			WHERE R.ID = GX.ROLE_ID
 			AND U.ID = GX.USER_ID
 			AND U.LOGIN_ID = #{loginId}

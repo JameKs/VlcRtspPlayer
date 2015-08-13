@@ -13,7 +13,7 @@ import java.util.Date;
  * @author meihu2007@sina.com
  * 2015年5月31日
  */
-public class DefaultTaskVo extends DefaultVo{
+public class DefaultTaskVO extends DefaultVO{
 	
 	private String name ;//任务名称 
 	

@@ -8,20 +8,6 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
 	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
-
-	<bean id="userDao" class="com.mqm.frame.sys.user.dao.impl.UserDaoImpl"
-		parent="defaultDao">
-	</bean> 
-	
-	<bean id="cdxxDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.mqm.frame.sys.menu.dao.ICdxxDao"></property>
-		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
-	</bean> 
-	
-	<bean id="roleDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.mqm.frame.sys.role.dao.IRoleDao"></property>
-		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
-	</bean> 
 	
 	<bean id="ehcacheCacheManager"
 		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
@@ -29,11 +15,14 @@
 			<value>classpath:ehcache.xml</value>
 		</property>
 	</bean>
-<!-- 
-	<bean id="loginService" class="com.icanft.common.login.service.impl.LoginServiceImpl">
-		<property name="userDao" ref="userDao" />
+	<!-- 
+	<bean id="ryxxServiceCache" class="com.icanft.rygl.service.impl.RyxxServiceCacheImpl">
+		<property name="ryxxService">
+			<ref bean="ryxxService" />
+		</property>
+		<property name="cacheManager" ref="ehcacheCacheManager" />
 	</bean>
- -->
+	 -->
 	<bean id="userService" class="com.mqm.frame.sys.user.service.impl.UserServiceImpl">
 		<property name="userDao" ref="userDao" />
 	</bean>
@@ -43,8 +32,8 @@
 	</bean>
 
 	
-	<bean id="cdxxService" class="com.mqm.frame.sys.menu.service.impl.CdxxServiceImpl">
-		<property name="cdxxDao" ref="cdxxDao" />
+	<bean id="menuService" class="com.mqm.frame.sys.menu.service.impl.MenuServiceImpl">
+		<property name="menuDao" ref="menuDao" />
 	</bean>
 
 </beans>

@@ -55,7 +55,7 @@
 
 	<!-- 配置哪些类的哪些方法使用事务 -->
 	<aop:config>
-		<aop:pointcut id="allManagerMethod" expression="execution(* com.icanft..service.impl.*Impl.*(..))" />
+		<aop:pointcut id="allManagerMethod" expression="execution(* com..service.impl.*Impl.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="allManagerMethod" />
 	</aop:config>
 
@@ -82,7 +82,7 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="configLocation" value="classpath:mybatis-configuration.xml"></property>
-		<property name="mapperLocations" value="classpath*:com/icanft/**/dao/mapper/*-mapper.xml" />
+		<property name="mapperLocations" value="classpath*:com/**/dao/mapper/*-mapper.xml" />
 	</bean>
 	
     <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">

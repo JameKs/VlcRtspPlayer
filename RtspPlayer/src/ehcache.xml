@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ehcache>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="false">
 	<diskStore path="java.io.tmpdir"/>
 	<!-- 纳税人信息缓存区，预计支持5万纳税人，超时时间为1个小时 -->
 	<cache name="user" maxElementsInMemory="5000"

@@ -62,7 +62,7 @@ Ext.onReady(function() {
 	});
 
 	Ext.Ajax.request({
-		url : ctx + '/cdxx/cdgl.do?getMenuPanel', // 请求地址
+		url : ctx + '/cdxx/menu.do?getMenuPanel', // 请求地址
 		// params : config.params, // 请求参数
 		method : 'post', // 方法
 		callback : function(options, success, response) {
@@ -131,7 +131,7 @@ Ext.onReady(function() {
 			proxy : {
 				type : 'ajax',
 				clearOnLoad : true,
-				url : ctx + '/cdxx/cdgl.do?userMenuPanelTree&id=' + id
+				url : ctx + '/cdxx/menu.do?userMenuPanelTree&id=' + id
 			}
 		});
 
@@ -143,7 +143,7 @@ Ext.onReady(function() {
 			proxy : {
 				type : 'ajax',
 				clearOnLoad : true,
-				url : ctx + '/cdxx/cdgl.do?wdscj'
+				url : ctx + '/cdxx/menu.do?wdscj'
 			}
 		});
 

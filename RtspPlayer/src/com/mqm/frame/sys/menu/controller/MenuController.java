@@ -17,26 +17,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mqm.frame.sys.menu.service.IMenuService;
-import com.mqm.frame.sys.menu.vo.Cdxx;
+import com.mqm.frame.sys.menu.vo.MenuVO;
 import com.mqm.frame.sys.menu.vo.JsonTree;
 import com.mqm.frame.sys.user.vo.User;
 import com.mqm.frame.util.constants.BaseConstants;
 
 @Controller
-@RequestMapping("/cdxx")
+@RequestMapping("/menu")
 public class MenuController {
 
 	private static final Logger logger = Logger.getLogger(MenuController.class);
 
-	@Resource(name = "cdxxService")
-	private IMenuService cdxxService;
+	@Resource(name = "menuService")
+	private IMenuService menuService;
 	
-	@RequestMapping(value="cdgl",params="main")
+	@RequestMapping(value="menu.do",params="main")
 	public String main(ModelMap map, HttpServletRequest req) {
-		List<Cdxx> menus = cdxxService.findAll(BaseConstants.TREE_HAS_ROOT);
+		List<MenuVO> menus = menuService.findAll();
+		//BaseConstants.TREE_HAS_ROOT 需要增加虚拟根节点
 		List<JsonTree> jsonTrees = new ArrayList<JsonTree>();
 
-		for (Cdxx vo : menus) {
+		for (MenuVO vo : menus) {
 			JsonTree jsonTree = new JsonTree();
 			jsonTree.setId(vo.getId());
 			jsonTree.setpId(vo.getpId());
@@ -59,48 +60,48 @@ public class MenuController {
 		return "/admin/cdgl/cdxx";
 	}
 	
-	@RequestMapping(value = "cdgl.do", params = "new")
+	@RequestMapping(value = "menu.do", params = "new")
 	@ResponseBody
-	public String add(ModelMap map, HttpServletRequest req, Cdxx cdxx, HttpSession session) {
+	public String add(ModelMap map, HttpServletRequest req, MenuVO cdxx, HttpSession session) {
 		User user = (User)session.getAttribute("user");
 		cdxx.setCjr(user.getLoginId());
 		cdxx.setpId(cdxx.getpId());
 		cdxx.setLeaf("1".equals(cdxx.getLeaf())?"1":"0");
-		cdxxService.insert(cdxx);
+		menuService.insert(cdxx);
 		return "{success:true,msg:'新增成功'}";
 	};
 	
-	@RequestMapping(value = "cdgl.do", params = "delete")
+	@RequestMapping(value = "menu.do", params = "delete")
 	@ResponseBody
 	public String deleteById(ModelMap map, HttpServletRequest req, String id) {
-		cdxxService.deleteById(id);
+		menuService.deleteById(id);
 		return "{success:true,msg:'删除成功'}";
 	}
 	
-	@RequestMapping(value = "cdgl.do", params = "update")
+	@RequestMapping(value = "menu.do", params = "update")
 	@ResponseBody
-	public String update(ModelMap map, HttpServletRequest req, Cdxx cdxx) {
+	public String update(ModelMap map, HttpServletRequest req, MenuVO cdxx) {
 		User user = (User)req.getSession().getAttribute("user");
 		cdxx.setXgr(user.getLoginId());
 		cdxx.setLeaf("1".equals(cdxx.getLeaf())?"1":"0");
-		cdxxService.update(cdxx);
+		menuService.update(cdxx);
 		return "{success:true,msg:'更新成功！'}";
 	}
 	
 	//获取整个菜单树
-	@RequestMapping(value = "cdgl.do", params = "getTree" )
+	@RequestMapping(value = "menu.do", params = "getTree" )
 	@ResponseBody
 	public List getMenuJsonTree(ModelMap map, HttpServletRequest req) {
-		List<Map<String, Object>> jsonTree = cdxxService.findAll(BaseConstants.TREE_HAS_NO_ROOT);
+		List<Map<String, Object>> jsonTree = menuService.findAll();
 		return jsonTree;
 	}
 
 	/**
-	 * @param cdxxService
-	 *            the cdxxService to set
+	 * @param menuService
+	 *            the menuService to set
 	 */
-	public void setCdxxService(IMenuService cdxxService) {
-		this.cdxxService = cdxxService;
+	public void setMenuService(IMenuService menuService) {
+		this.menuService = menuService;
 	}
 
 }

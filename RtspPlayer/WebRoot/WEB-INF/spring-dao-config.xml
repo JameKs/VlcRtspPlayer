@@ -20,6 +20,6 @@
 	<bean id="yhbjszDao" class="com.rtsp.yhbjgxsz.dao.impl.YhbjszDaoImpl"
 		parent="defaultDao">
 	</bean>
-
+	
 	
 </beans>

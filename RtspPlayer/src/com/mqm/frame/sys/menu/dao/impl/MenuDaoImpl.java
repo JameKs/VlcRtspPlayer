@@ -9,7 +9,7 @@ import java.util.Map;
 
 import com.mqm.frame.common.DefaultDaoImpl;
 import com.mqm.frame.sys.menu.dao.IMenuDao;
-import com.mqm.frame.sys.menu.vo.Cdxx;
+import com.mqm.frame.sys.menu.vo.MenuVO;
 
 /**
  * <pre>
@@ -18,38 +18,30 @@ import com.mqm.frame.sys.menu.vo.Cdxx;
  * @author meihu2007@sina.com
  * 2015年8月12日
  */
-public class MenuDaoImpl extends DefaultDaoImpl<Cdxx> implements IMenuDao<Cdxx> {
-
-
-
-
-
-	/* (non-Javadoc)
-	 * @see com.mqm.frame.sys.menu.dao.ICdxxDao#findByParentId(java.lang.String)
-	 */
-	@Override
-	public List findByParentId(String pId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mqm.frame.sys.menu.dao.ICdxxDao#findAll(java.lang.String)
-	 */
-	@Override
-	public List findAll(String hasRoot) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+public class MenuDaoImpl extends DefaultDaoImpl<MenuVO> implements IMenuDao<MenuVO> {
 
 	/* (non-Javadoc)
 	 * @see com.mqm.frame.sys.menu.dao.ICdxxDao#findAllUserMenu(java.lang.String)
 	 */
 	@Override
-	public List findAllUserMenu(String userId) {
-		// TODO Auto-generated method stub
+	public List findMenuByUserId(String userId) {
+		String statement = this.getStatement("findMenuByUserId");
+		List list = this.sqlSessionTemplate.selectList(statement, userId);
+		return list;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.mqm.frame.sys.menu.dao.ICdxxDao#findByParentId(java.lang.String)
+	 */
+	@Override
+	public List findByParentId(String pId) {
+		String statement = this.getStatement("findByParentId");
+		int count = this.sqlSessionTemplate.selectOne(statement, pId);
 		return null;
 	}
+
+
+	
 
 	/* (non-Javadoc)
 	 * @see com.mqm.frame.sys.menu.dao.ICdxxDao#getNodesByIdAndUserId(java.util.Map)

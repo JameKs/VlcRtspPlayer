@@ -143,7 +143,7 @@ Ext.onReady(function() {
 					proxy : {
 						type : 'ajax',
 						actionMethods: { read: 'POST' },
-						url : ctx + '/cdxx/cdgl.do?getDeptGwUserTree'
+						url : ctx + '/cdxx/menu.do?getDeptGwUserTree'
 					}
 
 				});

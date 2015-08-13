@@ -13,7 +13,7 @@ import java.util.Date;
  * @author meihu2007@sina.com
  * 2015年5月30日
  */
-public class DefaultVo {
+public class DefaultVO {
 	
 	/**
 	 * 常量。

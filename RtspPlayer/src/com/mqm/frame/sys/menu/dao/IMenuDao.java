@@ -7,12 +7,9 @@ import com.mqm.frame.common.IDefaultDao;
 
 public interface IMenuDao<T> extends IDefaultDao<T> {
 
-
-	public List findByParentId(String pId);
-
-	public List findAll(String hasRoot);
+	public List findMenuByUserId(String userId);
 	
-	public List findAllUserMenu(String userId);
+	public List findByParentId(String pId);
 	
 	public List getNodesByIdAndUserId(Map map);
 

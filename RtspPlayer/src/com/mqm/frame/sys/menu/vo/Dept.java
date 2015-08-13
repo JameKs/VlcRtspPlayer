@@ -2,13 +2,13 @@ package com.mqm.frame.sys.menu.vo;
 
 import java.io.Serializable;
 
-import com.mqm.frame.common.DefaultVo;
+import com.mqm.frame.common.DefaultVO;
 
 /**
  * @author Administrator
  *
  */
-public class Dept extends DefaultVo implements Serializable {
+public class Dept extends DefaultVO implements Serializable {
 
 	private static final long serialVersionUID = -433577178466098132L;
 	

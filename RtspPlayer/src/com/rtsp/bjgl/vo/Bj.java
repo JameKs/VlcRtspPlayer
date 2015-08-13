@@ -7,7 +7,7 @@ package com.rtsp.bjgl.vo;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.mqm.frame.common.DefaultVo;
+import com.mqm.frame.common.DefaultVO;
 
 /**
  * <pre>
@@ -17,7 +17,7 @@ import com.mqm.frame.common.DefaultVo;
  * @author meihu2007@sina.com
  * 2015年5月27日
  */
-public class Bj extends DefaultVo implements Serializable {
+public class Bj extends DefaultVO implements Serializable {
 
 	/**
 	 * $

@@ -16,17 +16,6 @@ import com.mqm.frame.sys.menu.dao.IMenuDao;
  */
 public interface IMenuService<T> extends IDefaultService<T> {
 
-
-	public abstract List findAll(String hasRoot);
-	
-	public abstract List findAllUserMenu(String userId);
-
-	
-	/**
-	 * @param cdxxDao
-	 *            the cdxxDao to set
-	 */
-	public abstract void setCdxxDao(IMenuDao cdxxDao);
-
+	public abstract List findMenuByUserId(String userId);
 
 }

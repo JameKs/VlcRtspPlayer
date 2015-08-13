@@ -2,8 +2,8 @@
 	<!DOCTYPE mapper
 	    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
-<mapper namespace="com.icanft.qjgl.dao.IQjglDao">
-	<resultMap type="Qjxx" id="QjxxMapper">
+<mapper namespace="com.rtsp.yhbjgxsz.dao.impl.YhbjszDaoImpl">
+	<resultMap type="YhBjVo" id="yhBjVoMapper">
 		<result column="ID" property="id" />
 		<result column="RWLX_DM" property="rwlxDm" />
 		<result column="KSSJ" property="kssj" />
@@ -27,7 +27,7 @@
 	
 	</resultMap>
 	
-	<insert id="insert" parameterType="Qjxx">
+	<insert id="insert" parameterType="YhBjVo">
 		<selectKey resultType="String" keyProperty = "id" order="BEFORE">
 			select SYS_GUID() FROM DUAL
 		</selectKey>
@@ -35,22 +35,22 @@
         values(#{id}, #{kssj}, #{jssj}, #{qjyy}, #{rwlxDm}, #{userId}, #{cjr})
     </insert>
     
-    <update id="update" parameterType="Qjxx">
+    <update id="update" parameterType="YhBjVo">
         update T_JXJY_QJXX set xgr = #{xgr}, xg_sj =sysdate,
         	kssj = #{kssj}, jssj = #{jssj}, qjyy = #{qjyy},
         	rw_id = #{rwId}, rwlx_dm = #{rwlxDm} 
         where ID = #{id}
     </update>
     
-    <select id="findById" parameterType="string" resultMap="QjxxMapper">
+    <select id="findById" parameterType="string" resultMap="yhBjVoMapper">
         select * from T_JXJY_QJXX T WHERE T.ID = #{id}
     </select>
     
-    <select id="findList" parameterType="Qjxx" resultMap="QjxxMapper">
+    <select id="findList" parameterType="YhBjVo" resultMap="yhBjVoMapper">
         select * from T_JXJY_QJXX T WHERE T.ID = #{id}
     </select>
     
-    <select id="findListCount" parameterType="Qjxx" resultType="long">
+    <select id="findListCount" parameterType="YhBjVo" resultType="long">
         select count(1) from T_JXJY_QJXX T WHERE T.ID = #{id}
     </select>
     

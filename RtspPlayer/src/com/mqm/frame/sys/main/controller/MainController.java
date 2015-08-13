@@ -5,26 +5,27 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONArray;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.mqm.frame.common.DefaultController;
 import com.mqm.frame.infrastructure.util.ContextUtil;
 import com.mqm.frame.sys.menu.service.IMenuService;
-import com.mqm.frame.sys.menu.vo.Cdxx;
+import com.mqm.frame.sys.menu.vo.MenuVO;
 import com.mqm.frame.sys.menu.vo.JsonTree;
 import com.mqm.frame.sys.user.vo.User;
 import com.mqm.frame.util.constants.BaseConstants;
@@ -49,7 +50,7 @@ public class MainController extends DefaultController {
 	private static final Log log = LogFactory.getLog(MainController.class);
 
 	@Resource
-	private IMenuService cdxxService;
+	private IMenuService menuService;
 
 	/**
 	 * 框架入口。
@@ -59,9 +60,17 @@ public class MainController extends DefaultController {
 	 * 
 	 * @return String
 	 */
-	@RequestMapping("main.do")
-	public String main(ModelMap mm) {
-		return "main";
+	@RequestMapping(value = "main.do")
+	public String main(ModelMap map, User user, HttpServletRequest request)
+			throws Exception {
+		Set<String> roles = AuthorityUtils
+				.authorityListToSet(SecurityContextHolder.getContext()
+						.getAuthentication().getAuthorities());
+		if (roles.contains("ROLE_ADMIN")) {
+			return "index";
+		}else{
+			return "public/frame";
+		}
 	}
 
 	/**
@@ -105,22 +114,22 @@ public class MainController extends DefaultController {
 		User user = this.getUser();
 		String userId = user.getId();
 		
-		List<Cdxx> voList = null;
+		List<MenuVO> voList = null;
 		if ("3".equals(userId)) {//管理员加载所有的
-			voList = cdxxService.findAll(BaseConstants.TREE_HAS_NO_ROOT);
+			voList = menuService.findAll();
 		}
-		voList = cdxxService.findAllUserMenu(userId);
+		voList = menuService.findMenuByUserId(userId);
 		
-		Collections.sort(voList, new Comparator<Cdxx>() {
+		Collections.sort(voList, new Comparator<MenuVO>() {
 			@Override
-			public int compare(Cdxx o1, Cdxx o2) {
+			public int compare(MenuVO o1, MenuVO o2) {
 				return o1.getSortNo() - o2.getSortNo();
 			}
 		});
 
 		List<JsonTree> jsonTrees = new ArrayList<JsonTree>();
 
-		for (Cdxx vo : voList) {
+		for (MenuVO vo : voList) {
 			JsonTree jsonTree = new JsonTree();
 			jsonTree.setId(vo.getId());
 			jsonTree.setpId(vo.getpId());
@@ -219,16 +228,15 @@ public class MainController extends DefaultController {
 	 * @return String
 	 * 
 	 */
-	@RequestMapping("mainlogout")
-	public RedirectView mainlogout(String _csrf,HttpServletResponse resp) {
-		// 这个数据要先清空了
-		String page = (String) ContextUtil.get("", ContextUtil.SCOPE_SESSION);
-		String url = "logout";
-//		if (StringUtils.hasText(page)) {
-//			return "redirect:/" + url + "?spring-security-redirect=" + page;
-//		}
-//		return "redirect:/" + url + "?_csrf=" + _csrf;
-		return new RedirectView("logout", false, false, false);
+	@RequestMapping(value = "logout")
+	public String logout(ModelMap map, User user, HttpServletRequest request)
+			throws Exception {
+		String page = (String) ContextUtil.get(BaseConstants.BEFORE_SEL_APP, ContextUtil.SCOPE_SESSION);
+		String url = "j_spring_security_logout";
+		if (StringUtils.hasText(page)) {
+			return "redirect" + url + ">spring-security-redirect" + page ;
+		} 
+		return "redirect" + url;
 	}
 
 }

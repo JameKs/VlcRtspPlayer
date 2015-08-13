@@ -18,14 +18,11 @@
 		<intercept-url pattern="/" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/index.jsp" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/login.jsp*" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<!-- <intercept-url pattern="/**/*.do" access="IS_AUTHENTICATED_FULLY" />
-		<intercept-url pattern="/**/*.jsp" access="IS_AUTHENTICATED_FULLY" /> 
-		<intercept-url pattern="/logout" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
 
 		<form-login login-page="/login.jsp"
 			authentication-failure-url="/login.jsp?login_error=1" 
-			default-target-url="/login/main.do"/>
+			default-target-url="/main.do"/>
 		<http-basic />
 		<logout logout-success-url="/index.jsp" delete-cookies="JSESSIONID"/>
 		<remember-me />

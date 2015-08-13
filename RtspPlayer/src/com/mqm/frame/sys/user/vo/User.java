@@ -3,13 +3,13 @@ package com.mqm.frame.sys.user.vo;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.mqm.frame.common.DefaultVo;
+import com.mqm.frame.common.DefaultVO;
 
 /**
  * @author Administrator
  *
  */
-public class User extends DefaultVo implements Serializable {
+public class User extends DefaultVO implements Serializable {
 
 	private static final long serialVersionUID = -433577178466098132L;
 	

@@ -13,7 +13,7 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			classpath*:/META-INF/conf/db/mqm-db-config.xml,
-	    	/WEB-INF/spring-activiti-config.xml,
+			classpath*:/META-INF/conf/db/mqm-dao-config.xml,
 	    	/WEB-INF/spring-dao-config.xml,
 	    	/WEB-INF/spring-service-config.xml,
 			classpath:applicationContext-security.xml,

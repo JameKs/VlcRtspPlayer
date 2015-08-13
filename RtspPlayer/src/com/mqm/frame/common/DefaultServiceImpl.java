@@ -67,6 +67,11 @@ public class DefaultServiceImpl<T> implements IDefaultService<T> {
 	public int findListCount(T t) {
 		return defaultdao.findListCount("findList", t);
 	}
+	
+	@Override
+	public List findAll() {
+		return defaultdao.findAll("findAll");
+	}
 
 	/**
 	 * @param roleDao the roleDao to set

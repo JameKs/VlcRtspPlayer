@@ -14,11 +14,11 @@
 		parent="defaultDao">
 	</bean> 
 	
-	<bean id="cdxxDao" class="com.mqm.frame.sys.menu.dao.impl.ICdxxDaoImpl"
+	<bean id="menuDao" class="com.mqm.frame.sys.menu.dao.impl.MenuDaoImpl"
 		parent="defaultDao">
 	</bean> 
 	
-	<bean id="roleDao" class="com.mqm.frame.sys.role.dao.impl.IRoleDaoImpl"
+	<bean id="roleDao" class="com.mqm.frame.sys.role.dao.impl.RoleDaoImpl"
 		parent="defaultDao">
 	</bean> 
 	

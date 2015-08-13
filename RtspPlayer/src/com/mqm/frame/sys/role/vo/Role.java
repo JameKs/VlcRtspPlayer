@@ -9,13 +9,13 @@ import java.io.Serializable;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import com.mqm.frame.common.DefaultVo;
+import com.mqm.frame.common.DefaultVO;
 
 /**
  * @author Administrator
  *
  */
-public class Role extends DefaultVo implements GrantedAuthority, Serializable {
+public class Role extends DefaultVO implements GrantedAuthority, Serializable {
 
 	/**
 	 * $

@@ -101,7 +101,7 @@ Ext.onReady(function() {
 				iconCls : 'icon-add',
 				handler : function() {
 					Ext.getCmp('formPanel').getForm().submit({
-						url : ctx+"/cdxx/cdgl.do?new&_csrf=" + $("#_csrf").val(),
+						url : ctx+"/cdxx/menu.do?new&_csrf=" + $("#_csrf").val(),
 						waitTitle:"请稍候",
 						waitMsg:"正在提交表单数据，请稍候。。。。。。",
 						success : function(form, action) {
@@ -122,7 +122,7 @@ Ext.onReady(function() {
 				iconCls : 'icon-add',
 				handler : function() {
 					Ext.getCmp('formPanel').getForm().submit({
-						url : ctx+"/cdxx/cdgl.do?update&_csrf=" + $("#_csrf").val(),
+						url : ctx+"/cdxx/menu.do?update&_csrf=" + $("#_csrf").val(),
 						waitTitle:"请稍候",
 						waitMsg:"正在提交表单数据，请稍候。。。。。。",
 						success : function(form, action) {
@@ -143,7 +143,7 @@ Ext.onReady(function() {
 				iconCls : 'icon-delete',
 				handler : function() {
 					Ext.getCmp('formPanel').getForm().submit({
-						url : ctx+"/cdxx/cdgl.do?delete&_csrf=" + $("#_csrf").val(),
+						url : ctx+"/cdxx/menu.do?delete&_csrf=" + $("#_csrf").val(),
 						waitTitle:"请稍候",
 						waitMsg:"正在提交表单数据，请稍候。。。。。。",
 						success : function(form, action) {
