@@ -9,6 +9,7 @@
 	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
 	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 	
+
 	<bean id="ehcacheCacheManager"
 		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
 		<property name="configLocation">

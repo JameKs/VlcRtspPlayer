@@ -89,20 +89,4 @@
 		<constructor-arg index="0" ref="sqlSessionFactory"/>
 	</bean>
 	
-	<bean id="defaultDao"
-		class="com.mqm.frame.common.DefaultDaoImpl">
-		<!-- 
-		<property name="serverTime" ref="fbrp_infrastructure_serverTime" />
-		<property name="keyGen" ref="fbrp_infrastructure_keyGen" />
-		<property name="dataSource" ref="${defaultDs}"/>
-		<property name="simpleJdbcTemplate" ref="fbrp_infrastructure_simpleJdbcTemplate" />
-		
-		<property name="auditLogger" ref="${audit.logger}" />
-		<property name="lobHandler" ref="${jdbc.lobHandler}" />
-		<property name="productionFlag" value="${fbrp.productionFlag}"/>
-		 -->
-		 <property name="sqlSessionTemplate" ref="sqlSessionTemplate" />
-	</bean>
-	
-	
 </beans>

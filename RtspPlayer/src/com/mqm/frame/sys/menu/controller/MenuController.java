@@ -17,10 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mqm.frame.sys.menu.service.IMenuService;
-import com.mqm.frame.sys.menu.vo.MenuVO;
 import com.mqm.frame.sys.menu.vo.JsonTree;
+import com.mqm.frame.sys.menu.vo.MenuVO;
 import com.mqm.frame.sys.user.vo.User;
-import com.mqm.frame.util.constants.BaseConstants;
 
 @Controller
 @RequestMapping("/menu")
@@ -62,12 +61,12 @@ public class MenuController {
 	
 	@RequestMapping(value = "menu.do", params = "new")
 	@ResponseBody
-	public String add(ModelMap map, HttpServletRequest req, MenuVO cdxx, HttpSession session) {
+	public String add(ModelMap map, HttpServletRequest req, MenuVO vo, HttpSession session) {
 		User user = (User)session.getAttribute("user");
-		cdxx.setCjr(user.getLoginId());
-		cdxx.setpId(cdxx.getpId());
-		cdxx.setLeaf("1".equals(cdxx.getLeaf())?"1":"0");
-		menuService.insert(cdxx);
+		vo.setCjr(user.getLoginId());
+		vo.setpId(vo.getpId());
+		vo.setLeaf("1".equals(vo.getLeaf())?"1":"0");
+		menuService.insert(vo);
 		return "{success:true,msg:'新增成功'}";
 	};
 	
@@ -80,11 +79,11 @@ public class MenuController {
 	
 	@RequestMapping(value = "menu.do", params = "update")
 	@ResponseBody
-	public String update(ModelMap map, HttpServletRequest req, MenuVO cdxx) {
+	public String update(ModelMap map, HttpServletRequest req, MenuVO vo) {
 		User user = (User)req.getSession().getAttribute("user");
-		cdxx.setXgr(user.getLoginId());
-		cdxx.setLeaf("1".equals(cdxx.getLeaf())?"1":"0");
-		menuService.update(cdxx);
+		vo.setXgr(user.getLoginId());
+		vo.setLeaf("1".equals(vo.getLeaf())?"1":"0");
+		menuService.update(vo);
 		return "{success:true,msg:'更新成功！'}";
 	}
 	

@@ -22,29 +22,29 @@
 	</resultMap>
 	
 	<insert id="insert" parameterType="User">
-		insert into T_JXJY_USER (LOGIN_ID,PASSWORD, USER_NAME, BM_DM, PHONE, EMAIL,CJR)
+		insert into T_MQM_USER (LOGIN_ID,PASSWORD, USER_NAME, BM_DM, PHONE, EMAIL,CJR)
 		values (#{loginId}, #{password}, #{userName}, #{bmDm}, #{phone}, #{email}, #{cjr})
 	</insert>
 	
 	<delete id="deleteById" parameterType="string">
-		delete from T_JXJY_USER where id = #{id}
+		delete from T_MQM_USER where id = #{id}
 	</delete>
 	
 	<update id="update" parameterType="User">
-		update T_JXJY_USER set USER_NAME=#{userName},PASSWORD=#{password} where id=#{id}
+		update T_MQM_USER set USER_NAME=#{userName},PASSWORD=#{password} where id=#{id}
 	</update>
 	
 	<select id="findById" parameterType="string" resultMap="UserMapper">
-		select * from T_JXJY_USER where id = #{id}
+		select * from T_MQM_USER where id = #{id}
 	</select>
 	
 	<select id="findByLoginId" parameterType="string" resultMap="UserMapper">
-		select * from T_JXJY_USER where LOGIN_ID = #{loginId}
+		select * from T_MQM_USER where LOGIN_ID = #{loginId}
 	</select>
 	
 	<select id="findList" parameterType="User" resultMap="UserMapper">
         select *
-        from T_JXJY_USER
+        from T_MQM_USER
 		<where>
 			<if test="loginId != null and loginId != ''">
 				and LOGIN_ID =#{loginId}
@@ -58,7 +58,7 @@
     
     <select id="findListCount" parameterType="User" resultType="long">
         select count(1) 
-        from T_JXJY_USER 
+        from T_MQM_USER 
         <where>
 			<if test="loginId != null and loginId != ''">
 				and LOGIN_ID =#{loginId}

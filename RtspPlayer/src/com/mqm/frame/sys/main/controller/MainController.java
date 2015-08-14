@@ -117,8 +117,9 @@ public class MainController extends DefaultController {
 		List<MenuVO> voList = null;
 		if ("3".equals(userId)) {//管理员加载所有的
 			voList = menuService.findAll();
+		} else {
+			voList = menuService.findMenuByUserId(userId);
 		}
-		voList = menuService.findMenuByUserId(userId);
 		
 		Collections.sort(voList, new Comparator<MenuVO>() {
 			@Override

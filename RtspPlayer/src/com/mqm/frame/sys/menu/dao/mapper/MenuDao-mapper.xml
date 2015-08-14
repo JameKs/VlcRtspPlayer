@@ -49,7 +49,7 @@
 		SELECT * FROM T_MQM_MENU 
 	</select>
 	
-	<select id="findAllUserMenu" parameterType="string"
+	<select id="findMenuByUserId" parameterType="string"
 		resultMap="menuMapper">
 		select c.*
 		from T_MQM_MENU C, T_MQM_ROLE ROLE, T_MQM_USER_ROLE RR, T_MQM_ROLE_MENU rc

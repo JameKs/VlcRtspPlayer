@@ -14,10 +14,13 @@
 		<param-value>
 			classpath*:/META-INF/conf/db/mqm-db-config.xml,
 			classpath*:/META-INF/conf/db/mqm-dao-config.xml,
+			classpath*:/META-INF/conf/spring/mqm-sys-service.xml,
 	    	/WEB-INF/spring-dao-config.xml,
 	    	/WEB-INF/spring-service-config.xml,
 			classpath:applicationContext-security.xml,
-			classpath*:/META-INF/conf/spring/mqm-*.xml
+			classpath*:/META-INF/conf/spring/mqm-infrastructure-service.xml,
+			classpath*:/META-INF/conf/spring/mqm-security-service.xml
+			
 		</param-value>
 	</context-param>
 

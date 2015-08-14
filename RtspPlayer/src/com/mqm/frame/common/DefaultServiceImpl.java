@@ -25,29 +25,29 @@ public class DefaultServiceImpl<T> implements IDefaultService<T> {
 
 	private static final Log log = LogFactory.getLog(DefaultServiceImpl.class);
 	
-	public IDefaultDao<T> defaultdao;
+	public IDefaultDao defaultDao;
 	
 	/* (non-Javadoc)
 	 * @see com.mqm.frame.common.IDao#insert(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public void insert(T t) {
-		defaultdao.insert("insert", t);
+		defaultDao.insert("insert", t);
 	}
 
 	@Override
 	public void deleteById(String id) {
-		defaultdao.deleteById("delete", id);
+		defaultDao.deleteById("delete", id);
 	}
 
 	@Override
 	public void update(T t) {
-		defaultdao.update("update", t);
+		defaultDao.update("update", t);
 	}
 
 	@Override
 	public T findById(String id) {
-		return defaultdao.findById("findById", id);
+		return (T)defaultDao.findById("findById", id);
 	}
 
 	/* (non-Javadoc)
@@ -55,29 +55,29 @@ public class DefaultServiceImpl<T> implements IDefaultService<T> {
 	 */
 	@Override
 	public List findList(T t) {
-		return defaultdao.findList("findList", t);
+		return defaultDao.findList("findList", t);
 	}
 
 	@Override
 	public List findPageList(T t, int pageIndex, int pageSize) {
-		return defaultdao.findPageList("findList", t , pageIndex , pageSize);
+		return defaultDao.findPageList("findList", t , pageIndex , pageSize);
 	}
 
 	@Override
 	public int findListCount(T t) {
-		return defaultdao.findListCount("findList", t);
+		return defaultDao.findListCount("findList", t);
 	}
 	
 	@Override
 	public List findAll() {
-		return defaultdao.findAll("findAll");
+		return defaultDao.findAll("findAll");
 	}
 
 	/**
-	 * @param roleDao the roleDao to set
+	 * @param defaultDao
 	 */
-	public void setDefaultDao(IDefaultDao defaultdao) {
-		this.defaultdao = defaultdao;
+	public void setDefaultDao(IDefaultDao defaultDao) {
+		this.defaultDao = defaultDao;
 	}
 
 	
