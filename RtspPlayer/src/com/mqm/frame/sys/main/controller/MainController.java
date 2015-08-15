@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -114,65 +115,10 @@ public class MainController extends DefaultController {
 		User user = this.getUser();
 		String userId = user.getId();
 		
-		List<MenuVO> voList = null;
-		if ("3".equals(userId)) {//管理员加载所有的
-			voList = menuService.findAll();
-		} else {
-			voList = menuService.findMenuByUserId(userId);
-		}
-		
-		Collections.sort(voList, new Comparator<MenuVO>() {
-			@Override
-			public int compare(MenuVO o1, MenuVO o2) {
-				return o1.getSortNo() - o2.getSortNo();
-			}
-		});
-
-		List<JsonTree> jsonTrees = new ArrayList<JsonTree>();
-
-		for (MenuVO vo : voList) {
-			JsonTree jsonTree = new JsonTree();
-			jsonTree.setId(vo.getId());
-			jsonTree.setpId(vo.getpId());
-			jsonTree.setName(vo.getCnName());
-
-			if ("E1801EBE06D211E588790023540C477B".equals(jsonTree.getpId())) {
-				jsonTree.setOpen(true);
-			}
-			jsonTree.getExts().put("url", vo.getUrl());
-			jsonTree.getExts().put("icon", vo.getImageUrl());
-			jsonTrees.add(jsonTree);
-		}
-
-		// TODO luxiaocheng 需要优化的代码
-		HashMap<String, JsonTree> map = new HashMap<String, JsonTree>();
-		HashMap<String, List<JsonTree>> collection = new HashMap<String, List<JsonTree>>();
-		List<JsonTree> list = new ArrayList<JsonTree>();
-		for (JsonTree vo : jsonTrees) {
-			map.put(vo.getId(), vo);// 非根节点
-			if ("E1801EBE06D211E588790023540C477B".equals(vo.getpId())) {// 根节点
-				collection.put(vo.getId(), new ArrayList<JsonTree>());
-				list.add(vo);// 根节点
-			}
-		}
-		for (JsonTree vo : jsonTrees) {
-			String p = vo.getpId();
-			if (!"E1801EBE06D211E588790023540C477B".equals(p)) {// 非根节点
-				int safe = 0;
-				while (!collection.containsKey(p) && map.containsKey(p)) {// 非根节点包含，根节点不包含
-					p = map.get(p).getpId();
-					if (safe++ > 30) {
-						break;
-					}
-				}
-				if (collection.containsKey(p)) {
-					collection.get(p).add(vo);
-				}
-			}
-		}
+		Map<String ,Object> hashMap = menuService.getMenuTree(this.isAdmin(), userId);
 		try {
-			mm.put("treeData", JSONArray.fromObject(collection).toString());
-			mm.put("top", JSONArray.fromObject(list).toString());
+			mm.put("treeData", hashMap.get("treeData"));
+			mm.put("top", hashMap.get("top"));
 		} catch (Exception e) {
 			log.error("", e);
 		}

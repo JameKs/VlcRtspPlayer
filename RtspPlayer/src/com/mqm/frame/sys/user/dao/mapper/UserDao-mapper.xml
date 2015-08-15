@@ -9,7 +9,6 @@
 		<result column="LOGIN_ID" property="loginId" />
 		<result column="PASSWORD" property="password" />
 		<result column="USER_NAME" property="userName" />
-		<result column="BM_DM" property="bmDm" />
 		<result column="PHONE" property="phone" />
 		<result column="EMAIL" property="email" />
 		<result column="STATUS" property="status" />
@@ -22,8 +21,8 @@
 	</resultMap>
 	
 	<insert id="insert" parameterType="User">
-		insert into T_MQM_USER (LOGIN_ID,PASSWORD, USER_NAME, BM_DM, PHONE, EMAIL,CJR)
-		values (#{loginId}, #{password}, #{userName}, #{bmDm}, #{phone}, #{email}, #{cjr})
+		insert into T_MQM_USER (LOGIN_ID,PASSWORD, USER_NAME, PHONE, EMAIL,CJR)
+		values (#{loginId}, #{password}, #{userName}, #{phone}, #{email}, #{cjr})
 	</insert>
 	
 	<delete id="deleteById" parameterType="string">
@@ -43,8 +42,7 @@
 	</select>
 	
 	<select id="findList" parameterType="User" resultMap="UserMapper">
-        select *
-        from T_MQM_USER
+        select * from T_MQM_USER
 		<where>
 			<if test="loginId != null and loginId != ''">
 				and LOGIN_ID =#{loginId}
@@ -57,8 +55,7 @@
     </select>
     
     <select id="findListCount" parameterType="User" resultType="long">
-        select count(1) 
-        from T_MQM_USER 
+        select count(1) from T_MQM_USER 
         <where>
 			<if test="loginId != null and loginId != ''">
 				and LOGIN_ID =#{loginId}
@@ -67,6 +64,10 @@
 				and USER_NAME =#{userName}
 			</if>
 		</where>
+    </select>
+    
+    <select id="findAll" resultMap="UserMapper">
+        select * from T_MQM_USER
     </select>
     
 </mapper>

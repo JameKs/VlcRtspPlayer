@@ -68,6 +68,10 @@
 		</where>
 	</select>
 	
+	<select id="findAll" parameterType="string" resultMap="roleMapper">
+		SELECT * FROM T_MQM_ROLE
+	</select>
+	
 	<select id="findByUserLoginId" parameterType="string" resultMap="roleMapper">
 		SELECT R.* 
 			FROM T_MQM_USER_ROLE GX,T_MQM_ROLE R,T_MQM_USER U

@@ -1,12 +1,10 @@
 package com.mqm.frame.sys.menu.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
 
@@ -16,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.mqm.frame.common.DefaultController;
 import com.mqm.frame.sys.menu.service.IMenuService;
 import com.mqm.frame.sys.menu.vo.JsonTree;
 import com.mqm.frame.sys.menu.vo.MenuVO;
@@ -23,46 +22,43 @@ import com.mqm.frame.sys.user.vo.User;
 
 @Controller
 @RequestMapping("/menu")
-public class MenuController {
+public class MenuController extends DefaultController {
 
 	private static final Logger logger = Logger.getLogger(MenuController.class);
 
 	@Resource(name = "menuService")
 	private IMenuService menuService;
 	
-	@RequestMapping(value="menu.do",params="main")
+	@RequestMapping(value="menu.do")
 	public String main(ModelMap map, HttpServletRequest req) {
-		List<MenuVO> menus = menuService.findAll();
-		//BaseConstants.TREE_HAS_ROOT 需要增加虚拟根节点
-		List<JsonTree> jsonTrees = new ArrayList<JsonTree>();
 
-		for (MenuVO vo : menus) {
-			JsonTree jsonTree = new JsonTree();
-			jsonTree.setId(vo.getId());
-			jsonTree.setpId(vo.getpId());
-			jsonTree.setName(vo.getCnName());
-
-			if ("0".equals(jsonTree.getpId())) {
-				jsonTree.setOpen(true);
-			}
-			jsonTree.getExts().put("url", vo.getUrl());
-			jsonTree.getExts().put("icon", vo.getImageUrl());
-			jsonTree.getExts().put("cnName", vo.getCnName());
-			jsonTree.getExts().put("enName", vo.getEnName());
-			jsonTree.getExts().put("cdDm", vo.getCdDm());
-			jsonTree.getExts().put("ccsd", vo.getCcsd().toString());
-			jsonTree.getExts().put("ccsx", vo.getCcsx().toString());
-			jsonTree.getExts().put("leaf", vo.getLeaf());
-			jsonTrees.add(jsonTree);
-		}
+		List<JsonTree> jsonTrees = menuService.getTree();
 		map.put("menus", JSONArray.fromObject(jsonTrees).toString());
-		return "/admin/cdgl/cdxx";
+		
+		List<Map<String, Object>> pJsonTree = menuService.getPTree();
+		map.put("pMenus", JSONArray.fromObject(pJsonTree).toString());
+		
+		return "/sys/menu/menu";
+	}
+	
+	@RequestMapping(value="menu.do",params="reloadTree")
+	@ResponseBody
+	public List reloadTree(ModelMap map, HttpServletRequest req) {
+		List<JsonTree> jsonTrees = menuService.getTree();
+		return jsonTrees;
+	}
+	
+	@RequestMapping(value="menu.do",params="reloadPTree")
+	@ResponseBody
+	public List<Map<String, Object>> reloadPTree(ModelMap map, HttpServletRequest req) {
+		List<Map<String, Object>> pJsonTree = menuService.getPTree();
+		return pJsonTree;
 	}
 	
 	@RequestMapping(value = "menu.do", params = "new")
 	@ResponseBody
-	public String add(ModelMap map, HttpServletRequest req, MenuVO vo, HttpSession session) {
-		User user = (User)session.getAttribute("user");
+	public String add(ModelMap map, HttpServletRequest req, MenuVO vo) {
+		User user = this.getUser();
 		vo.setCjr(user.getLoginId());
 		vo.setpId(vo.getpId());
 		vo.setLeaf("1".equals(vo.getLeaf())?"1":"0");
@@ -80,9 +76,8 @@ public class MenuController {
 	@RequestMapping(value = "menu.do", params = "update")
 	@ResponseBody
 	public String update(ModelMap map, HttpServletRequest req, MenuVO vo) {
-		User user = (User)req.getSession().getAttribute("user");
+		User user = this.getUser();
 		vo.setXgr(user.getLoginId());
-		vo.setLeaf("1".equals(vo.getLeaf())?"1":"0");
 		menuService.update(vo);
 		return "{success:true,msg:'更新成功！'}";
 	}

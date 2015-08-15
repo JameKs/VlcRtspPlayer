@@ -208,7 +208,7 @@ Ext.onReady(function() {
 						return false;
 					}
 					dataPanel.submit({
-						url : ctx+'/jsxx/jsgl.do?update",
+						url : ctx+'/jsxx/jsgl.do?update',
 						success : function(form, action) {
 							var data = Ext.JSON.decode(action.response.responseText);
 							Ext.Msg.alert('Success', data.msg);
@@ -226,7 +226,7 @@ Ext.onReady(function() {
 			listeners: {
                   'click': function () {
                 	  dataPanel.submit({
-						url : ctx+'/jsxx/jsgl.do?insert",
+						url : ctx+'/jsxx/jsgl.do?insert',
 						success : function(form, action) {
 							var data = Ext.JSON.decode(action.response.responseText);
 							Ext.Msg.alert('Success', data.msg);
@@ -254,14 +254,14 @@ Ext.onReady(function() {
 	
 
 	var viewport = Ext.create('Ext.Panel', {
-		renderTo : Ext.getBody(),
+		renderTo : 'panel_div',
 		layout: {
 	        type: 'table',
 	        columns: 2
 	    },
 		frame: true,
-		// width: 800,
-		// height: 700,
+		width: 800,
+		height: 700,
 		items : [ searchForm, dataPanel , jsxxGrid ]
 	});
 

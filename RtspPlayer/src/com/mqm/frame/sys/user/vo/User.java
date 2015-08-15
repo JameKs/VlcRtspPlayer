@@ -2,6 +2,7 @@ package com.mqm.frame.sys.user.vo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import com.mqm.frame.common.DefaultVO;
 
@@ -29,8 +30,6 @@ public class User extends DefaultVO implements Serializable {
 
 	private String userName;
 
-	private String bmDm;
-
 	private String phone;
 	
 	private String email;
@@ -40,10 +39,6 @@ public class User extends DefaultVO implements Serializable {
 	private String active;
 	
 	private int sessionOutTime ;
-	
-	private String gwId ;
-	
-	private String deptId ;
 	
 	private Integer failedLoginCount;
 	
@@ -68,6 +63,8 @@ public class User extends DefaultVO implements Serializable {
 	private String locked;
 	
 	private String delFlag;
+	
+	private List roles;
 
 	/**
 	 * @return 返回 loginId。
@@ -109,20 +106,6 @@ public class User extends DefaultVO implements Serializable {
 	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
-
-	/**
-	 * @return 返回 bmDm。
-	 */
-	public String getBmDm() {
-		return bmDm;
-	}
-
-	/**
-	 * @param bmDm 设置 bmDm。
-	 */
-	public void setBmDm(String bmDm) {
-		this.bmDm = bmDm;
 	}
 
 	/**
@@ -195,33 +178,6 @@ public class User extends DefaultVO implements Serializable {
 		this.sessionOutTime = sessionOutTime;
 	}
 
-	/**
-	 * @return 返回 gwId。
-	 */
-	public String getGwId() {
-		return gwId;
-	}
-
-	/**
-	 * @param gwId 设置 gwId。
-	 */
-	public void setGwId(String gwId) {
-		this.gwId = gwId;
-	}
-
-	/**
-	 * @return 返回 deptId。
-	 */
-	public String getDeptId() {
-		return deptId;
-	}
-
-	/**
-	 * @param deptId 设置 deptId。
-	 */
-	public void setDeptId(String deptId) {
-		this.deptId = deptId;
-	}
 
 	/**
 	 * @return the failedLoginCount
@@ -389,6 +345,20 @@ public class User extends DefaultVO implements Serializable {
 	 */
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
+	}
+
+	/**
+	 * @return the roles
+	 */
+	public List getRoles() {
+		return roles;
+	}
+
+	/**
+	 * @param roles the roles to set
+	 */
+	public void setRoles(List roles) {
+		this.roles = roles;
 	}
 	
 	

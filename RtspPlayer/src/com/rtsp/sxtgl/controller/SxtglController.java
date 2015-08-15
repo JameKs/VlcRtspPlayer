@@ -15,11 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.mqm.frame.common.DefaultController;
 import com.mqm.frame.common.Converter.DateConverter;
 import com.mqm.frame.sys.user.vo.User;
 import com.mqm.frame.util.StringUtil;
@@ -34,9 +33,8 @@ import com.rtsp.sxtgl.vo.Sxt;
  * 2015年5月27日
  */
 @Controller
-@RequestMapping(value="/sxtgl")
-@SessionAttributes("user")
-public class SxtglController {
+@RequestMapping(value="/sxt")
+public class SxtglController extends DefaultController {
 	
 	private static final Logger log = Logger.getLogger(SxtglController.class);
 	
@@ -63,8 +61,8 @@ public class SxtglController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="sxt.do", params="cx")
-	public String cx(ModelMap map , Sxt sxt , HttpServletRequest req){
+	@RequestMapping(value="sxt.do", params="find")
+	public String find(ModelMap map , Sxt sxt , HttpServletRequest req){
 		List list = sxtglService.findList(sxt);
 		int count = sxtglService.findListCount(sxt);
 		
@@ -75,8 +73,9 @@ public class SxtglController {
 	 * 新增摄像头
 	 * @return
 	 */
-	@RequestMapping(value="sxt.do", params="xz")
-	public String xz(ModelMap map, Sxt sxt , HttpServletRequest req){
+	@RequestMapping(value="sxt.do", params="insert")
+	public String insert(ModelMap map, Sxt sxt , HttpServletRequest req){
+		User user = this.getUser();
 		sxtglService.insert(sxt);
 		return "{\"success\":true,\"msg\":\"新增成功\"}";
 	}
@@ -85,9 +84,10 @@ public class SxtglController {
 	 * 保存年假申请业务
 	 * @return
 	 */
-	@RequestMapping(value="sxt.do", params="xg")
+	@RequestMapping(value="sxt.do", params="update")
 	@ResponseBody
-	public String xg(ModelMap map, Sxt sxt , HttpServletRequest req, @ModelAttribute("user") User user){
+	public String update(ModelMap map, Sxt sxt , HttpServletRequest req){
+		User user = this.getUser();
 		sxt.setCjr(user.getLoginId());
 		sxtglService.update(sxt);
 		return "{\"success\":true,\"msg\":\"修改成功\"}";
@@ -97,9 +97,10 @@ public class SxtglController {
 	 * 更新年假申请业务
 	 * @return
 	 */
-	@RequestMapping(value="sxt.do", params="sc")
+	@RequestMapping(value="sxt.do", params="deleteById")
 	@ResponseBody
-	public String sc(ModelMap map , Sxt sxt , HttpServletRequest req,  @ModelAttribute("user") User user){
+	public String deleteById(ModelMap map , Sxt sxt , HttpServletRequest req){
+		User user = this.getUser();
 		sxt.setXgr(user.getLoginId());
 		sxtglService.deleteById(sxt.getId());
 		return "{\"success\":true,\"msg\":\"更新成功\"}";

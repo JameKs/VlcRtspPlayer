@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.mqm.frame.common.DefaultController;
 import com.mqm.frame.common.Converter.DateConverter;
 import com.mqm.frame.sys.user.vo.User;
 import com.mqm.frame.util.StringUtil;
@@ -34,9 +34,8 @@ import com.rtsp.bjgl.vo.Bj;
  * 2015年5月27日
  */
 @Controller
-@RequestMapping(value="/qjgl")
-@SessionAttributes("user")
-public class BjglController {
+@RequestMapping(value="/bj")
+public class BjglController extends DefaultController {
 	
 	private static final Logger log = Logger.getLogger(BjglController.class);
 	
@@ -53,7 +52,7 @@ public class BjglController {
 	 * 进入摄像头管理界面
 	 * @return
 	 */
-	@RequestMapping(value="sxt.do")
+	@RequestMapping(value="bj.do")
 	public String main(ModelMap map , HttpServletRequest req){
 		return "/front/sxtgl/sxt";
 	}
@@ -63,8 +62,8 @@ public class BjglController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="sxt.do", params="cx")
-	public String cx(ModelMap map , Bj bj , HttpServletRequest req){
+	@RequestMapping(value="bj.do", params="find")
+	public String find(ModelMap map , Bj bj , HttpServletRequest req){
 		List list = bjglService.findList(bj);
 		int count = bjglService.findListCount(bj);
 		
@@ -75,8 +74,9 @@ public class BjglController {
 	 * 新增摄像头
 	 * @return
 	 */
-	@RequestMapping(value="sxt.do", params="xz")
-	public String xz(ModelMap map, Bj bj , HttpServletRequest req){
+	@RequestMapping(value="bj.do", params="insert")
+	public String insert(ModelMap map, Bj bj , HttpServletRequest req){
+		User user = this.getUser();
 		bjglService.insert(bj);
 		return "{\"success\":true,\"msg\":\"新增成功\"}";
 	}
@@ -85,9 +85,10 @@ public class BjglController {
 	 * 保存年假申请业务
 	 * @return
 	 */
-	@RequestMapping(value="sxt.do", params="xg")
+	@RequestMapping(value="bj.do", params="update")
 	@ResponseBody
-	public String xg(ModelMap map, Bj bj , HttpServletRequest req, @ModelAttribute("user") User user){
+	public String update(ModelMap map, Bj bj , HttpServletRequest req){
+		User user = this.getUser();
 		bj.setCjr(user.getLoginId());
 		bjglService.update(bj);
 		return "{\"success\":true,\"msg\":\"修改成功\"}";
@@ -97,9 +98,10 @@ public class BjglController {
 	 * 更新年假申请业务
 	 * @return
 	 */
-	@RequestMapping(value="sxt.do", params="sc")
+	@RequestMapping(value="bj.do", params="deleteById")
 	@ResponseBody
-	public String sc(ModelMap map , Bj bj , HttpServletRequest req,  @ModelAttribute("user") User user){
+	public String deleteById(ModelMap map , Bj bj , HttpServletRequest req){
+		User user = this.getUser();
 		bj.setXgr(user.getLoginId());
 		bjglService.deleteById(bj.getId());
 		return "{\"success\":true,\"msg\":\"更新成功\"}";

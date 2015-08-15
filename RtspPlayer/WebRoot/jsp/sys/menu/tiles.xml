@@ -3,8 +3,8 @@
        "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
        "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 <tiles-definitions>
-	<definition name="/admin/xtgl/yhgl/yhxx" extends="common">
+	<definition name="/sys/menu/menu" extends="common">
 		<put-attribute name="title" value="Foresee : Welcome" />
-		<put-attribute name="content" value="/jsp/admin/xtgl/yhgl/yhxx.jsp" />
+		<put-attribute name="content" value="/jsp/sys/menu/menu.jsp" />
 	</definition>
 </tiles-definitions>

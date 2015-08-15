@@ -15,11 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.mqm.frame.common.DefaultController;
 import com.mqm.frame.common.Converter.DateConverter;
 import com.mqm.frame.sys.user.vo.User;
 import com.mqm.frame.util.StringUtil;
@@ -35,8 +34,7 @@ import com.rtsp.yhbjgxsz.vo.YhBjVO;
  */
 @Controller
 @RequestMapping(value="/yhbjsz")
-@SessionAttributes("user")
-public class YhbjszController {
+public class YhbjszController extends DefaultController {
 	
 	private static final Logger log = Logger.getLogger(YhbjszController.class);
 	
@@ -65,8 +63,8 @@ public class YhbjszController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="yhbjsz.do", params="cxgx")
-	public String cxgx(ModelMap map , YhBjVO yhBjVo , HttpServletRequest req){
+	@RequestMapping(value="yhbjsz.do", params="find")
+	public String find(ModelMap map , YhBjVO yhBjVo , HttpServletRequest req){
 		List list = yhbjszService.findList(yhBjVo);
 		int count = yhbjszService.findListCount(yhBjVo);
 		
@@ -88,9 +86,10 @@ public class YhbjszController {
 	 * 新增关系
 	 * @return
 	 */
-	@RequestMapping(value="yhbjsz.do", params="xzgx")
+	@RequestMapping(value="yhbjsz.do", params="insert")
 	@ResponseBody
-	public String xzgx(ModelMap map, YhBjVO yhBjVo , HttpServletRequest req, @ModelAttribute("user") User user){
+	public String insert(ModelMap map, YhBjVO yhBjVo , HttpServletRequest req){
+		User user = this.getUser();
 		yhBjVo.setCjr(user.getLoginId());
 		yhbjszService.insert(yhBjVo);
 		return "{\"success\":true,\"msg\":\"保存成功\"}";
@@ -100,9 +99,10 @@ public class YhbjszController {
 	 * 删除关系
 	 * @return
 	 */
-	@RequestMapping(value="yhbjsz.do", params="scgx")
+	@RequestMapping(value="yhbjsz.do", params="deleteById")
 	@ResponseBody
-	public String scgx(ModelMap map , YhBjVO yhBjVo , HttpServletRequest req,  @ModelAttribute("user") User user){
+	public String deleteById(ModelMap map , YhBjVO yhBjVo , HttpServletRequest req){
+		User user = this.getUser();
 		yhBjVo.setXgr(user.getLoginId());
 		yhbjszService.deleteById(yhBjVo.getId());
 		return "{\"success\":true,\"msg\":\"更新成功\"}";

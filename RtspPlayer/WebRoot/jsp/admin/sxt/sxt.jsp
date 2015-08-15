@@ -13,9 +13,10 @@
 <title>main</title>
     <link rel="stylesheet" type="text/css" href="<%=ctx%>/resources/extjs/css/ext-all.css" />
 	<script type="text/javascript" src="<%=ctx%>/resources/extjs/js/ext-all.js"></script>
-	<script type="text/javascript" src="<%=ctx%>/jsp/admin/jsgl/jsgl.js"></script>
+	<script type="text/javascript" src="<%=ctx%>/jsp/admin/sxt/sxt.js"></script>
 
 </head>
 <body>
+<div id="panel_div"></div>
 </body>
 </html>

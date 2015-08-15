@@ -11,8 +11,6 @@
 		<result column="URL" property="url" />
 		<result column="IMAGE_URL" property="imageUrl" />
 		<result column="P_ID" property="pId" />
-		<result column="CCSD" property="ccsd" />
-		<result column="CCSX" property="ccsx" />
 		<result column="SORT_NO" property="sortNo" />
 		<result column="LEAF" property="leaf" />
 		<result column="CJR" property="cjr" />
@@ -24,9 +22,9 @@
 
 	<insert id="insert" parameterType="MenuVO">
 		insert into T_MQM_MENU
-		(CD_DM,CN_NAME, EN_NAME,URL,P_ID,CCSD,CCSX,LEAF,CJR,SORT_NO)
-		values (#{cdDm}, #{cnName}, #{enName}, #{url}, #{pId}, #{ccsd},
-		#{ccsx}, #{leaf},#{cjr},#{ccsd}*#{ccsx},)
+		(CD_DM,CN_NAME, EN_NAME,URL,P_ID,LEAF,CJR,SORT_NO)
+		values (#{cdDm}, #{cnName}, #{enName}, #{url},
+		 #{pId}, #{leaf},#{cjr},#{sortNo})
 	</insert>
 
 	<delete id="delete" parameterType="string">
@@ -36,8 +34,7 @@
 	<update id="update" parameterType="MenuVO">
 		update T_MQM_MENU set xgr = #{xgr} ,xg_sj = sysdate,
 			CN_NAME=#{cnName},EN_NAME=#{enName} ,
-			URL=#{url} ,CCSD=#{ccsd},CCSX=#{ccsx},
-			SORT_NO=#{ccsd}*#{ccsx},LEAF=#{leaf}
+			URL=#{url} ,SORT_NO=#{sortNo},LEAF=#{leaf}
 		where id = #{id}
 	</update>
 
@@ -60,33 +57,5 @@
 			and rr.USER_ID = #{userId}
 			order by c.sort_no
 	</select>
-
-	<!-- 查询当前菜单的子菜单个数 -->
-	<select id="getNodesByIdAndUserId" parameterType="hashMap"
-		resultMap="menuMapper">
-		select c.*
-		from T_MQM_MENU C, T_MQM_ROLE ROLE, T_MQM_USER_ROLE RR, T_MQM_ROLE_MENU rc
-		where rr.role_ID = role.ID
-			and role.ID = rc.role_ID
-			and C.ID = rc.CD_ID
-			and C.P_ID = #{pId}
-			and rr.USER_ID = #{userId}
-			order by c.ccsd,c.ccsx
-	</select>
-
-	<!-- 查询当前菜单的子菜单 -->
-	<select id="getChildrenNodes" parameterType="string" resultMap="menuMapper">
-		select * from T_MQM_MENU where P_ID= #{pId} order by ccsx
-	</select>
-
-	<!-- 查询当前菜单的子菜单个数 -->
-	<select id="getWdscjByUserId" parameterType="string" resultMap="menuMapper">
-		select cd.*
-		from T_MQM_MENU CD ,T_MQM_WDSCJ W
-		where W.CD_ID = CD.ID
-		and W.USER_ID = #{userId}
-		order by cd.ccsd,cd.ccsx
-	</select>
-
 
 </mapper>

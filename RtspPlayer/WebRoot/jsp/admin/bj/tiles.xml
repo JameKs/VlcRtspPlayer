@@ -3,8 +3,8 @@
        "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
        "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 <tiles-definitions>
-	<definition name="/admin/cdgl/cdxx" extends="common">
+	<definition name="/admin/bj/bj" extends="common">
 		<put-attribute name="title" value="Foresee : Welcome" />
-		<put-attribute name="content" value="/jsp/admin/cdgl/cdxx.jsp" />
+		<put-attribute name="content" value="/jsp/admin/bj/bj.jsp" />
 	</definition>
 </tiles-definitions>

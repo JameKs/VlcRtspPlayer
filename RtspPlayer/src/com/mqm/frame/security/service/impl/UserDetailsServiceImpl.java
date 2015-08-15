@@ -47,18 +47,21 @@ public final class UserDetailsServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException, DataAccessException {
 	
-		User userVO = (User)userService.findByLoginId(username);//此处的username就是loginId
+		User uservo = (User)userService.findByLoginId(username);//此处的username就是loginId
 
 		// 获取当前用户所有所属角色集合
-		List roles = null;//roleService.findByUserLoginId(userVO.getLoginId());
-		ContextUtil.put(BaseConstants.USER_PROFILE, userVO,ContextUtil.SCOPE_SESSION);
+		List roles = roleService.findByUserLoginId(uservo.getLoginId());
+		uservo.setRoles(roles);
+		
+		//将用户保存的session中
+		ContextUtil.put(BaseConstants.USER_PROFILE, uservo,ContextUtil.SCOPE_SESSION);
 		
 		QmUserDetails userDetails = new QmUserDetails();
 		userDetails.setUsername(username);
-		userDetails.setPassword(userVO.getPassword());
-		userDetails.setAccountNonExpired(!checkAccountExpire(userVO));
-		userDetails.setAccountNonLocked(!checkAccountLock(userVO));
-		userDetails.setEnabled(checkEnabled(userVO));
+		userDetails.setPassword(uservo.getPassword());
+		userDetails.setAccountNonExpired(!checkAccountExpire(uservo));
+		userDetails.setAccountNonLocked(!checkAccountLock(uservo));
+		userDetails.setEnabled(checkEnabled(uservo));
 
 		userDetails.setAuthorities(roles);
 

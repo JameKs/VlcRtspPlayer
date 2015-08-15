@@ -8,4 +8,4 @@
 
 <div id='yhxx_search'></div>
 <div id='yhxx_grid'></div>
- <script type="text/javascript" src="<%=ctx%>/jsp/admin/xtgl/yhgl/yhxx.js"></script>
+ <script type="text/javascript" src="<%=ctx%>/jsp/sys/user/user.js"></script>

@@ -23,10 +23,6 @@ public class MenuVO extends DefaultVO implements Serializable {
 	
 	private String pId;
 	
-	private BigDecimal ccsd;
-	
-	private BigDecimal ccsx;
-	
 	private String leaf;
 	
 	private String imageUrl;
@@ -103,33 +99,6 @@ public class MenuVO extends DefaultVO implements Serializable {
 		this.pId = pId;
 	}
 
-	/**
-	 * @return 返回 ccsd。
-	 */
-	public BigDecimal getCcsd() {
-		return ccsd;
-	}
-
-	/**
-	 * @param ccsd 设置 ccsd。
-	 */
-	public void setCcsd(BigDecimal ccsd) {
-		this.ccsd = ccsd;
-	}
-
-	/**
-	 * @return 返回 ccsx。
-	 */
-	public BigDecimal getCcsx() {
-		return ccsx;
-	}
-
-	/**
-	 * @param ccsx 设置 ccsx。
-	 */
-	public void setCcsx(BigDecimal ccsx) {
-		this.ccsx = ccsx;
-	}
 
 	/**
 	 * @return 返回 leaf。
@@ -161,5 +130,4 @@ public class MenuVO extends DefaultVO implements Serializable {
 		this.sortNo = sortNo;
 	}
 
-	
 }

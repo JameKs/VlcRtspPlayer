@@ -16,7 +16,7 @@ import com.mqm.frame.sys.user.vo.User;
 import com.mqm.frame.util.StringUtil;
 
 @Controller
-@RequestMapping("/yhgl")
+@RequestMapping("/user")
 public class UserController extends DefaultController {
 
 	private static final long serialVersionUID = -1097881755395101376L;
@@ -24,12 +24,12 @@ public class UserController extends DefaultController {
 	@Resource
 	private IUserService userService;
 	
-	@RequestMapping(value="yhgl.do" , params="main")
+	@RequestMapping(value="user.do")
 	public String ryxxMain(User user , ModelMap map , HttpServletRequest req){
-		return "/admin/xtgl/yhgl/yhxx";
+		return "/sys/user/user";
 	};
 	
-	@RequestMapping(value="yhgl.do" , params="insert")
+	@RequestMapping(value="user.do" , params="insert")
 	public String add(User user , ModelMap map , HttpServletRequest req){
 		User sessionUser = (User)req.getSession().getAttribute("user");
 		user.setCjr(sessionUser.getLoginId());
@@ -37,13 +37,13 @@ public class UserController extends DefaultController {
 		return "{success:true,msg:'添加成功！'}";
 	};
 	
-	@RequestMapping(value="yhgl.do" , params="delete")
+	@RequestMapping(value="user.do" , params="delete")
 	public String delete(String id , ModelMap map , HttpServletRequest req){
 		userService.deleteById(id);
 		return "{success:true,msg:'添加成功！'}";
 	}
 	
-	@RequestMapping(value="yhgl.do" , params="update")
+	@RequestMapping(value="user.do" , params="update")
 	public String update(User user , ModelMap map , HttpServletRequest req){
 		User sessionUser = (User)req.getSession().getAttribute("user");
 		user.setXgr(sessionUser.getLoginId());
@@ -51,14 +51,14 @@ public class UserController extends DefaultController {
 		return "{success:true,msg:'添加成功！'}";
 	}
 	
-	@RequestMapping(value="yhgl.do" , params="findById")
+	@RequestMapping(value="user.do" , params="findById")
 	public String findById(String id , ModelMap map , HttpServletRequest req){
 		User user = (User)userService.findById(id);
 		map.put("user", user );
 		return "{success:true,msg:'添加成功！'}";
 	}
 	
-	@RequestMapping(value="yhgl.do" , params="findList")
+	@RequestMapping(value="user.do" , params="findList")
 	@ResponseBody
 	public String find(User user , ModelMap map , HttpServletRequest req){
 		int pageIndex = super.getPageIndex(req);

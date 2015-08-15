@@ -3,11 +3,14 @@
  */
 package com.mqm.frame.common;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.mqm.frame.infrastructure.util.ContextUtil;
+import com.mqm.frame.sys.role.vo.Role;
 import com.mqm.frame.sys.user.vo.User;
 import com.mqm.frame.util.constants.BaseConstants;
 
@@ -26,6 +29,17 @@ public class DefaultController {
 	
 	public User getUser(){
 		return (User)ContextUtil.get(BaseConstants.USER_PROFILE,ContextUtil.SCOPE_SESSION);
+	}
+	
+	public boolean isAdmin(){
+		User user = (User)ContextUtil.get(BaseConstants.USER_PROFILE,ContextUtil.SCOPE_SESSION);
+		List<Role> roles = (List<Role>)user.getRoles();
+		for(Role role: roles){
+			if("supadmin".equals(role.getCode())){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	protected int getPageIndex(HttpServletRequest req){
