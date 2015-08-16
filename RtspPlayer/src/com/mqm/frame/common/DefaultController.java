@@ -1,5 +1,6 @@
 /**
- * Copyright(c) Foresee Science & Technology Ltd. 
+ * Copyright(c) MQM Science & Technology Ltd.
+ * 秦墨科技有限公司
  */
 package com.mqm.frame.common;
 
@@ -16,32 +17,41 @@ import com.mqm.frame.util.constants.BaseConstants;
 
 /**
  * <pre>
- * 程序的中文名称。
- * </pre>
- * @author meihu  meihu@foresee.cn
- * @version 1.00.00
+ * Controller的基类，用于公用方法的封装
  * <pre>
- * 修改记录
- *    修改后版本:     修改人：  修改日期:     修改内容: 
- * </pre>
+ * @author meihu2007@sina.com
+ * 2015年8月16日
  */
 public class DefaultController {
 	
+	/**
+	 * 获得登录的用户
+	 * @return
+	 */
 	public User getUser(){
 		return (User)ContextUtil.get(BaseConstants.USER_PROFILE,ContextUtil.SCOPE_SESSION);
 	}
 	
+	/**
+	 * 判断登录的用户是不是管理员
+	 * @return
+	 */
 	public boolean isAdmin(){
 		User user = (User)ContextUtil.get(BaseConstants.USER_PROFILE,ContextUtil.SCOPE_SESSION);
 		List<Role> roles = (List<Role>)user.getRoles();
 		for(Role role: roles){
-			if("supadmin".equals(role.getCode())){
+			if("SUPADMIN".equals(role.getCode())){
 				return true;
 			}
 		}
 		return false;
 	}
 	
+	/**
+	 * 获得当前页
+	 * @param req
+	 * @return
+	 */
 	protected int getPageIndex(HttpServletRequest req){
 		String pageIndex = req.getParameter("page");
 		if(StringUtils.isNotEmpty(pageIndex)){
@@ -50,6 +60,11 @@ public class DefaultController {
 		return 0;
 	}
 	
+	/**
+	 * 获得每页记录数
+	 * @param req
+	 * @return
+	 */
 	protected int getPageSize(HttpServletRequest req){
 		String limit = req.getParameter("limit");
 		if(StringUtils.isNotEmpty(limit)){

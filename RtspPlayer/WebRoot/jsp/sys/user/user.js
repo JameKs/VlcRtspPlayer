@@ -136,7 +136,6 @@ Ext.onReady(function() {
 					var editFormPanel = Ext.create('Ext.form.Panel', {
 				        defaultType: 'textfield',
 				        layout : 'column',
-				        url:  ctx + '/user/user.do?insert&_csrf=' + $("#_csrf").val(),  
 				        items: [{
 				    		fieldLabel: '登录ID',
 				    		name: 'loginId',
@@ -231,9 +230,9 @@ Ext.onReady(function() {
 						ids = ids + ',' + item.data.id; // id 对应映射字段
 					});
 					$.ajax({
-						url : ctx + '/user/user.do?delete&_csrf=' + $("#_csrf").val(),  
+						url : ctx + '/user/user.do?deleteByIds&_csrf=' + $("#_csrf").val(),  
 						data : {
-							"id" : ids.substring(1, ids.length);
+							"ids" : ids.substring(1, ids.length)
 						},
 						type : 'post',
 						cache : false,

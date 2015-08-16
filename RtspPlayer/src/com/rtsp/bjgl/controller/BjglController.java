@@ -76,10 +76,12 @@ public class BjglController extends DefaultController {
 	 * @return
 	 */
 	@RequestMapping(value="bj.do", params="insert")
+	@ResponseBody
 	public String insert(ModelMap map, Bj bj , HttpServletRequest req){
 		User user = this.getUser();
+		bj.setCjr(user.getLastLoginIp());
 		bjglService.insert(bj);
-		return "{\"success\":true,\"msg\":\"新增成功\"}";
+		return BaseConstants.INSERT_SUCC;
 	}
 	
 	/**
@@ -92,7 +94,7 @@ public class BjglController extends DefaultController {
 		User user = this.getUser();
 		bj.setCjr(user.getLoginId());
 		bjglService.update(bj);
-		return "{\"success\":true,\"msg\":\"修改成功\"}";
+		return BaseConstants.UPDATE_SUCC;
 	}
 	
 	/**
@@ -105,7 +107,7 @@ public class BjglController extends DefaultController {
 		User user = this.getUser();
 		bj.setXgr(user.getLoginId());
 		bjglService.deleteById(bj.getId());
-		return "{\"success\":true,\"msg\":\"更新成功\"}";
+		return BaseConstants.DELETE_SUCC;
 	}
 	
 	@RequestMapping(value="bj.do" , params="deleteByIds")

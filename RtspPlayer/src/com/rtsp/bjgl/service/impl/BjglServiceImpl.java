@@ -8,9 +8,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.mqm.frame.common.DefaultServiceImpl;
-import com.mqm.frame.sys.user.service.IUserService;
-import com.mqm.frame.sys.user.vo.User;
 import com.rtsp.bjgl.dao.IBjglDao;
 import com.rtsp.bjgl.service.IBjglService;
 import com.rtsp.bjgl.vo.Bj;

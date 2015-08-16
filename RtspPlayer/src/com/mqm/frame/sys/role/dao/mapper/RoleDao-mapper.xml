@@ -16,11 +16,8 @@
 	</resultMap>
 	
 	<insert id="insert" parameterType="Role">
-		<selectKey resultType="string" order="AFTER" keyProperty="id">  
-          SELECT @@IDENTITY
-	    </selectKey>
-		insert into T_MQM_ROLE (ROLE_DM , ROLE_NAME, BZ, CJR)
-		values (#{roleDm}, #{roleName}, #{bz}, #{cjr})
+		insert into T_MQM_ROLE (CODE , NAME, BZ, CJR)
+		values (#{code}, #{name}, #{bz}, #{cjr})
 	</insert>
 	
 	<delete id="deleteById" parameterType="string">
@@ -28,8 +25,8 @@
 	</delete>
 	
 	<update id="update" parameterType="Role">
-		update T_MQM_ROLE set xgr = #{xgr},xgSj = sysdate,
-			ROLE_DM=#{roleDm},ROLE_NAME=#{roleName},
+		update T_MQM_ROLE set xgr = #{xgr},XG_SJ = sysdate,
+			CODE=#{code},NAME=#{name},STATUS = #{status},
 			BZ=#{bz} 
 		where id=#{id}
 	</update>
@@ -41,14 +38,14 @@
 	<select id="findList" parameterType="Role" resultMap="roleMapper">
 		SELECT * FROM T_MQM_ROLE
 		<where>
-			<if test="roleDm != null and roleDm != ''">
-				and ROLE_DM = #{roleDm}
+			<if test="code != null and code != ''">
+				and code = #{code}
 			</if>
-			<if test="roleName != null and roleName != ''">
-				and ROLE_NAME = #{roleName}
+			<if test="name != null and name != ''">
+				and name = #{name}
 			</if>
-			<if test="yxBz != null and yxBz != ''">
-				and yx_bz = #{yxBz}
+			<if test="status != null and status != ''">
+				and status = #{status}
 			</if>
 		</where>
 	</select>
@@ -56,14 +53,14 @@
 	<select id="findListCount" parameterType="Role" resultType="int">
 		SELECT count(1) FROM T_MQM_ROLE
 		<where>
-			<if test="roleDm != null and roleDm != ''">
-				and ROLE_DM = #{roleDm}
+			<if test="code != null and code != ''">
+				and code = #{code}
 			</if>
-			<if test="roleName != null and roleName != ''">
-				and ROLE_NAME = #{roleName}
+			<if test="name != null and name != ''">
+				and name = #{name}
 			</if>
-			<if test="yxBz != null and yxBz != ''">
-				and yx_bz = #{yxBz}
+			<if test="status != null and status != ''">
+				and status = #{status}
 			</if>
 		</where>
 	</select>

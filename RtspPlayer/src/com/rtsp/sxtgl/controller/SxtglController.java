@@ -75,10 +75,11 @@ public class SxtglController extends DefaultController {
 	 * @return
 	 */
 	@RequestMapping(value="sxt.do", params="insert")
+	@ResponseBody
 	public String insert(ModelMap map, Sxt sxt , HttpServletRequest req){
 		User user = this.getUser();
 		sxtglService.insert(sxt);
-		return "{\"success\":true,\"msg\":\"新增成功\"}";
+		return BaseConstants.INSERT_SUCC;
 	}
 	
 	/**
@@ -91,7 +92,7 @@ public class SxtglController extends DefaultController {
 		User user = this.getUser();
 		sxt.setCjr(user.getLoginId());
 		sxtglService.update(sxt);
-		return "{\"success\":true,\"msg\":\"修改成功\"}";
+		return BaseConstants.UPDATE_SUCC;
 	}
 	
 	/**

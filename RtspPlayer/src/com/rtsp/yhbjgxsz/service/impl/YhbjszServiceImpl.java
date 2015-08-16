@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.mqm.frame.common.DefaultServiceImpl;
 import com.rtsp.yhbjgxsz.dao.IYhbjszDao;
 import com.rtsp.yhbjgxsz.service.IYhbjszService;
 import com.rtsp.yhbjgxsz.vo.YhBjVO;

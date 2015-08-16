@@ -7,7 +7,6 @@ package com.mqm.frame.sys.role.service.impl;
 
 import java.util.List;
 
-import com.mqm.frame.common.DefaultServiceImpl;
 import com.mqm.frame.sys.role.dao.IRoleDao;
 import com.mqm.frame.sys.role.service.IRoleService;
 import com.mqm.frame.sys.role.vo.Role;
@@ -71,7 +70,7 @@ public class RoleServiceImpl implements
 
 	@Override
 	public int findListCount(Role t) {
-		return roleDao.findListCount("findList", t);
+		return roleDao.findListCount("findListCount", t);
 	}
 	
 	@Override

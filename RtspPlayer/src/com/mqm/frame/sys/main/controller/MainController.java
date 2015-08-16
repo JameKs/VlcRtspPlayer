@@ -1,17 +1,10 @@
 package com.mqm.frame.sys.main.controller;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-
-import net.sf.json.JSONArray;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,8 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.mqm.frame.common.DefaultController;
 import com.mqm.frame.infrastructure.util.ContextUtil;
 import com.mqm.frame.sys.menu.service.IMenuService;
-import com.mqm.frame.sys.menu.vo.MenuVO;
-import com.mqm.frame.sys.menu.vo.JsonTree;
 import com.mqm.frame.sys.user.vo.User;
 import com.mqm.frame.util.constants.BaseConstants;
 
@@ -62,15 +53,15 @@ public class MainController extends DefaultController {
 	 * @return String
 	 */
 	@RequestMapping(value = "main.do")
-	public String main(ModelMap map, User user, HttpServletRequest request)
+	public String main(ModelMap map, HttpServletRequest request)
 			throws Exception {
-		Set<String> roles = AuthorityUtils
-				.authorityListToSet(SecurityContextHolder.getContext()
-						.getAuthentication().getAuthorities());
-		if (roles.contains("ROLE_ADMIN")) {
-			return "index";
-		}else{
+//		Set<String> roles = AuthorityUtils
+//				.authorityListToSet(SecurityContextHolder.getContext()
+//						.getAuthentication().getAuthorities());
+		if (this.isAdmin()) {
 			return "public/frame";
+		}else{
+			return "index";
 		}
 	}
 

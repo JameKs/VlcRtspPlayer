@@ -85,14 +85,10 @@ public class Role extends DefaultVO implements GrantedAuthority, Serializable {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-	/* (non-Javadoc)
-	 * @see org.springframework.security.core.GrantedAuthority#getAuthority()
-	 */
+	
 	@Override
 	public String getAuthority() {
-		// TODO Auto-generated method stub
-		return this.name;
+		return this.code;
 	}
 
 	

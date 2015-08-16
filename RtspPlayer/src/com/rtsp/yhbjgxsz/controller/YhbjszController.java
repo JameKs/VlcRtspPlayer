@@ -22,6 +22,7 @@ import com.mqm.frame.common.DefaultController;
 import com.mqm.frame.common.Converter.DateConverter;
 import com.mqm.frame.sys.user.vo.User;
 import com.mqm.frame.util.StringUtil;
+import com.mqm.frame.util.constants.BaseConstants;
 import com.rtsp.yhbjgxsz.service.IYhbjszService;
 import com.rtsp.yhbjgxsz.vo.YhBjVO;
 
@@ -92,7 +93,7 @@ public class YhbjszController extends DefaultController {
 		User user = this.getUser();
 		yhBjVo.setCjr(user.getLoginId());
 		yhbjszService.insert(yhBjVo);
-		return "{\"success\":true,\"msg\":\"保存成功\"}";
+		return BaseConstants.INSERT_SUCC;
 	}
 	
 	/**
@@ -105,7 +106,7 @@ public class YhbjszController extends DefaultController {
 		User user = this.getUser();
 		yhBjVo.setXgr(user.getLoginId());
 		yhbjszService.deleteById(yhBjVo.getId());
-		return "{\"success\":true,\"msg\":\"更新成功\"}";
+		return BaseConstants.DELETE_SUCC;
 	}
 	
 }

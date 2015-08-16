@@ -21,7 +21,6 @@
 <link rel="stylesheet" href="<%=ctx%>/resources/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
 <script type="text/javascript" src="<%=ctx%>/resources/extjs/js/ext-all.js"></script>
 <script type="text/javascript" src="<%=ctx%>/resources/jquery/js/jquery-1.7.2.js"></script>
-<!-- <script type="text/javascript" src="<%=ctx%>/resources/extjs/plugins/extjsPlugins.js"></script>  -->
 <script type="text/javascript" src="<%=ctx%>/resources/ztree/js/jquery.ztree.core-3.5.js"></script>
 <style type="text/css">
 /* navigation */

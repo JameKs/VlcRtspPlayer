@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.mqm.frame.common.DefaultServiceImpl;
 import com.rtsp.sxtgl.dao.ISxtglDao;
 import com.rtsp.sxtgl.service.ISxtglService;
 import com.rtsp.sxtgl.vo.Sxt;

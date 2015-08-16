@@ -4,42 +4,57 @@ Ext.onReady(function() {
 
 	var searchForm = Ext.create('Ext.form.Panel', {
 		title : '按条件搜索',
-		width : 800,
+		region:"north",
+		height : 70,
 		defaultType : 'textfield',
 		frame : true,
 		method : 'POST',
 		collapsible : false,// 可折叠
 		bodyPadding : 5,
 		layout : 'column',
-		margin : '0 0 10 0',
+		margin : '0 0 5 0',
 		items : [ {
 			fieldLabel : '角色代码',
 			labelWidth : 80,
-			id : 'roleDm'
+			id : 'code'
 		}, {
 			fieldLabel : '角色名称',
 			labelWidth : 80,
-			id : 'roleName'
+			id : 'name'
 		}, {
-			fieldLabel : '有效标志',
-			labelWidth : 80,
-			id : 'yxBz'
+		    xtype: "checkbox",          //checkbox控件
+		    id: "st",         //表单中字段名称
+		    abelWidth : 80,
+		    fieldLabel: "是否有效",       //标签名称
+		    inputValue: "1",         //选中的值
+		    uncheckedValue: "0",    //未选中的值
+		    checked: true
 		}, {
 			xtype : 'button',
 			text : '搜索',
 			margin : '0 0 0 5',
 			handler : function() {
-				var roleDm = Ext.getCmp('roleDm').getValue();
-				var roleName = Ext.getCmp('roleName').getValue(); // 获取文本框值
-				var yxBz = Ext.getCmp('yxBz').getValue(); // 获取文本框值
-
+				var form = searchForm.getForm();
+				
+				var code = form.findField("code").getValue();
+				var name = form.findField("name").getValue();
+				var status = form.findField("st").getSubmitValue();
 				gridStore.load({
 					params : {
-						roleDm : roleDm,
-						roleName : roleName,
-						yxBz : yxBz
+						code : code,
+						name : name,
+						status : status
 					}
 				});// 传递参数
+
+			}
+		} , {
+			xtype : 'button',
+			text : '重置',
+			margin : '0 0 0 5',
+			handler : function() {
+				var form = searchForm.getForm();
+				form.reset();
 
 			}
 		} ]
@@ -54,17 +69,23 @@ Ext.onReady(function() {
 			name : 'id',
 			mapping : 'id'
 		}, {
-			name : 'roleDm',
-			mapping : 'roleDm'
+			name : 'code',
+			mapping : 'code'
 		}, {
-			name : 'roleName',
-			mapping : 'roleName'
+			name : 'name',
+			mapping : 'name'
 		}, {
 			name : 'bz',
 			mapping : 'bz'
 		}, {
-			name : 'yxBz',
-			mapping : 'yxBz'
+			name : 'status',
+			mapping : 'status'
+		}, {
+			name : 'cjr',
+			mapping : 'cjr'
+		}, {
+			name : 'cjSj',
+			mapping : 'cjSj'
 		} ]
 	});
 
@@ -73,7 +94,7 @@ Ext.onReady(function() {
 		pageSize : 10,
 		proxy : {
 			type : 'ajax',
-			url : ctx+'/jsxx/jsgl.do?findList',
+			url : ctx+'/role/role.do?findList&_csrf=' + $("#_csrf").val(),
 
 			reader : {
 				type : 'json',
@@ -90,32 +111,30 @@ Ext.onReady(function() {
 		hidden:true
 	}, {
 		header : "角色代码",
-		dataIndex : 'roleDm'
+		dataIndex : 'code'
 	}, {
 		header : "角色名称",
-		dataIndex : 'roleName'
+		dataIndex : 'name'
 	}, {
 		header : "备注",
 		dataIndex : 'bz'
 	}, {
 		header : "有效标志",
-		dataIndex : 'yxBz'
+		dataIndex : 'status'
+	}, {
+		header : "创建人",
+		dataIndex : 'cjr'
+	}, {
+		header : "创建时间",
+		dataIndex : 'cjSj'
 	} ];
 
 	var jsxxGrid = new Ext.grid.GridPanel({
 		store : gridStore,
 		columns : cm,
 		frame : false,
-		height : 320,
-		width : 800,
-		// region:'west',
-		// bbar : Ext.create('Ext.PagingToolbar', {
-		// store : gridStore,
-		// displayInfo : true,
-		// displayMsg : 'Displaying topics {0} - {1} of {2}',
-		// emptyMsg : "No topics to display",
-		// region : 'north'
-		// })
+		width : 550,
+		region:"west",
 		dockedItems : [ {
 			xtype : 'pagingtoolbar',
 			store : gridStore, // same store GridPanel is using
@@ -129,14 +148,14 @@ Ext.onReady(function() {
 			xtype : 'toolbar',
 			items : [ {
 				iconCls : 'icon-add',
-				text : 'Add',
+				text : '新增',
 				scope : this, // 添加
 				handler : function() {
 					Panel.show(); // 显示
 				}
 			}, {
 				iconCls : 'icon-delete',
-				text : 'Delete',
+				text : '删除',
 				// disabled: true,
 				itemId : 'delete',
 				scope : this,
@@ -168,101 +187,114 @@ Ext.onReady(function() {
 	});
 
 	// 初始加载第1页
-	gridStore.loadPage(1);
+//	gridStore.loadPage(1);
+	var form = searchForm.getForm();
+	
+	var code = form.findField("code").getValue();
+	var name = form.findField("name").getValue();
+	var status = form.findField("st").getSubmitValue();
+	gridStore.load({
+		params : {
+			code : code,
+			name : name,
+			status : status
+		}
+	});
 
 	var dataPanel = Ext.create('Ext.form.Panel', {
 		title : '表单',
 		width : 300,
-		height : 200,
-		frame : true,
+		region:"center",
+		//frame : true,
 		bodyPadding : 5,
-		rowspan: 2,
-		// closable:true,//是否可关闭
-		//hidden : true, // 隐藏
-		margin : '5',
-		defaultType : 'textfield', // name对应grid列中的dataIndex
+		margin : '0 0 5 5',
+		defaultType : 'textfield',
+		tbar :[{  
+        	text : "修改",  
+            iconCls:'deleteBtn' ,
+            handler : function() {
+            	var form = dataPanel.getForm();
+            	var id = form.findField("id").getValue();
+				if(id == null || id == ''){
+					Ext.MessageBox.alert('提示', '请选择要修改的记录!');
+					return false;
+				}
+				form.submit({
+					url : ctx+'/role/role.do?update&_csrf=' + $("#_csrf").val(),
+					success : function(form, action) {
+						var data = Ext.JSON.decode(action.response.responseText);
+						Ext.Msg.alert('Success', data.msg);
+					},
+					failure : function(form, action) {
+						var data = Ext.JSON.decode(action.response.responseText);
+						Ext.Msg.alert('Failure', data.msg);
+					}
+				});
+            }
+		},{  
+        	text : "新增",  
+            iconCls:'deleteBtn' ,
+            handler : function() {
+            	var form = dataPanel.getForm();
+            	form.submit({
+					url : ctx+'/role/role.do?insert&_csrf=' + $("#_csrf").val(),
+					success : function(form, action) {
+						var data = Ext.JSON.decode(action.response.responseText);
+						Ext.Msg.alert('Success', data.msg);
+					},
+					failure : function(form, action) {
+						var data = Ext.JSON.decode(action.response.responseText);
+						Ext.Msg.alert('Failure', data.msg);
+					}
+				});
+            }
+		},{  
+        	text : "重置",  
+            iconCls:'deleteBtn' ,
+            handler : function() {
+            	var form = dataPanel.getForm();
+            	form.reset();
+            	form.findField("id").setValue(0);
+            }
+		}],
 		items : [ {
 			fieldLabel : '角色代码',
-			name : 'roleDm'
+			name : 'code'
 		}, {
 			fieldLabel : '角色名称',
-			name : 'roelName'
+			name : 'name'
 		}, {
 			fieldLabel : '备注',
 			name : 'bz'
+		}, {
+		    xtype: "checkbox",          //checkbox控件
+		    name: "status",         //表单中字段名称
+		    abelWidth : 80,
+		    fieldLabel: "是否有效",       //标签名称
+		    inputValue: "1",         //选中的值
+		    uncheckedValue: "0",    //未选中的值
+		    checked: true
+		} , {
+			fieldLabel : '创建人',
+			name : 'cjr'
+		} , {
+			fieldLabel : '创建时间',
+			name : 'cjSj'
 		} , {
 			fieldLabel : 'id',
 			name : 'id',
 			value:0,
 			hidden:true
-		} ],
-		buttons : [ {
-			text : '更新',
-			listeners: {
-                  //'mouseover': btnresetmouseover,
-			    'click' : function() {
-
-					var id = dataPanel.getForm().findField("id").getValue();
-					if(id == null || id == ''){
-						Ext.MessageBox.alert('提示', '请选择要修改的记录!');
-						return false;
-					}
-					dataPanel.submit({
-						url : ctx+'/jsxx/jsgl.do?update',
-						success : function(form, action) {
-							var data = Ext.JSON.decode(action.response.responseText);
-							Ext.Msg.alert('Success', data.msg);
-						},
-						failure : function(form, action) {
-							var data = Ext.JSON.decode(action.response.responseText);
-							Ext.Msg.alert('Failure', data.msg);
-						}
-					});
- 	             }
-              }
-
-		},  {
-			text : '新建',
-			listeners: {
-                  'click': function () {
-                	  dataPanel.submit({
-						url : ctx+'/jsxx/jsgl.do?insert',
-						success : function(form, action) {
-							var data = Ext.JSON.decode(action.response.responseText);
-							Ext.Msg.alert('Success', data.msg);
-						},
-						failure : function(form, action) {
-							var data = Ext.JSON.decode(action.response.responseText);
-							Ext.Msg.alert('Failure', data.msg);
-						}
-					});
- 	             }
-              }
-
-		},{
-			text: '重置',
-          listeners: {
-             'click': function () {
-            	 dataPanel.getForm().reset();
-            	 dataPanel.getForm().findField("id").setValue(0);
-            }
-
-         }
-
 		} ]
 	});
 	
 
 	var viewport = Ext.create('Ext.Panel', {
 		renderTo : 'panel_div',
-		layout: {
-	        type: 'table',
-	        columns: 2
-	    },
-		frame: true,
-		width: 800,
-		height: 700,
-		items : [ searchForm, dataPanel , jsxxGrid ]
+		layout:"border", 
+		//frame: true,
+		height: 750,
+		items : [ searchForm, jsxxGrid, dataPanel]
 	});
 
 });

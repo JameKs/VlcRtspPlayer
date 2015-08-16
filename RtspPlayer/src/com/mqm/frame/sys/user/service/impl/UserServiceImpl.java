@@ -2,7 +2,6 @@ package com.mqm.frame.sys.user.service.impl;
 
 import java.util.List;
 
-import com.mqm.frame.common.DefaultServiceImpl;
 import com.mqm.frame.sys.user.dao.IUserDao;
 import com.mqm.frame.sys.user.service.IUserService;
 import com.mqm.frame.sys.user.vo.User;

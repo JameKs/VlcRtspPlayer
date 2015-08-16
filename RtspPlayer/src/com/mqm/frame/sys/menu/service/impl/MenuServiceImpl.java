@@ -9,7 +9,6 @@ import java.util.Map;
 
 import net.sf.json.JSONArray;
 
-import com.mqm.frame.common.DefaultServiceImpl;
 import com.mqm.frame.sys.menu.dao.IMenuDao;
 import com.mqm.frame.sys.menu.service.IMenuService;
 import com.mqm.frame.sys.menu.vo.JsonTree;
