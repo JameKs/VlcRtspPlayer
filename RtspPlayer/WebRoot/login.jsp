@@ -23,11 +23,14 @@
 	if(msg != null && msg != ''){
 		alert(msg);
 	}
+	function submit(){
+		document.form.submit();
+	}
 </script>
 </HEAD>
 <BODY id=userlogin_body>
 	
-	<form name="f" action="<c:url value='login'/>" method="POST">
+	<form id="form" name="form" action="<c:url value='login'/>" method="POST">
 		<input type="hidden" name="<c:out value="${_csrf.parameterName}"/>" value="<c:out value="${_csrf.token}"/>"/>
 		<DIV></DIV>
 
@@ -69,7 +72,7 @@
 					<INPUT class=IbtnEnterCssClass
 						id=IbtnEnter
 						style="BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px"
-						onclick='javascript:document.form.submit()'
+						onclick='submit'
 						type=image src="<%=ctx%>/resources/login/images/user_botton.gif"
 						name=IbtnEnter></LI>
 					</UL>

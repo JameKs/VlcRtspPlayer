@@ -23,6 +23,7 @@ import com.mqm.frame.common.DefaultController;
 import com.mqm.frame.common.Converter.DateConverter;
 import com.mqm.frame.sys.user.vo.User;
 import com.mqm.frame.util.StringUtil;
+import com.mqm.frame.util.constants.BaseConstants;
 import com.rtsp.bjgl.service.IBjglService;
 import com.rtsp.bjgl.vo.Bj;
 
@@ -62,8 +63,8 @@ public class BjglController extends DefaultController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="bj.do", params="find")
-	public String find(ModelMap map , Bj bj , HttpServletRequest req){
+	@RequestMapping(value="bj.do", params="findList")
+	public String findList(ModelMap map , Bj bj , HttpServletRequest req){
 		List list = bjglService.findList(bj);
 		int count = bjglService.findListCount(bj);
 		
@@ -105,6 +106,21 @@ public class BjglController extends DefaultController {
 		bj.setXgr(user.getLoginId());
 		bjglService.deleteById(bj.getId());
 		return "{\"success\":true,\"msg\":\"更新成功\"}";
+	}
+	
+	@RequestMapping(value="bj.do" , params="deleteByIds")
+	@ResponseBody
+	public String deleteByIds(String ids , ModelMap map , HttpServletRequest req){
+		String[] temIds = ids.split(",");
+		bjglService.deleteByIds(temIds);
+		return BaseConstants.DELETE_SUCC;
+	}
+	
+	@RequestMapping(value="bj.do" , params="findById")
+	public Bj findById(String id , ModelMap map , HttpServletRequest req){
+		Bj bj = (Bj)bjglService.findById(id);
+		map.put("user", bj );
+		return bj;
 	}
 	
 	

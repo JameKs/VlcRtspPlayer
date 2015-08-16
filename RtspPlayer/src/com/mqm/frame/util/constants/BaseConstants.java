@@ -19,6 +19,20 @@ package com.mqm.frame.util.constants;
  */
 public class BaseConstants {
 
+	public static final String INSERT_SUCC = "{\"success\":\"true\",\"msg\":\"添加成功！\"}";
+	
+	public static final String UPDATE_SUCC = "{\"success\":\"true\",\"msg\":\"修改成功！\"}";
+	
+	public static final String DELETE_SUCC = "{\"success\":\"true\",\"msg\":\"删除成功！\"}";
+	
+	public static final String INSERT_ERROR = "{\"success\":\"false\",\"msg\":\"添加失败！\"}";
+	
+	public static final String UPDATE_ERROR = "{\"success\":\"false\",\"msg\":\"修改失败！\"}";
+	
+	public static final String DELETE_ERROR = "{\"success\":\"false\",\"msg\":\"删除失败！\"}";
+	
+	public static final String CZ_ERROR = "{\"success\":\"false\",\"msg\":\"操作失败！\"}";
+	
 	/**
 	 * 登录ID。
 	 */

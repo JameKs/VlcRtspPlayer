@@ -2,10 +2,11 @@ Ext.require(['*']);
 Ext.onReady(function() {
 	
 	//定义一个用于查询的Form
-	var form = Ext.create('Ext.form.Panel', {
+	var searchFormPanel = Ext.create('Ext.form.Panel', {
         defaultType: 'textfield',
         layout : 'column',
         renderTo:'yhxx_search',
+        height: 30,
         items: [{
         		fieldLabel: '用户代码',
         		name: 'loginId',
@@ -20,10 +21,12 @@ Ext.onReady(function() {
 			text : '搜索',
 			margin : '0 0 0 5',
 			handler : function() {
-				var loginId = Ext.getCmp('loginId').getValue();
-				var userName = Ext.getCmp('userName').getValue(); // 获取文本框值
+				var form = searchFormPanel.getForm();
+				
+				var loginId = form.findField("loginId").getValue();
+				var userName = form.findField("userName").getValue();
 
-				ryxxGrid.load({
+				gridStore.load({
 					params : {
 						loginId : loginId,
 						userName : userName
@@ -51,7 +54,6 @@ Ext.onReady(function() {
   			{ name : 'sessionOutTime', mapping : 'sessionOutTime' },
   			{ name : 'cjr', mapping : 'cjr' },
   			{ name : 'cjSj', mapping : 'cjSj' },
-  			{ name : 'bmDm', mapping : 'bmDm' }
   		]
 	});
 	
@@ -60,7 +62,7 @@ Ext.onReady(function() {
 		pageSize: 2,
 		proxy : {
 			type: 'ajax',
-            url: ctx + '/yhgl/yhgl.do?findList',
+            url: ctx + '/user/user.do?findList&_csrf=' + $("#_csrf").val(),  
             reader: {
                 type: 'json',
                 root: 'items',
@@ -72,8 +74,8 @@ Ext.onReady(function() {
 
 	var cm = [ {
 		xtype : "rownumberer",
-		text : "行号",
-		width : 40
+		text : "#",
+		width : 30
 	}, {
 		header : "id",
 		dataIndex : 'id'
@@ -107,12 +109,9 @@ Ext.onReady(function() {
 	}, {
 		header : "创建时间",
 		dataIndex : 'cjSj'
-	}, {
-		header : "部门代码",
-		dataIndex : 'bmDm'
 	}];
 		
-	var ryxxGrid = new Ext.grid.GridPanel({
+	var userGrid = new Ext.grid.GridPanel({
 		columns : cm,
 		frame : false,
 		//height: 350,
@@ -131,24 +130,227 @@ Ext.onReady(function() {
 			xtype : 'toolbar',
 			items : [ {
 				iconCls : 'icon-add',
-				text : 'Add',
+				text : '新增',
 				scope : this, // 添加
 				handler : function() {
-					Panel.show(); // 显示
+					var editFormPanel = Ext.create('Ext.form.Panel', {
+				        defaultType: 'textfield',
+				        layout : 'column',
+				        url:  ctx + '/user/user.do?insert&_csrf=' + $("#_csrf").val(),  
+				        items: [{
+				    		fieldLabel: '登录ID',
+				    		name: 'loginId',
+				    		fieldWidth: 60,
+				            allowBlank: false
+						},{
+				    		fieldLabel: '用户名称',
+				    		name: 'userName',
+				    		fieldWidth: 60,
+				            allowBlank: false
+						}, {
+				    		fieldLabel: '电话号码',
+				    		name: 'phone',
+				    		fieldWidth: 60,
+				    		regex: /^((\d{3,4}-)*\d{7,8}(-\d{3,4})*|13\d{9})$/  
+						}, {
+				    		fieldLabel: '邮箱地址',
+				    		name: 'email',
+				    		vtype:'email', 
+				    		fieldWidth: 60
+						},{
+						    xtype: "checkbox",          //checkbox控件
+						    name: "status",         //表单中字段名称
+						    fieldLabel: "是否有效",       //标签名称
+						    inputValue: "1",         //选中的值
+						    uncheckedValue: "0",    //未选中的值
+						    checked: true
+						}, {
+							xtype: 'numberfield',
+							fieldLabel: '超时时间',
+				    		name: 'sessionOutTime',
+				    		value: 30,
+				    		fieldWidth: 60
+						}, {
+							fieldLabel: 'id',
+				    		name: 'id'
+						}]
+					});
+					
+					var addWindow = new Ext.Window({    
+					    title : '增加用户',  
+					    width : 600,
+					    height : 250,
+					    resizable : false,  
+					    closeAction:'hide',   
+					    autoHeight : true,   
+					    constrainHeader : true,  
+					    modal: true, //是否模态窗口，默认为false
+					    plain : true,  
+					    items : [editFormPanel],
+					    buttons : [{  
+			                text : '确定',  
+			                handler : function(){  
+			                	editFormPanel.getForm().submit({
+			                		url:  ctx + '/user/user.do?insert&_csrf=' + $("#_csrf").val(),   
+				                	method:"POST",
+				                	waitMsg:"保存中，请稍后...",
+			                        success : function(form, action) {  
+			                            // 得到数据  
+			                            var result = Ext.JSON  
+			                                    .decode(action.response.responseText);// 就可以取出来。如果是数组，那么很简单  
+			                            // 把数据放到结果里面  
+			                            Ext.Msg.alert('提示',result.msg);  
+			                            gridStore.loadPage(1);
+			                        },  
+			                        failure : function(form, action) {  
+			                            Ext.Msg.alert('提示', "操作失败：输入非法字符！！！");  
+			                        }  
+			                	});
+			                	addWindow.close();  
+			                }  
+			            },{  
+			                text : '取消', 
+		                	handler : function(){  
+		                		addWindow.close();  
+			                }
+			            }] 
+					}); 
+					addWindow.show();  
 				}
 			}, {
 				iconCls : 'icon-delete',
-				text : 'Delete',
+				text : '删除',
 				// disabled: true,
 				itemId : 'delete',
 				scope : this,
 				handler : function() {
 					// var selModel = grid.getSelectionModel();
-					var selected = grid.getSelectionModel().getSelection();
-					var Ids = []; // 要删除的id
+					var selected = userGrid.getSelectionModel().getSelection();
+					var ids = "" ; // 要删除的id
 					Ext.each(selected, function(item) {
-						Ids.push(item.data.id); // id 对应映射字段
+						ids = ids + ',' + item.data.id; // id 对应映射字段
 					});
+					$.ajax({
+						url : ctx + '/user/user.do?delete&_csrf=' + $("#_csrf").val(),  
+						data : {
+							"id" : ids.substring(1, ids.length);
+						},
+						type : 'post',
+						cache : false,
+						dataType : 'json',
+						success : function(data) {
+							Ext.Msg.alert('提示',data.msg);  
+							gridStore.loadPage(1);
+						},
+						error : function() {
+							alert("异常！");
+						}
+					});  
+
+				}
+			}, {
+				iconCls : 'icon-update',
+				text : '修改',
+				// disabled: true,
+				itemId : 'update',
+				scope : this,
+				handler : function() {
+					// var selModel = grid.getSelectionModel();
+					var record = userGrid.getSelectionModel().getSelection();
+					
+					var editFormPanel = Ext.create('Ext.form.Panel', {
+				        defaultType: 'textfield',
+				        layout : 'column',
+				        url:  ctx + '/user/user.do?insert&_csrf=' + $("#_csrf").val(),  
+				        items: [{
+				    		fieldLabel: '登录ID',
+				    		name: 'loginId',
+				    		fieldWidth: 60,
+				            allowBlank: false
+						},{
+				    		fieldLabel: '用户名称',
+				    		name: 'userName',
+				    		fieldWidth: 60,
+				            allowBlank: false
+						}, {
+				    		fieldLabel: '电话号码',
+				    		name: 'phone',
+				    		fieldWidth: 60,
+				    		regex: /^((\d{3,4}-)*\d{7,8}(-\d{3,4})*|13\d{9})$/  
+						}, {
+				    		fieldLabel: '邮箱地址',
+				    		name: 'email',
+				    		vtype:'email', 
+				    		fieldWidth: 60
+						},{
+						    xtype: "checkbox",          //checkbox控件
+						    name: "status",         //表单中字段名称
+						    fieldLabel: "是否有效",       //标签名称
+						    inputValue: "1",         //选中的值
+						    uncheckedValue: "0",    //未选中的值
+						    checked: true
+						}, {
+							xtype: 'numberfield',
+							fieldLabel: '超时时间',
+				    		name: 'sessionOutTime',
+				    		value: 30,
+				    		fieldWidth: 60
+						}, {
+							fieldLabel: 'id',
+				    		name: 'id'
+						}]
+					});
+					
+					var addWindow = new Ext.Window({    
+					    title : '增加用户',  
+					    width : 600,
+					    height : 300,
+					    resizable : false,  
+					    closeAction:'hide',   
+					    autoHeight : true,   
+					    constrainHeader : true,  
+					    modal: true, //是否模态窗口，默认为false
+					    plain : true,  
+					    items : [editFormPanel],
+					    buttons : [{  
+			                text : '确定',  
+			                handler : function(){  
+//			                	if(saveFormPanel.getForm().isValid()) {  
+			                		editFormPanel.getForm().submit({  
+				                        url : ctx + '/user/user.do?update&_csrf=' + $("#_csrf").val(),  
+				                        waitMsg : '正在提交数据',  
+				                        waitTitle : '提示',  
+				                        method : "POST",  
+				                        success : function(form, action) {  
+				                            var result = Ext.JSON.decode(action.response.responseText);// 就可以取出来。如果是数组，那么很简单  
+				                            Ext.Msg.alert('提示',result.msg);  
+				                            gridStore.loadPage(1);
+				                        },  
+				                        failure : function(form, action) {  
+				                            Ext.Msg.alert('提示', "操作失败：输入非法字符！！！");  
+				                        }  
+				                    }); 
+//			                	};
+			                	addWindow.close(); 
+			                }  
+			            },{  
+			                text : '取消', 
+		                	handler : function(){  
+		                		addWindow.close();  
+			                }
+			            }] 
+					}); 
+					addWindow.show();  
+					//editFormPanel.getForm().loadRecord(record);
+					var form = editFormPanel.getForm();
+					form.findField("id").setValue(record[0].data["id"]);
+					form.findField("loginId").setValue(record[0].data["loginId"]);
+					form.findField("userName").setValue(record[0].data["userName"]);
+					form.findField("phone").setValue(record[0].data["phone"]);
+					form.findField("email").setValue(record[0].data["email"]);
+					form.findField("status").setValue(record[0].data["status"]);
+					form.findField("sessionOutTime").setValue(record[0].data["sessionOutTime"]);
+					//form.findField("id").setValue(record.data["id"]);
 				}
 			} ]
 		} ]

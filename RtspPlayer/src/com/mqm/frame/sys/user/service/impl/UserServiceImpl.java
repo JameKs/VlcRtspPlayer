@@ -25,7 +25,14 @@ public class UserServiceImpl implements IUserService<User> {
 
 	@Override
 	public void deleteById(String id) {
-		userDao.deleteById("delete", id);
+		userDao.deleteById("deleteById", id);
+	}
+	
+	@Override
+	public void deleteByIds(String[] ids) {
+		for(String id : ids){
+			this.deleteById(id);
+		}
 	}
 
 	@Override
@@ -53,7 +60,7 @@ public class UserServiceImpl implements IUserService<User> {
 
 	@Override
 	public int findListCount(User t) {
-		return userDao.findListCount("findList", t);
+		return userDao.findListCount("findListCount", t);
 	}
 	
 	@Override

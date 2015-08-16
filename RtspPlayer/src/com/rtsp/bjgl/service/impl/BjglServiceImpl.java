@@ -40,7 +40,14 @@ public class BjglServiceImpl implements IBjglService<Bj> {
 
 	@Override
 	public void deleteById(String id) {
-		bjglDao.deleteById("delete", id);
+		bjglDao.deleteById("deleteById", id);
+	}
+	
+	@Override
+	public void deleteByIds(String[] ids) {
+		for(String id : ids){
+			this.deleteById(id);
+		}
 	}
 
 	@Override

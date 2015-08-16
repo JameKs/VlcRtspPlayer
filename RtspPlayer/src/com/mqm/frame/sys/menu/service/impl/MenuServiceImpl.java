@@ -42,7 +42,14 @@ public class MenuServiceImpl implements IMenuService<MenuVO> {
 
 	@Override
 	public void deleteById(String id) {
-		menuDao.deleteById("delete", id);
+		menuDao.deleteById("deleteById", id);
+	}
+	
+	@Override
+	public void deleteByIds(String[] ids) {
+		for(String id : ids){
+			this.deleteById(id);
+		}
 	}
 
 	@Override

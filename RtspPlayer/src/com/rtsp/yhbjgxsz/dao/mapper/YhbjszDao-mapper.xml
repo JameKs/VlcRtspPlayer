@@ -50,7 +50,7 @@
         select * from T_RTSP_USER_BJ T WHERE T.ID = #{id}
     </select>
     
-    <select id="findListCount" parameterType="YhBjVo" resultType="long">
+    <select id="findListCount" parameterType="YhBjVo" resultType="int">
         select count(1) from T_RTSP_USER_BJ T WHERE T.ID = #{id}
     </select>
     

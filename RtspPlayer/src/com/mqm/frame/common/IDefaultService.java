@@ -20,11 +20,13 @@ public interface IDefaultService<T> {
 	public void insert(T t);
 
 	public void deleteById(String id);
+	
+	public void deleteByIds(String[] ids);
 
 	public void update(T t);
 	
 	public T findById(String id);
-
+	
 	public List findList(T t);
 	
 	public List findPageList(T t , int pageIndex, int pageSize);

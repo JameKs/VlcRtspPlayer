@@ -53,7 +53,7 @@
         select * from T_RTSP_BJ T WHERE T.ID = #{id}
     </select>
     
-    <select id="findListCount" parameterType="Bj" resultType="long">
+    <select id="findListCount" parameterType="Bj" resultType="int">
         select count(1) from T_RTSP_BJ T WHERE T.ID = #{id}
     </select>
     

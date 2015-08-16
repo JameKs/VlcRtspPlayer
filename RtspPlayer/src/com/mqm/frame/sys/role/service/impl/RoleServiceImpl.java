@@ -36,9 +36,16 @@ public class RoleServiceImpl implements
 
 	@Override
 	public void deleteById(String id) {
-		roleDao.deleteById("delete", id);
+		roleDao.deleteById("deleteById", id);
 	}
-
+	
+	@Override
+	public void deleteByIds(String[] ids) {
+		for(String id : ids){
+			this.deleteById(id);
+		}
+	}
+	
 	@Override
 	public void update(Role t) {
 		roleDao.update("update", t);

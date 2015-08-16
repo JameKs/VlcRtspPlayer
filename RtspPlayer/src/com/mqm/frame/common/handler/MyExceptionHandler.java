@@ -10,6 +10,8 @@ import org.apache.log4j.Logger;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mqm.frame.util.constants.BaseConstants;
+
 public class MyExceptionHandler implements HandlerExceptionResolver {
 
 	private static final Logger logger = Logger
@@ -59,7 +61,7 @@ public class MyExceptionHandler implements HandlerExceptionResolver {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		writer.write("{success:false,msg:ddd}");
+		writer.write(BaseConstants.CZ_ERROR);
 		writer.flush();
 		return null;
 	}

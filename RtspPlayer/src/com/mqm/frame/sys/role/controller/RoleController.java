@@ -22,6 +22,7 @@ import com.mqm.frame.sys.role.service.IRoleService;
 import com.mqm.frame.sys.role.vo.Role;
 import com.mqm.frame.sys.user.vo.User;
 import com.mqm.frame.util.StringUtil;
+import com.mqm.frame.util.constants.BaseConstants;
 
 /**
  * @author Administrator
@@ -48,11 +49,19 @@ public class RoleController extends DefaultController {
 		return "{success:true,msg:'保存成功！'}";
 	}
 	
-	@RequestMapping(value="role.do" , params="delete")
+	@RequestMapping(value="role.do" , params="deleteById")
 	@ResponseBody
-	public String delete(ModelMap map, String id, HttpServletRequest req) {
+	public String deleteById(ModelMap map, String id, HttpServletRequest req) {
 		roleService.deleteById(id);
 		return "{success:true,msg:'删除成功！'}";
+	}
+	
+	@RequestMapping(value="role.do" , params="deleteByIds")
+	@ResponseBody
+	public String deleteByIds(String ids , ModelMap map , HttpServletRequest req){
+		String[] temIds = ids.split(",");
+		roleService.deleteByIds(temIds);
+		return BaseConstants.DELETE_SUCC;
 	}
 	
 	@RequestMapping(value="role.do" , params="update")

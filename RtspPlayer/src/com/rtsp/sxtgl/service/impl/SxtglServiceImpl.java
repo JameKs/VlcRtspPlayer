@@ -37,7 +37,14 @@ public class SxtglServiceImpl implements ISxtglService<Sxt> {
 
 	@Override
 	public void deleteById(String id) {
-		sxtglDao.deleteById("delete", id);
+		sxtglDao.deleteById("deleteById", id);
+	}
+	
+	@Override
+	public void deleteByIds(String[] ids) {
+		for(String id : ids){
+			this.deleteById(id);
+		}
 	}
 
 	@Override

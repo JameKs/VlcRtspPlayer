@@ -37,7 +37,14 @@ public class YhbjszServiceImpl implements IYhbjszService<YhBjVO> {
 
 	@Override
 	public void deleteById(String id) {
-		yhbjszDao.deleteById("delete", id);
+		yhbjszDao.deleteById("deleteById", id);
+	}
+	
+	@Override
+	public void deleteByIds(String[] ids) {
+		for(String id : ids){
+			this.deleteById(id);
+		}
 	}
 
 	@Override

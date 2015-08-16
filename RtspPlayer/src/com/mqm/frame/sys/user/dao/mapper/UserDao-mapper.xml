@@ -21,8 +21,10 @@
 	</resultMap>
 	
 	<insert id="insert" parameterType="User">
-		insert into T_MQM_USER (LOGIN_ID,PASSWORD, USER_NAME, PHONE, EMAIL,CJR)
-		values (#{loginId}, #{password}, #{userName}, #{phone}, #{email}, #{cjr})
+		insert into T_MQM_USER (LOGIN_ID,PASSWORD, USER_NAME, PHONE, EMAIL,CJR,SESSION_OUT_TIME)
+		values (#{loginId}, #{password}, #{userName},
+		 #{phone}, #{email}, 
+		#{cjr},	#{sessionOutTime})
 	</insert>
 	
 	<delete id="deleteById" parameterType="string">
@@ -30,7 +32,14 @@
 	</delete>
 	
 	<update id="update" parameterType="User">
-		update T_MQM_USER set USER_NAME=#{userName},PASSWORD=#{password} where id=#{id}
+		update T_MQM_USER set USER_NAME=#{userName},
+			<if test="password != null and password != ''" >PASSWORD=#{password},</if>
+			<if test="phone != null and phone != ''" >PHONE = #{phone},</if>
+			<if test="email != null and email != ''" >EMAIL = #{email},</if>
+			XGR = #{xgr},XG_SJ = #{xgSj}
+			
+			
+		where id = #{id}
 	</update>
 	
 	<select id="findById" parameterType="string" resultMap="UserMapper">
@@ -45,23 +54,23 @@
         select * from T_MQM_USER
 		<where>
 			<if test="loginId != null and loginId != ''">
-				and LOGIN_ID =#{loginId}
+				and LOGIN_ID like CONCAT('%',#{loginId},'%' )  
 			</if>
 			<if test="userName != null and userName != ''">
-				and USER_NAME =#{userName}
+				and USER_NAME like CONCAT('%',#{userName},'%' )  
 			</if>
 		</where>
         order by id
     </select>
     
-    <select id="findListCount" parameterType="User" resultType="long">
+    <select id="findListCount" parameterType="User" resultType="int">
         select count(1) from T_MQM_USER 
         <where>
 			<if test="loginId != null and loginId != ''">
-				and LOGIN_ID =#{loginId}
+				and LOGIN_ID like CONCAT('%',#{loginId},'%' )  
 			</if>
 			<if test="userName != null and userName != ''">
-				and USER_NAME =#{userName}
+				and USER_NAME like CONCAT('%',#{userName},'%' )  
 			</if>
 		</where>
     </select>

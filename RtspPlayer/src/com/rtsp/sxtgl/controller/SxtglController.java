@@ -22,6 +22,7 @@ import com.mqm.frame.common.DefaultController;
 import com.mqm.frame.common.Converter.DateConverter;
 import com.mqm.frame.sys.user.vo.User;
 import com.mqm.frame.util.StringUtil;
+import com.mqm.frame.util.constants.BaseConstants;
 import com.rtsp.sxtgl.service.ISxtglService;
 import com.rtsp.sxtgl.vo.Sxt;
 
@@ -105,13 +106,13 @@ public class SxtglController extends DefaultController {
 		sxtglService.deleteById(sxt.getId());
 		return "{\"success\":true,\"msg\":\"更新成功\"}";
 	}
-	/**
-	 * @param sxtglService the sxtglService to set
-	 */
-	public void setSxtglService(ISxtglService sxtglService) {
-		this.sxtglService = sxtglService;
+	
+	@RequestMapping(value="sxt.do" , params="deleteByIds")
+	@ResponseBody
+	public String deleteByIds(String ids , ModelMap map , HttpServletRequest req){
+		String[] temIds = ids.split(",");
+		sxtglService.deleteByIds(temIds);
+		return BaseConstants.DELETE_SUCC;
 	}
-	
-	
 	
 }
