@@ -35,14 +35,7 @@ import com.mqm.frame.util.constants.BaseConstants;
 public class RoleController extends DefaultController {
 	
 	@Resource
-	private IRoleService roleService;
-	
-	@InitBinder  
-    protected void initBinder(HttpServletRequest request,  
-                                  ServletRequestDataBinder binder) throws Exception {  
-        //对于需要转换为Date类型的属性，使用DateEditor进行处理  
-        binder.registerCustomEditor(Date.class, new DateConverter());  
-    }  
+	private IRoleService roleService; 
 	
 	@RequestMapping(value="role.do")
 	public String main(ModelMap map , HttpServletRequest req) {

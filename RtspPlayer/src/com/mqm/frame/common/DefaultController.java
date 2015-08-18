@@ -4,12 +4,16 @@
  */
 package com.mqm.frame.common;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 
+import com.mqm.frame.common.Converter.DateConverter;
 import com.mqm.frame.infrastructure.util.ContextUtil;
 import com.mqm.frame.sys.role.vo.Role;
 import com.mqm.frame.sys.user.vo.User;
@@ -23,6 +27,14 @@ import com.mqm.frame.util.constants.BaseConstants;
  * 2015年8月16日
  */
 public class DefaultController {
+	
+	
+	@InitBinder  
+    protected void initBinder(HttpServletRequest request,  
+                                  ServletRequestDataBinder binder) throws Exception {  
+        //对于需要转换为Date类型的属性，使用DateEditor进行处理  
+        binder.registerCustomEditor(Date.class, new DateConverter());  
+    } 
 	
 	/**
 	 * 获得登录的用户
