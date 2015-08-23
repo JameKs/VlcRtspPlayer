@@ -31,12 +31,12 @@ public class SxtglServiceImpl implements ISxtglService<Sxt> {
 	 */
 	@Override
 	public void insert(Sxt t) {
-		sxtglDao.insert("insert", t);
+		sxtglDao.insert(t);
 	}
 
 	@Override
 	public void deleteById(String id) {
-		sxtglDao.deleteById("deleteById", id);
+		sxtglDao.deleteById(id);
 	}
 	
 	@Override
@@ -48,12 +48,12 @@ public class SxtglServiceImpl implements ISxtglService<Sxt> {
 
 	@Override
 	public void update(Sxt t) {
-		sxtglDao.update("update", t);
+		sxtglDao.update(t);
 	}
 
 	@Override
 	public Sxt findById(String id) {
-		return (Sxt)sxtglDao.findById("findById", id);
+		return (Sxt)sxtglDao.findById(id);
 	}
 
 	/* (non-Javadoc)
@@ -61,22 +61,22 @@ public class SxtglServiceImpl implements ISxtglService<Sxt> {
 	 */
 	@Override
 	public List findList(Sxt t) {
-		return sxtglDao.findList("findList", t);
+		return sxtglDao.findList(t);
 	}
 
 	@Override
-	public List findPageList(Sxt t, int pageIndex, int pageSize) {
-		return sxtglDao.findPageList("findList", t , pageIndex , pageSize);
+	public List findListPage(Sxt t, int pageIndex, int pageSize) {
+		return sxtglDao.findListPage(t , pageIndex , pageSize);
 	}
 
 	@Override
 	public int findListCount(Sxt t) {
-		return sxtglDao.findListCount("findList", t);
+		return sxtglDao.findListCount(t);
 	}
 	
 	@Override
 	public List findAll() {
-		return sxtglDao.findAll("findAll");
+		return sxtglDao.findAll();
 	}
 	
 	/**

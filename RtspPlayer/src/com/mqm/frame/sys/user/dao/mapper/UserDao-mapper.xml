@@ -63,6 +63,19 @@
         order by id
     </select>
     
+    <select id="findListPage" parameterType="User" resultMap="UserMapper">
+        select * from T_MQM_USER
+		<where>
+			<if test="loginId != null and loginId != ''">
+				and LOGIN_ID like CONCAT('%',#{loginId},'%' )  
+			</if>
+			<if test="userName != null and userName != ''">
+				and USER_NAME like CONCAT('%',#{userName},'%' )  
+			</if>
+		</where>
+        order by id
+    </select>
+    
     <select id="findListCount" parameterType="User" resultType="int">
         select count(1) from T_MQM_USER 
         <where>

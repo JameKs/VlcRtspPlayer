@@ -85,7 +85,7 @@ public class UserController extends DefaultController {
 	public String find(User user , ModelMap map , HttpServletRequest req){
 		int pageIndex = super.getPageIndex(req);
 		int pageSize = super.getPageSize(req);
-        List list = userService.findPageList(user,pageIndex,pageSize);
+        List list = userService.findListPage(user,pageIndex,pageSize);
         long count = userService.findListCount(user);
         String jsonStr = StringUtil.pageListToJson(list, count);
 		return jsonStr;

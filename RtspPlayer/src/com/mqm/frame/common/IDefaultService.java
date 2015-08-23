@@ -27,11 +27,11 @@ public interface IDefaultService<T> {
 	
 	public T findById(String id);
 	
-	public List findList(T t);
+	public List<T> findList(T t);
 	
-	public List findPageList(T t , int pageIndex, int pageSize);
+	public List<T> findListPage(T t , int pageIndex, int pageSize);
 	
 	public int findListCount(T t);
 	
-	public List findAll();
+	public List<T> findAll();
 }

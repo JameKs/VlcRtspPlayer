@@ -2,6 +2,27 @@
 	<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+	<properties>
+		<property name="dialect" value="oracle" />
+		<property name="pageSqlId" value=".*Page$" />
+	</properties>
+	<settings>
+		<!-- 全局的映射器启用或禁用缓存。 -->
+		<setting name="cacheEnabled" value="false" />
+		<!-- 全局启用或禁用延迟加载 -->
+		<setting name="lazyLoadingEnabled" value="false" />
+		<!-- 允许或不允许多种结果集从一个单独的语句中返回 -->
+		<setting name="multipleResultSetsEnabled" value="false" />
+		<!-- 使用列标签代替列名 -->
+		<setting name="useColumnLabel" value="false" />
+		<!-- 允许JDBC支持生成的键 -->
+		<setting name="useGeneratedKeys" value="false" />
+		<!-- 配置默认的执行器 -->
+		<setting name="defaultExecutorType" value="SIMPLE" />
+		<!-- 设置超时时间 -->
+		<setting name="defaultStatementTimeout" value="25000" />
+
+	</settings>
 	<typeAliases>
 		<typeAlias type="com.mqm.frame.sys.user.vo.User" alias="User" />
 		<typeAlias type="com.mqm.frame.sys.menu.vo.MenuVO" alias="MenuVO" />
@@ -10,5 +31,8 @@
 		<typeAlias type="com.rtsp.sxtgl.vo.Sxt" alias="Sxt" />
 		<typeAlias type="com.rtsp.yhbjgxsz.vo.YhBjVO" alias="YhBjVO" />
 	</typeAliases>
+	<plugins>
+		<plugin interceptor="com.mqm.frame.dbtool.interceptor.PaginationInterceptor" />
+	</plugins>
 
 </configuration>

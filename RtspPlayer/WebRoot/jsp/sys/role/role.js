@@ -12,7 +12,7 @@ Ext.onReady(function() {
 		collapsible : false,// 可折叠
 		bodyPadding : 5,
 		layout : 'column',
-		margin : '0 0 5 0',
+		margin : '5 5 5 5',
 		items : [ {
 			fieldLabel : '角色代码',
 			labelWidth : 80,
@@ -31,7 +31,7 @@ Ext.onReady(function() {
 		    checked: true
 		}, {
 			xtype : 'button',
-			text : '搜索',
+			text : '查询',
 			margin : '0 0 0 5',
 			handler : function() {
 				var form = searchForm.getForm();
@@ -91,7 +91,7 @@ Ext.onReady(function() {
 
 	var gridStore = new Ext.data.JsonStore({
 		model : 'Role',
-		pageSize : 10,
+		pageSize : 2,
 		proxy : {
 			type : 'ajax',
 			url : ctx+'/role/role.do?findList&_csrf=' + $("#_csrf").val(),
@@ -102,30 +102,66 @@ Ext.onReady(function() {
 				idProperty : 'id',
 				totalProperty : 'totalCount'
 			}
+		},
+		listeners:{
+			beforeload: function (store, options) {
+				var form = searchForm.getForm();
+				
+				var code = form.findField("code").getValue();
+				var name = form.findField("name").getValue();
+				var status = form.findField("st").getSubmitValue();
+				var	params = {
+						code : code,
+						name : name,
+						status : status
+					}
+		        Ext.apply(store.proxy.extraParams, params);
+		    }
 		}
 	});
-
+	
 	var cm = [ {
 		header : "id",
 		dataIndex : 'id',
 		hidden:true
 	}, {
 		header : "角色代码",
+		width : 60,
 		dataIndex : 'code'
 	}, {
 		header : "角色名称",
+		width : 60,
 		dataIndex : 'name'
 	}, {
 		header : "备注",
 		dataIndex : 'bz'
 	}, {
 		header : "有效标志",
+		width : 60,
+		renderer :function(value, cellmeta, record, rowIndex, columnIndex, store){
+//			1.value是当前单元格的值
+//			2.cellmeta里保存的是cellId单元格id，id不知道是干啥的，似乎是列号，css是这个单元格的css样式。
+//			3.record是这行的所有数据，你想要什么，record.data["id"]这样就获得了。
+//			4.rowIndex是行号，不是从头往下数的意思，而是计算了分页以后的结果。
+//			5.columnIndex列号太简单了。
+//			6.store，这个厉害，实际上这个是你构造表格时候传递的ds，也就是说表格里所有的数据，你都可以随便调用，唉，太厉害了。
+			if(value == '1'){
+				return "Y";
+			}else{
+				return "N";
+			}
+		},
 		dataIndex : 'status'
 	}, {
 		header : "创建人",
+		width : 60,
 		dataIndex : 'cjr'
 	}, {
 		header : "创建时间",
+		//xtype:'datecolumn',
+		//dateFormat:'Y-m-d H:i:s',
+		renderer : Ext.util.Format.dateRenderer('Y-m-d H:i:s'),
+		width : 120,
 		dataIndex : 'cjSj'
 	} ];
 
@@ -133,8 +169,10 @@ Ext.onReady(function() {
 		store : gridStore,
 		columns : cm,
 		frame : false,
-		width : 550,
+		width : 580,
+		//height:300,
 		region:"west",
+		margin : '0 0 5 5',
 		dockedItems : [ {
 			xtype : 'pagingtoolbar',
 			store : gridStore, // same store GridPanel is using
@@ -147,13 +185,6 @@ Ext.onReady(function() {
 		}, {
 			xtype : 'toolbar',
 			items : [ {
-				iconCls : 'icon-add',
-				text : '新增',
-				scope : this, // 添加
-				handler : function() {
-					Panel.show(); // 显示
-				}
-			}, {
 				iconCls : 'icon-delete',
 				text : '删除',
 				// disabled: true,
@@ -178,7 +209,7 @@ Ext.onReady(function() {
 			},
 			selectionchange : function(model, records) {
 				if (records[0]) {
-					dataPanel.show(); // 显示
+					//dataPanel.show(); // 显示
 					dataPanel.loadRecord(records[0]);
 				}
 			}
@@ -202,12 +233,12 @@ Ext.onReady(function() {
 	});
 
 	var dataPanel = Ext.create('Ext.form.Panel', {
-		title : '表单',
+		//title : '表单',
 		width : 300,
 		region:"center",
 		//frame : true,
 		bodyPadding : 5,
-		margin : '0 0 5 5',
+		margin : '0 5 5 5',
 		defaultType : 'textfield',
 		tbar :[{  
         	text : "修改",  
@@ -279,12 +310,34 @@ Ext.onReady(function() {
 			name : 'cjr'
 		} , {
 			fieldLabel : '创建时间',
-			name : 'cjSj'
+			name : 'cjSj',
+			id : 'cjSj',
+			listeners:{  
+
+	            render : function(p) {
+					p.getEl().on('click', function() {
+
+						WdatePicker({
+							el : 'cjSj-inputEl',
+							dateFmt : 'yyyy-MM-dd'
+						});
+
+					});
+				}
+			}  
+
 		} , {
 			fieldLabel : 'id',
 			name : 'id',
 			value:0,
 			hidden:true
+		}  , {
+			xtype     : 'textarea',
+			name : 'sm',
+			readOnly : true,
+			value:'说明：\n1.添加记录：先点重置，填写信息后再点新增即可添加记录。\n2.修改记录：选择一条记录，修改内容，点击修改按钮。',
+			
+			anchor    : '100%' 
 		} ]
 	});
 	
@@ -293,7 +346,7 @@ Ext.onReady(function() {
 		renderTo : 'panel_div',
 		layout:"border", 
 		//frame: true,
-		height: 750,
+		height: 400,
 		items : [ searchForm, jsxxGrid, dataPanel]
 	});
 

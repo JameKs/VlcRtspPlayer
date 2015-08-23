@@ -36,7 +36,24 @@
 	</select>
 	
 	<select id="findList" parameterType="Role" resultMap="roleMapper">
-		SELECT * FROM T_MQM_ROLE
+		SELECT id, code, name, bz, status, cjr, to_char(cj_sj,'yyyy-mm-dd hh24:mi:ss') cj_sj, xgr, xg_sj
+		FROM T_MQM_ROLE
+		<where>
+			<if test="code != null and code != ''">
+				and code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findListPage" parameterType="Role" resultMap="roleMapper">
+		SELECT id, code, name, bz, status, cjr, to_char(cj_sj,'yyyy-mm-dd hh24:mi:ss') cj_sj, xgr, xg_sj
+		FROM T_MQM_ROLE
 		<where>
 			<if test="code != null and code != ''">
 				and code = #{code}

@@ -22,6 +22,7 @@
 <script type="text/javascript" src="<%=ctx%>/resources/extjs/js/ext-all.js"></script>
 <script type="text/javascript" src="<%=ctx%>/resources/jquery/js/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="<%=ctx%>/resources/ztree/js/jquery.ztree.core-3.5.js"></script>
+<script type="text/javascript" src="<%=ctx%>/resources/My97DatePicker/WdatePicker.js"></script>
 <style type="text/css">
 /* navigation */
 html{

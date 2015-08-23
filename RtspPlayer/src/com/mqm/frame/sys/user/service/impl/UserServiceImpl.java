@@ -8,23 +8,20 @@ import com.mqm.frame.sys.user.vo.User;
 
 public class UserServiceImpl implements IUserService<User> {
 	
-	private IUserDao userDao;
+	private IUserDao<User> userDao;
 
 	public User findByLoginId(String loginId) {
-		return (User)userDao.findByLoginId("findByLoginId" , loginId);
+		return (User)userDao.findByLoginId(loginId);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.mqm.frame.common.IDao#insert(java.lang.String, java.lang.Object)
-	 */
 	@Override
 	public void insert(User t) {
-		userDao.insert("insert", t);
+		userDao.insert(t);
 	}
 
 	@Override
 	public void deleteById(String id) {
-		userDao.deleteById("deleteById", id);
+		userDao.deleteById(id);
 	}
 	
 	@Override
@@ -36,41 +33,38 @@ public class UserServiceImpl implements IUserService<User> {
 
 	@Override
 	public void update(User t) {
-		userDao.update("update", t);
+		userDao.update(t);
 	}
 
 	@Override
 	public User findById(String id) {
-		return (User)userDao.findById("findById", id);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mqm.frame.common.IDao#findList(java.lang.String, java.lang.Object)
-	 */
-	@Override
-	public List findList(User t) {
-		return userDao.findList("findList", t);
+		return (User)userDao.findById(id);
 	}
 
 	@Override
-	public List findPageList(User t, int pageIndex, int pageSize) {
-		return userDao.findPageList("findList", t , pageIndex , pageSize);
+	public List<User> findList(User t) {
+		return userDao.findList(t);
+	}
+
+	@Override
+	public List<User> findListPage(User t, int pageIndex, int pageSize) {
+		return userDao.findListPage(t , pageIndex , pageSize);
 	}
 
 	@Override
 	public int findListCount(User t) {
-		return userDao.findListCount("findListCount", t);
+		return userDao.findListCount(t);
 	}
 	
 	@Override
-	public List findAll() {
-		return userDao.findAll("findAll");
+	public List<User> findAll() {
+		return userDao.findAll();
 	}
 
 	/**
 	 * @param ryxxDao the ryxxDao to set
 	 */
-	public void setUserDao(IUserDao userDao) {
+	public void setUserDao(IUserDao<User> userDao) {
 		this.userDao = userDao;
 	}
 

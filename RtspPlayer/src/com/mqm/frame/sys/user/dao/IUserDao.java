@@ -4,6 +4,6 @@ import com.mqm.frame.common.IDefaultDao;
 
 public interface IUserDao<T> extends IDefaultDao<T>{
 
-	public T findByLoginId(String key ,String loginId);
+	public T findByLoginId(String loginId);
 
 }

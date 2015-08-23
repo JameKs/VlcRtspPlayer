@@ -69,9 +69,21 @@ Ext.onReady(function() {
                 idProperty: 'id',
                 totalProperty: 'totalCount'
             }
+		},
+		listeners:{
+			beforeload:function (store, options) {
+				var form = searchFormPanel.getForm();
+				var loginId = form.findField("loginId").getValue();
+				var userName = form.findField("userName").getValue();
+				var	params = {
+						loginId : loginId,
+						userName : userName
+					}
+		        Ext.apply(store.proxy.extraParams, params);
+		    }
 		}
 	});
-
+	
 	var cm = [ {
 		xtype : "rownumberer",
 		text : "#",

@@ -28,56 +28,56 @@ public class DefaultDaoImpl<T> implements IDefaultDao<T>{
 
 	//公用的方法
 	@Override
-	public void insert(String key , T t) {
-		String statement = this.getStatement(key);
+	public void insert(T t) {
+		String statement = this.getStatement("insert");
 		sqlSessionTemplate.insert(statement, t);
 	}
 	
 	@Override
-	public void deleteById(String key , String id) {
-		String statement = this.getStatement(key);
+	public void deleteById(String id) {
+		String statement = this.getStatement("deleteById");
 		sqlSessionTemplate.delete(statement, id);
 	}
 	
 	@Override
-	public void update(String key , T t) {
-		String statement = this.getStatement(key);
+	public void update(T t) {
+		String statement = this.getStatement("update");
 		sqlSessionTemplate.update(statement, t);
 	}
 	
 	@Override
-	public T findById(String key , String id) {
-		String statement = this.getStatement(key);
+	public T findById(String id) {
+		String statement = this.getStatement("findById");
 		T t = (T)sqlSessionTemplate.selectOne(statement, id);
 		return t;
 	}
 	
 	@Override
-	public List findList(String key , T t) {
-		String statement = this.getStatement(key);
-		List list = this.sqlSessionTemplate.selectList(statement, t);
+	public List<T> findList(T t) {
+		String statement = this.getStatement("findList");
+		List<T> list = this.sqlSessionTemplate.selectList(statement, t);
 		return list;
 	}
 	
 	@Override
-	public List findPageList(String key, T t,
+	public List<T> findListPage(T t,
 			int pageIndex, int pageSize) {
 		RowBounds rb = this.getRowBounds(pageIndex, pageSize);
-		String statement = this.getStatement(key);
-		List list = this.sqlSessionTemplate.selectList(statement, t, rb);
+		String statement = this.getStatement("findListPage");
+		List<T> list = this.sqlSessionTemplate.selectList(statement, t, rb);
 		return list;
 	}
 	
 	@Override
-	public int findListCount(String key , T t) {
-		String statement = this.getStatement(key);
+	public int findListCount(T t) {
+		String statement = this.getStatement("findListCount");
 		int count = this.sqlSessionTemplate.selectOne(statement, t);
 		return count;
 	}
 	
 	@Override
-	public List findAll(String key) {
-		String statement = this.getStatement(key);
+	public List<T> findAll() {
+		String statement = this.getStatement("findAll");
 		return this.sqlSessionTemplate.selectList(statement);
 	}
 	
@@ -97,7 +97,7 @@ public class DefaultDaoImpl<T> implements IDefaultDao<T>{
 			pageIndex = 1;
 		}
 		int offset = (pageIndex - 1) * pageSize;
-		RowBounds rb = new RowBounds(offset, pageSize);
+		RowBounds rb = new RowBounds(offset, pageSize*pageIndex);
 		return rb;
 	}
 	

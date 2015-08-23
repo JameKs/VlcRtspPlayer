@@ -31,12 +31,12 @@ public class YhbjszServiceImpl implements IYhbjszService<YhBjVO> {
 	 */
 	@Override
 	public void insert(YhBjVO yhBjVO) {
-		yhbjszDao.insert("insert", yhBjVO);
+		yhbjszDao.insert(yhBjVO);
 	}
 
 	@Override
 	public void deleteById(String id) {
-		yhbjszDao.deleteById("deleteById", id);
+		yhbjszDao.deleteById(id);
 	}
 	
 	@Override
@@ -48,12 +48,12 @@ public class YhbjszServiceImpl implements IYhbjszService<YhBjVO> {
 
 	@Override
 	public void update(YhBjVO yhBjVO) {
-		yhbjszDao.update("update", yhBjVO);
+		yhbjszDao.update(yhBjVO);
 	}
 
 	@Override
 	public YhBjVO findById(String id) {
-		return (YhBjVO)yhbjszDao.findById("findById", id);
+		return (YhBjVO)yhbjszDao.findById(id);
 	}
 
 	/* (non-Javadoc)
@@ -61,22 +61,22 @@ public class YhbjszServiceImpl implements IYhbjszService<YhBjVO> {
 	 */
 	@Override
 	public List findList(YhBjVO yhBjVO) {
-		return yhbjszDao.findList("findList", yhBjVO);
+		return yhbjszDao.findList(yhBjVO);
 	}
 
 	@Override
-	public List findPageList(YhBjVO yhBjVO, int pageIndex, int pageSize) {
-		return yhbjszDao.findPageList("findList", yhBjVO , pageIndex , pageSize);
+	public List findListPage(YhBjVO yhBjVO, int pageIndex, int pageSize) {
+		return yhbjszDao.findListPage(yhBjVO , pageIndex , pageSize);
 	}
 
 	@Override
 	public int findListCount(YhBjVO yhBjVO) {
-		return yhbjszDao.findListCount("findList", yhBjVO);
+		return yhbjszDao.findListCount(yhBjVO);
 	}
 	
 	@Override
 	public List findAll() {
-		return yhbjszDao.findAll("findAll");
+		return yhbjszDao.findAll();
 	}
 	
 	/**

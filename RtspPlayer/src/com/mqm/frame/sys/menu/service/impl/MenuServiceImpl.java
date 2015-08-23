@@ -36,12 +36,12 @@ public class MenuServiceImpl implements IMenuService<MenuVO> {
 	 */
 	@Override
 	public void insert(MenuVO t) {
-		menuDao.insert("insert", t);
+		menuDao.insert(t);
 	}
 
 	@Override
 	public void deleteById(String id) {
-		menuDao.deleteById("deleteById", id);
+		menuDao.deleteById(id);
 	}
 	
 	@Override
@@ -53,12 +53,12 @@ public class MenuServiceImpl implements IMenuService<MenuVO> {
 
 	@Override
 	public void update(MenuVO t) {
-		menuDao.update("update", t);
+		menuDao.update(t);
 	}
 
 	@Override
 	public MenuVO findById(String id) {
-		return (MenuVO)menuDao.findById("findById", id);
+		return (MenuVO)menuDao.findById(id);
 	}
 
 	/* (non-Javadoc)
@@ -66,22 +66,22 @@ public class MenuServiceImpl implements IMenuService<MenuVO> {
 	 */
 	@Override
 	public List findList(MenuVO t) {
-		return menuDao.findList("findList", t);
+		return menuDao.findList(t);
 	}
 
 	@Override
-	public List findPageList(MenuVO t, int pageIndex, int pageSize) {
-		return menuDao.findPageList("findList", t , pageIndex , pageSize);
+	public List findListPage(MenuVO t, int pageIndex, int pageSize) {
+		return menuDao.findListPage(t , pageIndex , pageSize);
 	}
 
 	@Override
 	public int findListCount(MenuVO t) {
-		return menuDao.findListCount("findList", t);
+		return menuDao.findListCount(t);
 	}
 	
 	@Override
 	public List findAll() {
-		return menuDao.findAll("findAll");
+		return menuDao.findAll();
 	}
 	
 	/**

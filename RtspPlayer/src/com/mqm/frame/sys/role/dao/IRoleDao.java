@@ -16,5 +16,5 @@ import com.mqm.frame.common.IDefaultDao;
  */
 public interface IRoleDao<T> extends IDefaultDao<T>{
 	
-	public List findByUserLoginId(String loginId);
+	public List<T> findByUserLoginId(String loginId);
 }

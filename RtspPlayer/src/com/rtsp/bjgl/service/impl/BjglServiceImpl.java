@@ -32,12 +32,12 @@ public class BjglServiceImpl implements IBjglService<Bj> {
 	 */
 	@Override
 	public void insert(Bj t) {
-		bjglDao.insert("insert", t);
+		bjglDao.insert(t);
 	}
 
 	@Override
 	public void deleteById(String id) {
-		bjglDao.deleteById("deleteById", id);
+		bjglDao.deleteById(id);
 	}
 	
 	@Override
@@ -49,12 +49,12 @@ public class BjglServiceImpl implements IBjglService<Bj> {
 
 	@Override
 	public void update(Bj t) {
-		bjglDao.update("update", t);
+		bjglDao.update(t);
 	}
 
 	@Override
 	public Bj findById(String id) {
-		return (Bj)bjglDao.findById("findById", id);
+		return (Bj)bjglDao.findById(id);
 	}
 
 	/* (non-Javadoc)
@@ -62,22 +62,22 @@ public class BjglServiceImpl implements IBjglService<Bj> {
 	 */
 	@Override
 	public List findList(Bj t) {
-		return bjglDao.findList("findList", t);
+		return bjglDao.findList(t);
 	}
 
 	@Override
-	public List findPageList(Bj t, int pageIndex, int pageSize) {
-		return bjglDao.findPageList("findList", t , pageIndex , pageSize);
+	public List findListPage(Bj t, int pageIndex, int pageSize) {
+		return bjglDao.findListPage(t , pageIndex , pageSize);
 	}
 
 	@Override
 	public int findListCount(Bj t) {
-		return bjglDao.findListCount("findList", t);
+		return bjglDao.findListCount(t);
 	}
 	
 	@Override
 	public List findAll() {
-		return bjglDao.findAll("findAll");
+		return bjglDao.findAll();
 	}
 	
 	public void setBjglDao(IBjglDao bjglDao) {

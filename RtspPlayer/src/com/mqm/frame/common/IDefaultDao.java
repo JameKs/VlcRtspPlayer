@@ -6,8 +6,6 @@ package com.mqm.frame.common;
 
 import java.util.List;
 
-import com.mqm.frame.sys.role.vo.Role;
-
 /**
  * <pre>
  * 文件中文描述
@@ -17,19 +15,19 @@ import com.mqm.frame.sys.role.vo.Role;
  */
 public interface IDefaultDao<T> {
 	
-	public void insert(String key , T t);
+	public void insert(T t);
 
-	public void deleteById(String key , String id);
+	public void deleteById(String id);
 
-	public void update(String key , T t);
+	public void update(T t);
 	
-	public T findById(String key , String id);
+	public T findById(String id);
 
-	public List findList(String key , T t);
+	public List<T> findList(T t);
 	
-	public List findPageList(String key, T t , int pageIndex, int pageSize);
+	public List<T> findListPage(T t , int pageIndex, int pageSize);
 	
-	public int findListCount(String key , T t);
+	public int findListCount(T t);
 	
-	public List findAll(String key);
+	public List<T> findAll();
 }

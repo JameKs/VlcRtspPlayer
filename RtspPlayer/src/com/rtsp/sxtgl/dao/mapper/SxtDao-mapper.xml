@@ -22,6 +22,10 @@
         values(#{id}, #{kssj}, #{jssj}, #{qjyy}, #{rwlxDm}, #{userId}, #{cjr})
     </insert>
     
+    <insert id="deleteById" parameterType="Sxt">
+		delete from T_RTSP_SXT where id = #{id}
+    </insert>
+    
     <update id="update" parameterType="Sxt">
         update T_RTSP_SXT set xgr = #{xgr}, xg_sj =sysdate,
         	kssj = #{kssj}, jssj = #{jssj}, qjyy = #{qjyy},
@@ -34,6 +38,10 @@
     </select>
     
     <select id="findList" parameterType="Sxt" resultMap="SxtMapper">
+        select * from T_RTSP_SXT T WHERE T.ID = #{id}
+    </select>
+    
+    <select id="findListPage" parameterType="Sxt" resultMap="SxtMapper">
         select * from T_RTSP_SXT T WHERE T.ID = #{id}
     </select>
     

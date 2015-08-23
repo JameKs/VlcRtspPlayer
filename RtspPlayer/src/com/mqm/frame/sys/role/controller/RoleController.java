@@ -5,7 +5,6 @@
  */
 package com.mqm.frame.sys.role.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -13,13 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mqm.frame.common.DefaultController;
-import com.mqm.frame.common.Converter.DateConverter;
 import com.mqm.frame.sys.role.service.IRoleService;
 import com.mqm.frame.sys.role.vo.Role;
 import com.mqm.frame.sys.user.vo.User;
@@ -35,7 +31,7 @@ import com.mqm.frame.util.constants.BaseConstants;
 public class RoleController extends DefaultController {
 	
 	@Resource
-	private IRoleService roleService; 
+	private IRoleService<Role> roleService; 
 	
 	@RequestMapping(value="role.do")
 	public String main(ModelMap map , HttpServletRequest req) {
@@ -82,10 +78,13 @@ public class RoleController extends DefaultController {
 		return role;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value="role.do" , params="findList")
 	@ResponseBody
 	public String findList(ModelMap map, Role role, HttpServletRequest req) {
-		List list = roleService.findList(role);
+		int pageIndex = this.getPageIndex(req);
+		int pageSize = this.getPageSize(req);
+		List list = roleService.findListPage(role, pageIndex, pageSize);
 		long count = roleService.findListCount(role);
 		String jsonString = StringUtil.pageListToJson(list,count);
 		return jsonString;

@@ -21,8 +21,8 @@ import com.mqm.frame.sys.user.vo.User;
 public class UserDaoImpl extends DefaultDaoImpl<User> implements IUserDao<User> {
 
 	@Override
-	public User findByLoginId(String key , String loginId) {
-		String statement = this.getStatement(key);
+	public User findByLoginId(String loginId) {
+		String statement = this.getStatement("findByLoginId");
 		User user = (User)sqlSessionTemplate.selectOne(statement, loginId);
 		return user;
 	}

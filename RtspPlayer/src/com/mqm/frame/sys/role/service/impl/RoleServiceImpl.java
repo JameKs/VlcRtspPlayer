@@ -18,24 +18,22 @@ import com.mqm.frame.sys.role.vo.Role;
 public class RoleServiceImpl implements
 		IRoleService<Role> {
 	
-	IRoleDao roleDao;
+	IRoleDao<Role> roleDao;
 	
 	@Override
-	public List findByUserLoginId(String loginId) {
-		return roleDao.findByUserLoginId(loginId);
+	public List<Role> findByUserLoginId(String loginId) {
+		List<Role> findByUserLoginId = roleDao.findByUserLoginId(loginId);
+		return findByUserLoginId;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.mqm.frame.common.IDao#insert(java.lang.String, java.lang.Object)
-	 */
 	@Override
 	public void insert(Role t) {
-		roleDao.insert("insert", t);
+		roleDao.insert(t);
 	}
 
 	@Override
 	public void deleteById(String id) {
-		roleDao.deleteById("deleteById", id);
+		roleDao.deleteById(id);
 	}
 	
 	@Override
@@ -47,42 +45,39 @@ public class RoleServiceImpl implements
 	
 	@Override
 	public void update(Role t) {
-		roleDao.update("update", t);
+		roleDao.update(t);
 	}
 
 	@Override
 	public Role findById(String id) {
-		return (Role)roleDao.findById("findById", id);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mqm.frame.common.IDao#findList(java.lang.String, java.lang.Object)
-	 */
-	@Override
-	public List findList(Role t) {
-		return roleDao.findList("findList", t);
+		return (Role)roleDao.findById(id);
 	}
 
 	@Override
-	public List findPageList(Role t, int pageIndex, int pageSize) {
-		return roleDao.findPageList("findList", t , pageIndex , pageSize);
+	public List<Role> findList(Role t) {
+		return roleDao.findList(t);
+	}
+
+	@Override
+	public List<Role> findListPage(Role t, int pageIndex, int pageSize) {
+		return roleDao.findListPage(t , pageIndex , pageSize);
 	}
 
 	@Override
 	public int findListCount(Role t) {
-		return roleDao.findListCount("findListCount", t);
+		return roleDao.findListCount(t);
 	}
 	
 	@Override
-	public List findAll() {
-		return roleDao.findAll("findAll");
+	public List<Role> findAll() {
+		return roleDao.findAll();
 	}
 
 	/**
 	 * @param jsglDao
 	 *            the jsglDao to set
 	 */
-	public void setRoleDao(IRoleDao roleDao) {
+	public void setRoleDao(IRoleDao<Role> roleDao) {
 		this.roleDao = roleDao;
 	}
 

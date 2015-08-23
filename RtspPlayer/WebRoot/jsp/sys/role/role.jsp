@@ -11,5 +11,5 @@
 var ctx = '<%=ctx%>';
 //-->
 </script>
-<div id="panel_div"></div>
+<div id="panel_div" style="height:100%;boder:1px red solid"></div>
 <script type="text/javascript" src="<%=ctx%>/jsp/sys/role/role.js"></script>

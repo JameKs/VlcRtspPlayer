@@ -35,6 +35,18 @@
         values(#{id}, #{kssj}, #{jssj}, #{qjyy}, #{rwlxDm}, #{userId}, #{cjr})
     </insert>
     
+    <insert id="deleteById" parameterType="Sxt">
+		delete from T_RTSP_USER_BJ where id = #{id}
+    </insert>
+    
+    <insert id="deleteByUserId" parameterType="Sxt">
+		delete from T_RTSP_USER_BJ where user_id = #{userId}
+    </insert>
+    
+    <insert id="deleteByUserIdAndBjId" parameterType="Sxt">
+		delete from T_RTSP_USER_BJ where user_id = #{userId} and bj_id = #{bjId}
+    </insert>
+    
     <update id="update" parameterType="YhBjVo">
         update T_RTSP_USER_BJ set xgr = #{xgr}, xg_sj =sysdate,
         	kssj = #{kssj}, jssj = #{jssj}, qjyy = #{qjyy},
@@ -47,6 +59,10 @@
     </select>
     
     <select id="findList" parameterType="YhBjVo" resultMap="yhBjVoMapper">
+        select * from T_RTSP_USER_BJ T WHERE T.ID = #{id}
+    </select>
+    
+    <select id="findListPage" parameterType="YhBjVo" resultMap="yhBjVoMapper">
         select * from T_RTSP_USER_BJ T WHERE T.ID = #{id}
     </select>
     

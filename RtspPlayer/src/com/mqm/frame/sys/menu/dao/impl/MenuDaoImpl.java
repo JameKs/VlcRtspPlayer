@@ -20,9 +20,6 @@ import com.mqm.frame.sys.menu.vo.MenuVO;
  */
 public class MenuDaoImpl extends DefaultDaoImpl<MenuVO> implements IMenuDao<MenuVO> {
 
-	/* (non-Javadoc)
-	 * @see com.mqm.frame.sys.menu.dao.ICdxxDao#findAllUserMenu(java.lang.String)
-	 */
 	@Override
 	public List findMenuByUserId(String userId) {
 		String statement = this.getStatement("findMenuByUserId");
@@ -30,9 +27,6 @@ public class MenuDaoImpl extends DefaultDaoImpl<MenuVO> implements IMenuDao<Menu
 		return list;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.mqm.frame.sys.menu.dao.ICdxxDao#findByParentId(java.lang.String)
-	 */
 	@Override
 	public List findByParentId(String pId) {
 		String statement = this.getStatement("findByParentId");
@@ -40,66 +34,42 @@ public class MenuDaoImpl extends DefaultDaoImpl<MenuVO> implements IMenuDao<Menu
 		return null;
 	}
 
-
-	
-
-	/* (non-Javadoc)
-	 * @see com.mqm.frame.sys.menu.dao.ICdxxDao#getNodesByIdAndUserId(java.util.Map)
-	 */
 	@Override
 	public List getNodesByIdAndUserId(Map map) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mqm.frame.sys.menu.dao.ICdxxDao#getChildrenNodes(java.lang.String)
-	 */
 	@Override
 	public List getChildrenNodes(String pId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mqm.frame.sys.menu.dao.ICdxxDao#getChildrenNodesCount(java.lang.String)
-	 */
 	@Override
 	public long getChildrenNodesCount(String pId) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mqm.frame.sys.menu.dao.ICdxxDao#getWdscjByUserId(java.util.Map)
-	 */
 	@Override
 	public List getWdscjByUserId(Map map) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mqm.frame.sys.menu.dao.ICdxxDao#getAllDept()
-	 */
 	@Override
 	public List getAllDept() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mqm.frame.sys.menu.dao.ICdxxDao#getAllGw()
-	 */
 	@Override
 	public List getAllGw() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mqm.frame.sys.menu.dao.ICdxxDao#getAllUser()
-	 */
 	@Override
 	public List getAllUser() {
 		// TODO Auto-generated method stub
