@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<bean id="fbrp_dbtool_dbDialect" class="com.qm.frame.dbtool.dialect.impl.DbDialect">
+		<property name="dsService" ref="fbrp_dbtool_dsService"/>
+	</bean>
+	
+	<bean id="fbrp_dbtool_db2Dialect" class="com.qm.frame.dbtool.dialect.impl.DB2Dialect">
+		<property name="dsService" ref="fbrp_dbtool_dsService"/>
+	</bean>
+	
+	<bean id="fbrp_dbtool_informixDialect" class="com.qm.frame.dbtool.dialect.impl.InformixDialect">
+		<property name="dsService" ref="fbrp_dbtool_dsService"/>
+	</bean>
+	
+	<bean id="fbrp_dbtool_mysqlDialect" class="com.qm.frame.dbtool.dialect.impl.MySQLDialect">
+		<property name="dsService" ref="fbrp_dbtool_dsService"/>
+	</bean>
+	
+	<bean id="fbrp_dbtool_oracleDialect" class="com.qm.frame.dbtool.dialect.impl.OracleDialect">
+		<property name="dsService" ref="fbrp_dbtool_dsService"/>
+	</bean>
+	
+	<bean id="fbrp_dbtool_sqlserver2005Dialect" class="com.qm.frame.dbtool.dialect.impl.SQLServer2005Dialect">
+		<property name="dsService" ref="fbrp_dbtool_dsService"/>
+	</bean>
+	
+	<bean id="fbrp_dbtool_sqlserverDialect" class="com.qm.frame.dbtool.dialect.impl.SQLServerDialect">
+		<property name="dsService" ref="fbrp_dbtool_dsService"/>
+	</bean>
+	
+	<bean id="fbrp_dbtool_sybaseDialect" class="com.qm.frame.dbtool.dialect.impl.SybaseDialect">
+		<property name="dsService" ref="fbrp_dbtool_dsService"/>
+	</bean>
+	
+	<bean id="fbrp_dbtool_teradataDialect" class="com.qm.frame.dbtool.dialect.impl.TeradataDialect">
+		<property name="dsService" ref="fbrp_dbtool_dsService"/>
+	</bean>
+
+	<bean id="fbrp_dbtool_sqlExecutionEngineService" 
+		class="com.qm.frame.dbtool.service.impl.SqlExecutionEngineServiceImpl"
+		parent="fbrp_infrastructure_defaultService">
+		<property name="dsService" ref="fbrp_dbtool_dsService"/>
+		<property name="dbDialect" ref="fbrp_dbtool_dbDialect"/>
+	</bean>
+
+	<bean id="fbrp_dbtool_dsService"
+		class="com.qm.frame.dbtool.service.impl.DsServiceImpl"
+		parent="fbrp_infrastructure_defaultService"/>
+
+</beans>

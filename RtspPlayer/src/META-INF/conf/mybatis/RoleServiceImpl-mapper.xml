@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qm.frame.security.role.service.impl.RoleServiceImpl">
+
+<!-- 	<select id="selectRole" parameterType="com.qm.frame.security.role.vo.FbrpSecRoleVO" resultMap="vos.fbrpSecRoleVO">
+		SELECT r.id, r.code, r.name, r.remark, decode(rm.staff_id,#{staffid jdbcType=VARCHAR},'1','0') AS role_status
+		FROM fbrp_sec_role r, fbrp_sec_role_member rm 
+		WHERE r.id = rm.role_id
+  	    <include refid="common_condition1"/>
+	</select>
+	
+	<select id="selectRole_count" parameterType="com.qm.frame.security.role.vo.FbrpSecRoleVO" resultType="Long">
+		SELECT count(1) 
+		FROM fbrp_sec_role role, fbrp_sec_role_member rm
+		WHERE role.id = rm.role_id
+  	    <include refid="common_condition1"/>
+	</select>
+	
+ 	<sql id="common_condition1">
+	    <if test="code!=null and code!=''">AND role.code LIKE CONCAT(CONCAT('%',#{code}),'%')</if>
+		<if test="name!=null and name!=''">AND role.name LIKE CONCAT(CONCAT('%',#{name}),'%')</if>
+		<if test="remark!=null and remark!=''">AND role.remark LIKE CONCAT(CONCAT('%',#{remark}),'%')</if>
+	</sql> -->
+	<parameterMap type="java.util.Map" id="selectRoleListMap">
+		<parameter property="id"/>
+		<parameter property="delFlag"/>
+		<parameter property="orgCode"/>
+	</parameterMap>
+	
+	<sql id="common_condition">
+	    <if test="orgCode!=null and orgCode!='' ">
+		AND (t1.sjssjg_dm = ANY 
+		(SELECT org.orgcode
+		    FROM t_gy_uuv_org org
+		    START WITH org.orgcode = #{orgCode}
+		    CONNECT BY PRIOR org.parentcode = org.orgcode)
+		 OR t1.sjssjg_dm IS NULL)
+		 </if>
+	     <if test="code!=null and code!=''">and t1.code like CONCAT(CONCAT('%',#{code}),'%')</if>
+		 <if test="name!=null and name!=''">and t1.name like CONCAT(CONCAT('%',#{name}),'%')</if>
+		 <if test="remark!=null and remark!=''">and t1.remark like CONCAT(CONCAT('%',#{remark}),'%')</if>
+	</sql>
+
+	<select id="selectRoleList"  parameterMap="selectRoleListMap"  resultMap="vos.fbrpSecRoleVO">		
+	    SELECT t1.id,t1.code,t1.name,t1.status,t1.remark,t1.creator_id AS creatorId,t1.created_time AS createdTime,t1.last_modifier_id AS lastModifierId,t1.last_modified_time AS lastModifiedTime
+	    ,del_flag AS delFlag,t1.sjssjg_dm AS sjssjgDm,t1.cjr_dm,t2.parentnames as ext1,t2.orgname as ext2 FROM fbrp_sec_role t1 LEFT JOIN t_gy_uuv_org t2 ON t1.sjssjg_dm =t2.orgcode
+	      WHERE  t1.id <![CDATA[<>]]> #{id} and t1.del_flag = #{delFlag}  
+	   <include refid="common_condition"/> 
+	   ORDER BY t1.code 
+	</select>
+	
+	<select id="selectRoleList_count"  parameterMap="selectRoleListMap"  resultType="long">
+		  SELECT COUNT(1) FROM fbrp_sec_role t1  WHERE  t1.id <![CDATA[<>]]> #{id} and t1.del_flag = #{delFlag}  
+	   <include refid="common_condition"/>
+	</select>
+	
+	<select id="selectRoleById" parameterType="com.qm.frame.security.role.vo.FbrpSecRoleVO" resultMap="vos.fbrpSecRoleVO">
+	    SELECT r.id, r.code, r.name, r.remark,r.sjssjg_dm,u.parentnames as ext1,u.orgname as ext2
+	    FROM fbrp_sec_role r 
+	    LEFT JOIN t_gy_uuv_org u ON r.sjssjg_dm = u.orgcode 
+	    WHERE (NOT EXISTS 
+	    (SELECT 1 
+	    FROM fbrp_sec_role_member rm 
+	    WHERE rm.role_id = r.id AND rm.staff_id = #{staffid})) AND r.code != 'sysAdmin' 
+		<include refid="common_condition2"/>
+	</select>
+	
+	<select id="selectRoleById_count" parameterType="com.qm.frame.security.role.vo.FbrpSecRoleVO" resultType="Long">
+	    SELECT count(1)
+	    FROM fbrp_sec_role r
+	    WHERE (NOT EXISTS 
+	    (SELECT 1 
+	    FROM fbrp_sec_role_member rm 
+	    WHERE rm.role_id = r.id AND rm.staff_id = #{staffid})) AND r.code != 'sysAdmin'
+		<include refid="common_condition2"/>
+	</select>
+	
+ 	<sql id="common_condition2">
+ 		<if test="orgCode!=null and orgCode!=''">
+ 		AND (r.sjssjg_dm = ANY 
+		(SELECT org.orgcode
+		    FROM t_gy_uuv_org org
+		    START WITH org.orgcode = #{orgCode}
+		    CONNECT BY PRIOR org.parentcode = org.orgcode)
+		 OR r.sjssjg_dm IS NULL)
+ 		</if>
+	    <if test="code!=null and code!=''"> AND r.code LIKE CONCAT(CONCAT('%',#{code}),'%')</if>
+		<if test="name!=null and name!=''"> AND r.name LIKE CONCAT(CONCAT('%',#{name}),'%')</if>
+		<if test="remark!=null and remark!=''"> AND r.remark LIKE CONCAT(CONCAT('%',#{remark}),'%')</if>
+	</sql>
+	
+	<select id="selectExistedRoleById" parameterType="com.qm.frame.security.role.vo.FbrpSecRoleVO" resultMap="vos.fbrpSecRoleVO">
+		SELECT a.*,u.orgcode,u.parentnames as ext1,u.orgname as ext2 FROM (SELECT r.id, r.code, r.name, r.remark,r.sjssjg_dm
+         FROM fbrp_sec_role r ,fbrp_sec_role_member rm  WHERE r.id = rm.role_id
+         <include refid="common_condition3"/>
+          ) a 
+        LEFT JOIN t_gy_uuv_org u ON a.sjssjg_dm =u.orgcode  
+		
+	</select>
+	
+	<select id="selectExistedRoleById_count" parameterType="com.qm.frame.security.role.vo.FbrpSecRoleVO" resultType="Long">
+		SELECT count(1) 
+		FROM fbrp_sec_role r ,fbrp_sec_role_member rm 
+		WHERE r.id = rm.role_id 
+		<include refid="common_condition3"/>
+	</select>
+	
+ 	<sql id="common_condition3">
+ 		<if test="orgCode!=null and orgCode!=''">
+ 		AND (r.sjssjg_dm = ANY 
+		(SELECT org.orgcode
+		    FROM t_gy_uuv_org org
+		    START WITH org.orgcode = #{orgCode}
+		    CONNECT BY PRIOR org.parentcode = org.orgcode)
+		 OR r.sjssjg_dm IS NULL)
+ 		</if>
+	    <if test="staffid!=null and staffid!=''"> AND rm.staff_id = #{staffid}</if>
+	    <if test="code!=null and code!=''"> AND r.code LIKE CONCAT(CONCAT('%',#{code}),'%')</if>
+		<if test="name!=null and name!=''"> AND r.name LIKE CONCAT(CONCAT('%',#{name}),'%')</if>
+		<if test="remark!=null and remark!=''"> AND r.remark LIKE CONCAT(CONCAT('%',#{remark}),'%')</if>
+	</sql>
+
+	<insert id="addRole" parameterType="com.qm.frame.security.role.vo.FbrpSecRoleMember">
+		INSERT INTO fbrp_sec_role_member t (t.id, t.staff_id, t.role_id, t.status, t.del_flag) VALUES (#{id}, #{staffId}, #{roleId}, '1', 'n')
+	</insert>
+	
+	<delete id="deleteRole" parameterType="com.qm.frame.security.role.vo.FbrpSecRoleMember">
+		DELETE FROM fbrp_sec_role_member t WHERE t.staff_id=#{staffId} AND t.role_id = #{roleId}
+	</delete>
+	
+</mapper>

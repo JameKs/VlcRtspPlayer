@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qm.frame.dbtool.service.impl.DsServiceImpl">
+  <sql id="select_condition">
+	<if test="name!=null and name!=''"> and t.name LIKE CONCAT(CONCAT('%',#{name} ),'%') </if>
+	<if test="dbType!=null and dbType!=''"> and t.db_type=#{dbType} </if>		
+	<if test="url!=null and url!=''"> and t.url LIKE CONCAT(CONCAT('%',#{url} ),'%') </if>
+  </sql>
+ 
+  <resultMap type="com.qm.frame.dbtool.vo.FbrpDbtoolDsVO" id="fbrpDbtoolDs">
+	<result property="dbType" column="db_type" />
+  </resultMap>
+ 	
+	<select id="selectDs" parameterType="com.qm.frame.dbtool.vo.FbrpDbtoolDsVO" resultMap="fbrpDbtoolDs">
+	 <if test="includeOrgCode !=null and includeOrgCode !=''">
+	 <include refid="com.foresee.bi.tsmp.common.with_table_orgcodeAndorgname"/>     
+       SELECT t.*, t2.orgcode AS includeOrgCode, t2.orgname AS swjgMc FROM fbrp_dbtool_ds t, table_orgcodeAndorgname t2
+       WHERE t.sjssjg_dm = t2.orgcode     
+       <include refid="select_condition"/> 
+       UNION ALL 
+       SELECT t.*,'' AS includeOrgCode, '' AS swjgMc FROM fbrp_dbtool_ds t WHERE t.sjssjg_dm IS NULL
+       <include refid="select_condition"/>  
+      </if>	
+       <if test="includeOrgCode ==null or includeOrgCode ==''">
+         SELECT t.*,t.sjssjg_dm AS includeOrgCode, t3.orgname AS swjgMc FROM fbrp_dbtool_ds t 
+           LEFT JOIN t_gy_uuv_org t3 ON t.sjssjg_dm = t3.orgcode
+         WHERE 1=1
+         <include refid="select_condition"/>  
+       </if>
+	</select>
+	
+	<select id="selectDs_count" parameterType="com.qm.frame.dbtool.vo.FbrpDbtoolDsVO" resultType="long">
+	 <if test="includeOrgCode !=null and includeOrgCode !=''">
+		  <include refid="com.foresee.bi.tsmp.common.with_table_orgcodeAndorgname"/>     
+      SELECT SUM(sm) FROM 
+       (SELECT COUNT(1) AS sm FROM fbrp_dbtool_ds t,  table_orgcodeAndorgname t2
+        WHERE t.sjssjg_dm = t2.orgcode
+       <include refid="select_condition"/>
+        UNION ALL 
+        SELECT COUNT(1) AS sm FROM fbrp_dbtool_ds t WHERE t.sjssjg_dm IS NULL 
+         <include refid="select_condition"/>)   
+      </if> 
+       <if test="includeOrgCode ==null or includeOrgCode ==''">
+         SELECT COUNT(1) FROM fbrp_dbtool_ds t WHERE 1=1
+         <include refid="select_condition"/>  
+       </if>  
+	</select>
+		
+	<select id="selectOne" resultType="com.qm.frame.dbtool.vo.FbrpDbtoolDs" parameterType="java.util.Map">
+	   SELECT name FROM fbrp_dbtool_ds WHERE name = #{name}
+	    <if test="id !=null and id !=''">AND id != #{id}</if>
+	</select>
+		
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qm.frame.security.org.service.impl.OrgServiceImpl">
+  <sql id="select_condition">
+		<where>
+			<if test="delFlag!=null and delFlag!=''"> and t.DEL_FLAG=#{delFlag} </if>
+			<if test="orgType!=null and orgType!=''"> and t.ORG_TYPE=#{name} </if>		
+		</where>
+ </sql>
+	
+	<insert id="insert" parameterType="com.qm.frame.security.org.vo.FbrpSecOrgMember">
+		insert into FBRP_SEC_ORG_MEMBER (ID,ORG_ID,STAFF_ID,STATUS,RELATION_TYPE,CREATOR_ID,CREATED_TIME,LAST_MODIFIER_ID,LAST_MODIFIED_TIME,DEL_FLAG,EXT1,EXT2,EXT3)
+		 values(#{id},#{orgId},#{staffId},#{status},#{relationType,jdbcType=CHAR},#{creatorId,jdbcType=VARCHAR},#{createdTime,jdbcType=DATE},#{lastModifierId,jdbcType=VARCHAR},#{lastModifiedTime,jdbcType=DATE},#{delFlag,jdbcType=CHAR},#{ext1,jdbcType=VARCHAR},#{ext2,jdbcType=VARCHAR},#{ext3,jdbcType=VARCHAR})
+	</insert>
+	
+	<delete id="deleteByOrgId" parameterType="java.lang.String">
+	  delete from FBRP_SEC_ORG_MEMBER t where t.ORG_ID = #{orgid}
+	</delete>
+	
+	<delete id="deleteByStaffId" parameterType="java.lang.String">
+	 delete from FBRP_SEC_ORG_MEMBER t where t.STAFF_ID = #{staffid}
+	</delete>
+	
+	<delete id="deleteByOrgIdAndStaffId" parameterType="java.util.Map">
+	 delete from FBRP_SEC_ORG_MEMBER t where t.ORG_ID = #{orgid} and t.STAFF_ID = #{staffid}
+	</delete>
+	
+	<delete id="deleteByOrgIdAndRelationType" parameterType="java.util.Map">
+	 delete from  FBRP_SEC_ORG_MEMBER t where t.ORG_ID = #{orgId} and t.RELATION_TYPE = #{relationType}
+	</delete>
+	
+	<select id="select" parameterType="java.util.Map" resultMap="vos.fbrpSecOrgVO">
+	 select * from FBRP_SEC_ORG t where t.PARENT_ID is null 
+	</select>
+	
+	<select id="select_id" parameterType="java.lang.String" resultMap="vos.fbrpSecOrgVO">
+	 select t1.* from FBRP_SEC_ORG t1 where id in (select t2.id from FBRP_SEC_ORG t2 where t2.PARENT_ID is null and t2.DEL_FLAG = #{delFlag})
+	</select>
+	
+	<select id="select_staffId" parameterType="java.lang.String" resultType="java.lang.String">
+	 select t.STAFF_ID from FBRP_SEC_ORG_MEMBER t where t.ORG_ID = #{orgid}
+	</select>
+	
+	<select id="select_orgAndCount1" parameterType="java.util.Map" resultMap="vos.fbrpSecOrgVO">
+	 select t1.*, (select count(*) from FBRP_SEC_ORG t2 where t2.PARENT_ID=t1.ID and t2.DEL_FLAG='n') as haveChildOrg
+	 from FBRP_SEC_ORG t1  where t1.PARENT_ID is null and t1.DEL_FLAG='n'
+	</select>
+	
+	<select id="select_orgAndCount2" parameterType="java.util.Map" resultMap="vos.fbrpSecOrgVO">
+	 select t1.*, (select count(*) from FBRP_SEC_ORG t2 where t2.PARENT_ID=t1.ID and t2.DEL_FLAG='n') as haveChildOrg
+	 from FBRP_SEC_ORG t1  where t1.PARENT_ID = #{orgId} and t1.DEL_FLAG='n'
+	</select>
+		
+</mapper>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="vos">
+  <resultMap type="com.qm.frame.security.staff.vo.FbrpSecStaff" id="fbrpSecStaffVO">
+	<result property="id" column="ID" />
+	<result property="code" column="CODE" />
+	<result property="name" column="NAME" />
+	<result property="status" column="STATUS" />
+	<result property="idNumber" column="ID_NUMBER" />
+	<result property="birthday" column="BIRTHDAY" />
+	<result property="sex" column="SEX" />
+	<result property="tel" column="TEL" />
+	<result property="mobileTel" column="MOBILE_TEL" />
+	<result property="email" column="EMAIL" />
+	<result property="address" column="ADDRESS" />
+	<result property="loginid" column="LOGIN_ID" />
+	<result property="passwd" column="PASSWD" />
+	<result property="failedLoginCount" column="FAILED_LOGIN_COUNT" />
+	<result property="maxFailedLoginCount" column="MAX_FAILED_LOGIN_COUNT" />
+	<result property="passwdExpireDays" column="PASSWD_EXPIRE_DAYS" />
+	<result property="accountExpireTime" column="ACCOUNT_EXPIRE_TIME" />
+	<result property="loginIp" column="LAST_LOGIN_IP" />
+	<result property="loginTime" column="LAST_LOGIN_TIME" />
+	<result property="lastLoginIp" column="LOGIN_IP" />
+	<result property="lastLoginTime" column="LOGIN_TIME" />
+	<result property="onlineCount" column="ONLINE_COUNT" />
+	<result property="ext1" column="EXT1" />
+	<result property="ext2" column="EXT2" />
+	<result property="ext3" column="EXT3" />
+	<result property="ext4" column="EXT4" />
+	<result property="ext5" column="EXT5" />
+	<result property="ext6" column="EXT6" />
+	<result property="ext7" column="EXT7" />
+	<result property="ext8" column="EXT8" />
+	<result property="ext9" column="EXT9" />
+	<result property="creatorId" column="CREATOR_ID" />
+	<result property="createdTime" column="CREATED_TIME" />
+	<result property="lastModifierId" column="LAST_MODIFIER_ID" />
+	<result property="lastModifiedTime" column="LAST_MODIFIED_TIME" />
+	<result property="delFlag" column="DEL_FLAG" />
+	<result property="orgCode" column="ORGCODE" />
+	<result property="cjrDm" column="CJR_DM" />
+ </resultMap>
+ 
+ <resultMap type="com.qm.frame.security.vo.FbrpSecAuthRdbms" id="fbrpSecAuthRdbmsVO">
+    <result property="id" column="ID" />
+	<result property="srvName" column="SRV_NAME" />
+	<result property="dsId" column="DS_ID" />
+	<result property="userTable" column="USER_TABLE" />
+	<result property="userName" column="USER_NAME" />
+	<result property="userPassword" column="USER_PASSWORD" />
+	<result property="validUserSql" column="VALID_USER_SQL" />
+	<result property="staffMappingData" column="STAFF_MAPPING_DATA" />
+	<result property="roleMappingData" column="ROLE_MAPPING_DATA" />
+	<result property="relationMappingData" column="RELATION_MAPPING_DATA" />
+	<result property="ROLE_TABLE" column="ROLE_TABLE" />
+	<result property="RELATION_TABLE" column="RELATION_TABLE" />
+	<result property="SYN_FLAG" column="SYN_FLAG" />
+	<result property="ENCODER" column="ENCODER" />
+	<result property="ENCODER_TYPE" column="ENCODER_TYPE" />
+	<result property="ENCODER_SALT" column="ENCODER_SALT" />
+	<result property="ext1" column="EXT1" />
+	<result property="ext2" column="EXT2" />
+	<result property="ext3" column="EXT3" />
+</resultMap>
+  
+ <resultMap type="com.qm.frame.security.org.vo.FbrpSecOrg" id="fbrpSecOrgVO">
+	<result property="id" column="ID" />
+	<result property="code" column="CODE" />
+	<result property="name" column="NAME" />
+	<result property="parentId" column="PARENT_ID" />
+	<result property="orgLevel" column="ORG_LEVEL" />
+	<result property="orgType" column="ORG_TYPE" />
+	<result property="status" column="STATUS" />
+	<result property="remark" column="REMARK" />
+	<result property="ext1" column="EXT1" />
+	<result property="ext2" column="EXT2" />
+	<result property="ext3" column="EXT3" />
+	<result property="ext4" column="EXT4" />
+	<result property="ext5" column="EXT5" />
+	<result property="creatorId" column="CREATOR_ID" />
+	<result property="createdTime" column="CREATED_TIME" />
+	<result property="lastModifierId" column="LAST_MODIFIER_ID" />
+	<result property="lastModifiedTime" column="LAST_MODIFIED_TIME" />
+	<result property="delFlag" column="DEL_FLAG" />	
+ </resultMap>
+ 
+ <resultMap type="com.qm.frame.security.acl.vo.FbrpSecAclObjectIdentity" id="fbrpSecAclObjectIdentityVO">
+    <result property="id" column="ID"/>
+    <result property="objectIdIdentity" column="OBJECT_ID_IDENTITY"/>
+    <result property="objectIdClass" column="OBJECT_ID_CLASS"/>
+    <result property="parentObject" column="PARENT_OBJECT"/>
+    <result property="ownerSid" column="OWNER_SID"/>
+    <result property="entriesInheriting" column="ENTRIES_INHERITING"/>
+    <result property="ext1" column="EXT1"/>
+    <result property="ext2" column="EXT2"/>
+    <result property="ext3" column="EXT3"/>
+    <association property="fbrpSecAclClassVO" column="objectIdClass" resultMap="vos.fbrpSecAclClassVO"/>
+    <association property="fbrpSecAclSidVO" resultMap="vos.fbrpSecAclSidVO" column="ownerSid"/>
+ </resultMap>
+ 
+  <resultMap type="com.qm.frame.security.acl.vo.FbrpSecAclClass" id="fbrpSecAclClassVO">
+     <id property="id" column="ID"/>
+     <result property="className" column="CLASS"/>
+     <result property="ext1" column="EXT1"/>
+     <result property="ext2" column="EXT2"/>
+     <result property="ext3" column="EXT3"/>
+  </resultMap>
+  
+  <resultMap type="com.qm.frame.security.acl.vo.FbrpSecAclSid" id="fbrpSecAclSidVO">
+     <id property="id" column="ID"/>
+     <result property="principal" column="PRINCIPAL"/>
+     <result property="sid" column="SID"/>
+     <result property="ext1" column="EXT1"/>
+     <result property="ext2" column="EXT2"/>
+     <result property="ext3" column="EXT3"/>
+  </resultMap>
+  
+  <resultMap type="com.qm.frame.security.acl.vo.FbrpSecAclSid" id="fbrpSecAclSidVOx">
+     <id property="id" column="ID"/>
+     <result property="principal" column="PRINCIPAL"/>
+     <result property="sid" column="SIDx"/>
+     <result property="ext1" column="EXT1"/>
+     <result property="ext2" column="EXT2"/>
+     <result property="ext3" column="EXT3"/>
+  </resultMap>
+ 
+  <resultMap type="com.qm.frame.security.acl.vo.FbrpSecAclEntry" id="fbrpSecAclEntryVO">
+   <result property="id" column="ID"/>
+   <result property="aclObjectIdentity" column="ACL_OBJECT_IDENTITY"/>
+   <result property="aceOrder" column="ACE_ORDER"/>
+   <result property="sid" column="SID"/>
+   <result property="mask" column="MASK"/>
+   <result property="granting" column="GRANTING"/>
+   <result property="auditSuccess" column="AUDIT_SUCCESS"/>
+   <result property="auditFailure" column="AUDIT_FAILURE"/>
+   <result property="ext1" column="EXT1"/>
+   <result property="ext2" column="EXT2"/>
+   <result property="ext3" column="EXT3"/>
+   <association property="sidVO" column="SID" resultMap="vos.fbrpSecAclSidVOx"/>
+  </resultMap>
+
+  <resultMap type="com.qm.frame.security.role.vo.FbrpSecRole" id="fbrpSecRoleVO">
+	<result property="code" column="CODE" />
+	<result property="name" column="NAME" />
+	<result property="remark" column="REMARK" />
+	<result property="cjrDm" column="CJR_DM" />
+	<result property="sjssjgDm" column="SJSSJG_DM" />
+  </resultMap>
+  
+  <resultMap type="com.qm.frame.security.staff.vo.StaffOAVO" id="staffOAVO">
+  	<result property="id" column="id"/>
+  	<result property="logID" column="logid"/>
+  	<result property="logTime" column="logtime"/>
+  	<result property="actionType" column="actiontype"/>
+  	<result property="userID" column="userid"/>
+  	<result property="accountName" column="accountname"/>
+  	<result property="username" column="username"/>
+  	<result property="fullName" column="fullname"/>
+  	<result property="email" column="email"/>
+  	<result property="orgID" column="orgid"/>
+  	<result property="orgCode" column="orgcode"/>
+  	<result property="dutyID" column="dutyid"/>
+  	<result property="dutyCode" column="dutycode"/>
+  	<result property="leaderID" column="leaderid"/>
+  	<result property="idNO" column="idno"/>
+  	<result property="birthday" column="birthday"/>
+  	<result property="mailSize" column="mailsize"/>
+  	<result property="serviceLevel" column="servicelevel"/>
+  	<result property="order" column="ord"/>
+  	<result property="status" column="status"/>
+  	<result property="create" column="createdate"/>
+  	<result property="createrID" column="createrid"/>
+  	<result property="createrCode" column="creatercode"/>
+  	<result property="freezetime" column="freezetime"/>
+  	<result property="pwdUpdate" column="pwdupdate"/>
+  	<result property="lastLogin" column="lastlogin"/>
+  	<result property="lastModify" column="lastmodify"/>
+  	<result property="description" column="description"/>
+  	<result property="officephone" column="officephone"/>
+  	<result property="mobile" column="mobile"/>
+  	<result property="userLevel" column="userlevel"/>
+  	<result property="sex" column="sex"/>
+  	<result property="internalCode" column="internalcode"/>
+  	<result property="fromOrgId" column="fromorgId"/>
+  	<result property="fromOrgCode" column="fromorgcode"/>
+  	<result property="orgName" column="orgname"/>
+  	<result property="fromOrgName" column="fromorgname"/>
+  </resultMap>
+  
+  <resultMap type="com.qm.frame.security.staff.vo.GyUuvOrgVO" id="gyUuvOrg">
+  	<result property="id" column="id"/>
+  	<result property="orgCode" column="orgcode"/>
+  	<result property="orgName" column="orgname"/>
+  	<result property="shortName" column="shortname"/>
+  	<result property="parentCode" column="parentcode"/>
+  	<result property="swbmBj" column="swbm_bj"/>
+  </resultMap>
+  
+</mapper>

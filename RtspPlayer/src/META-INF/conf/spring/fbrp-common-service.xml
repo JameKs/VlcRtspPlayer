@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<bean id="fbrp_common_auditLogService"
+		class="com.qm.frame.common.auditlog.service.impl.AuditLogServiceImpl"
+		parent="fbrp_infrastructure_defaultService" lazy-init="true"/>
+		
+	<bean id="fbrp_common_codeValueService"
+		class="com.qm.frame.common.codeinfo.service.impl.CodeValueServiceImpl"
+		parent="fbrp_infrastructure_defaultService" init-method="init" lazy-init="true">
+		<property name="dataCacheService" ref="${defaultDataCacheService}"/>
+		<property name="codeTypeService" ref="fbrp_common_codeTypeService" />
+	</bean>
+
+	<bean id="fbrp_common_codeTypeService"
+		class="com.qm.frame.common.codeinfo.service.impl.CodeTypeServiceImpl"
+		parent="fbrp_infrastructure_defaultService" lazy-init="true">
+		<property name="dataCacheService" ref="${defaultDataCacheService}"/>
+	</bean>
+
+	<bean id="fbrp_common_cacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" lazy-init="true"/>
+
+	<bean id="fbrp_common_dataCacheBackend"
+		class="org.springframework.cache.ehcache.EhCacheFactoryBean" lazy-init="true">
+		<property name="cacheManager" ref="fbrp_common_cacheManager" />
+		<property name="cacheName" value="dataCache" />
+		<property name="diskExpiryThreadIntervalSeconds" value="86400" />
+		<property name="diskPersistent" value="false" />
+		<property name="eternal" value="true" />
+		<property name="maxElementsInMemory" value="10000" />
+		<property name="overflowToDisk" value="true" />
+	</bean>
+
+	<bean id="fbrp_common_dataCacheService" class="com.qm.frame.common.cache.service.impl.DataCacheServiceImpl" 
+		lazy-init="true" primary="true">
+		<property name="cache" ref="fbrp_common_dataCacheBackend"/>
+	</bean>
+	
+	<bean id="fbrp_common_nullDataCacheService" 
+		class="com.qm.frame.common.cache.service.impl.NullDataCacheServiceImpl" lazy-init="true"/>
+
+</beans>

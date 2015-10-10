@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE mapper
+	    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+	    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+	    
+	    
+<mapper namespace="com.rtsp.bjgl.dao.impl.BjglDaoImpl">
+
+	<resultMap type="Bj" id="bjMapper">
+		<result column="ID" property="id" />
+		<result column="RWLX_DM" property="rwlxDm" />
+		<result column="KSSJ" property="kssj" />
+		<result column="JSSJ" property="jssj" />
+		<result column="QJYY" property="qjyy" />
+		<result column="RW_ID" property="rwId" />
+		<result column="USER_ID" property="userId" />
+		
+		<result column="CJR" property="cjr" />
+		<result column="CJ_SJ" property="cjSj" />
+		<result column="XGR" property="xgr" />
+		<result column="XG_SJ" property="xgSj" />
+		
+		<result column="NAME_" property="name" />
+		<result column="PROC_DEF_ID_" property="procDefId" />
+		<result column="OWNER_" property="owner" />
+		<result column="ASSIGNEE_" property="assignee" />
+		<result column="PRIORITY_" property="priority" />
+		<result column="CREATE_TIME_" property="createTime" />
+		<result column="DUE_DATE_" property="dueDate" />
+	
+	</resultMap>
+	
+	<insert id="insert" parameterType="Bj">
+		<selectKey resultType="String" keyProperty = "id" order="BEFORE">
+			select SYS_GUID() FROM DUAL
+		</selectKey>
+        insert into T_RTSP_BJ(id, kssj, jssj, qjyy, rwlx_dm, USER_ID, cjr)
+        values(#{id}, #{kssj}, #{jssj}, #{qjyy}, #{rwlxDm}, #{userId}, #{cjr})
+    </insert>
+    
+    <update id="update" parameterType="Bj">
+        update T_RTSP_BJ set xgr = #{xgr}, xg_sj =sysdate,
+        	kssj = #{kssj}, jssj = #{jssj}, qjyy = #{qjyy},
+        	rw_id = #{rwId}, rwlx_dm = #{rwlxDm} 
+        where ID = #{id}
+    </update>
+    
+    <select id="findById" parameterType="string" resultMap="bjMapper">
+        select * from T_RTSP_BJ T WHERE T.ID = #{id}
+    </select>
+    
+    <select id="findList" parameterType="Bj" resultMap="bjMapper">
+        select * from T_RTSP_BJ T WHERE T.ID = #{id}
+    </select>
+    
+    <select id="findListPage" parameterType="Bj" resultMap="bjMapper">
+        select * from T_RTSP_BJ T WHERE T.ID = #{id}
+    </select>
+    
+    <select id="findListCount" parameterType="Bj" resultType="int">
+        select count(1) from T_RTSP_BJ T WHERE T.ID = #{id}
+    </select>
+    
+</mapper>

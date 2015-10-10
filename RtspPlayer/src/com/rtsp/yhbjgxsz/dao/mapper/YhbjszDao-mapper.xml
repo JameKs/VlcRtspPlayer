@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE mapper
+	    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+	    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.rtsp.yhbjgxsz.dao.impl.YhbjszDaoImpl">
+	<resultMap type="YhBjVo" id="yhBjVoMapper">
+		<result column="ID" property="id" />
+		<result column="RWLX_DM" property="rwlxDm" />
+		<result column="KSSJ" property="kssj" />
+		<result column="JSSJ" property="jssj" />
+		<result column="QJYY" property="qjyy" />
+		<result column="RW_ID" property="rwId" />
+		<result column="USER_ID" property="userId" />
+		
+		<result column="CJR" property="cjr" />
+		<result column="CJ_SJ" property="cjSj" />
+		<result column="XGR" property="xgr" />
+		<result column="XG_SJ" property="xgSj" />
+		
+		<result column="NAME_" property="name" />
+		<result column="PROC_DEF_ID_" property="procDefId" />
+		<result column="OWNER_" property="owner" />
+		<result column="ASSIGNEE_" property="assignee" />
+		<result column="PRIORITY_" property="priority" />
+		<result column="CREATE_TIME_" property="createTime" />
+		<result column="DUE_DATE_" property="dueDate" />
+	
+	</resultMap>
+	
+	<insert id="insert" parameterType="YhBjVo">
+		<selectKey resultType="String" keyProperty = "id" order="BEFORE">
+			select SYS_GUID() FROM DUAL
+		</selectKey>
+        insert into T_RTSP_USER_BJ(id, kssj, jssj, qjyy, rwlx_dm, USER_ID, cjr)
+        values(#{id}, #{kssj}, #{jssj}, #{qjyy}, #{rwlxDm}, #{userId}, #{cjr})
+    </insert>
+    
+    <insert id="deleteById" parameterType="Sxt">
+		delete from T_RTSP_USER_BJ where id = #{id}
+    </insert>
+    
+    <insert id="deleteByUserId" parameterType="Sxt">
+		delete from T_RTSP_USER_BJ where user_id = #{userId}
+    </insert>
+    
+    <insert id="deleteByUserIdAndBjId" parameterType="Sxt">
+		delete from T_RTSP_USER_BJ where user_id = #{userId} and bj_id = #{bjId}
+    </insert>
+    
+    <update id="update" parameterType="YhBjVo">
+        update T_RTSP_USER_BJ set xgr = #{xgr}, xg_sj =sysdate,
+        	kssj = #{kssj}, jssj = #{jssj}, qjyy = #{qjyy},
+        	rw_id = #{rwId}, rwlx_dm = #{rwlxDm} 
+        where ID = #{id}
+    </update>
+    
+    <select id="findById" parameterType="string" resultMap="yhBjVoMapper">
+        select * from T_RTSP_USER_BJ T WHERE T.ID = #{id}
+    </select>
+    
+    <select id="findList" parameterType="YhBjVo" resultMap="yhBjVoMapper">
+        select * from T_RTSP_USER_BJ T WHERE T.ID = #{id}
+    </select>
+    
+    <select id="findListPage" parameterType="YhBjVo" resultMap="yhBjVoMapper">
+        select * from T_RTSP_USER_BJ T WHERE T.ID = #{id}
+    </select>
+    
+    <select id="findListCount" parameterType="YhBjVo" resultType="int">
+        select count(1) from T_RTSP_USER_BJ T WHERE T.ID = #{id}
+    </select>
+    
+</mapper>

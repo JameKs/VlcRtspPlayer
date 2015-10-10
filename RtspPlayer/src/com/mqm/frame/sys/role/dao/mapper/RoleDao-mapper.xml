@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE mapper
+	    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+	    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.mqm.frame.sys.role.dao.impl.RoleDaoImpl">
+	<resultMap id="roleMapper" type="Role" >
+		<result column="ID" property="id" />
+		<result column="CODE" property="code" />
+		<result column="NAME" property="name" />
+		<result column="BZ" property="bz" />
+		<result column="STATUS" property="status" />
+		<result column="CJR" property="cjr" />
+		<result column="CJ_SJ" property="cjSj" />
+		<result column="XGR" property="xgr" />
+		<result column="XG_SJ" property="xgSj" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="Role">
+		insert into T_MQM_ROLE (CODE , NAME, BZ, CJR)
+		values (#{code}, #{name}, #{bz}, #{cjr})
+	</insert>
+	
+	<delete id="deleteById" parameterType="string">
+		delete from T_MQM_ROLE where id = #{id}
+	</delete>
+	
+	<update id="update" parameterType="Role">
+		update T_MQM_ROLE set xgr = #{xgr},XG_SJ = sysdate,
+			CODE=#{code},NAME=#{name},STATUS = #{status},
+			BZ=#{bz} 
+		where id=#{id}
+	</update>
+	
+	<select id="findById" parameterType="string" resultMap="roleMapper">
+		SELECT * FROM T_MQM_ROLE where id=#{id}
+	</select>
+	
+	<select id="findList" parameterType="Role" resultMap="roleMapper">
+		SELECT id, code, name, bz, status, cjr, to_char(cj_sj,'yyyy-mm-dd hh24:mi:ss') cj_sj, xgr, xg_sj
+		FROM T_MQM_ROLE
+		<where>
+			<if test="code != null and code != ''">
+				and code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findListPage" parameterType="Role" resultMap="roleMapper">
+		SELECT id, code, name, bz, status, cjr, to_char(cj_sj,'yyyy-mm-dd hh24:mi:ss') cj_sj, xgr, xg_sj
+		FROM T_MQM_ROLE
+		<where>
+			<if test="code != null and code != ''">
+				and code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findListCount" parameterType="Role" resultType="int">
+		SELECT count(1) FROM T_MQM_ROLE
+		<where>
+			<if test="code != null and code != ''">
+				and code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findAll" parameterType="string" resultMap="roleMapper">
+		SELECT * FROM T_MQM_ROLE
+	</select>
+	
+	<select id="findByUserLoginId" parameterType="string" resultMap="roleMapper">
+		SELECT R.* 
+			FROM T_MQM_USER_ROLE GX,T_MQM_ROLE R,T_MQM_USER U
+			WHERE R.ID = GX.ROLE_ID
+			AND U.ID = GX.USER_ID
+			AND U.LOGIN_ID = #{loginId}
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qm.frame.security.acl.service.impl.AclServiceImpl">
+  
+  <select id="select_id" resultType="java.lang.String" parameterType="java.util.Map">
+    SELECT t1.id FROM fbrp_sec_acl_object_identity t1, fbrp_sec_acl_class t2 WHERE t1.object_id_class = t2.id 
+    AND t1.object_id_identity = #{className} AND t2.class = #{objectIdIdentity}
+  </select>
+  
+  <select id="select_children" resultType="map" parameterType="java.lang.String">
+    SELECT t1.object_id_identity,t2.class FROM fbrp_sec_acl_object_identity t1, fbrp_sec_acl_class t2 
+    WHERE t1.object_id_class = t2.id AND t1.parent_object = #{parentid}
+  </select>
+  
+</mapper>

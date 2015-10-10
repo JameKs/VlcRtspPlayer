@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+	
+	<definition name="public/frame" template="/jsp/public/layout/empty.jsp">
+		<put-attribute name="title" value="Foresee" />
+		<put-attribute name="content" value="/jsp/frame/frame.jsp" />
+	</definition>
+	
+	<definition name="common" template="/jsp/public/layout/common.jsp">
+		<put-attribute name="title" value="Foresee" />
+		<put-attribute name="content" value="" />
+	</definition>
+	
+	<definition name="commonhome" template="/jsp/public/layout/commonhome.jsp">
+		<put-attribute name="title" value="Foresee" />
+		<put-attribute name="content" value="" />
+	</definition>
+
+	<definition name="empty"  template="/jsp/public/layout/empty.jsp">
+		<put-attribute name="content" value="" />
+	</definition>
+		
+	<definition name="header" template="/jsp/public/layout/empty.jsp">
+		<put-attribute name="content" value="/jsp/frame/header.jsp" />
+	</definition>
+
+	<definition name="left" extends="empty">
+		<put-attribute name="content" value="/jsp/frame/left.jsp" />
+	</definition>
+		
+	<definition name="processStartLayout" template="/jsp/public/layout/processStartLayout.jsp">
+		<put-attribute name="title" value="Foresee" />
+		<put-attribute name="toolbar" value="/jsp/public/layout/processTbar.jsp" />
+		<put-attribute name="content" value="" />
+	</definition>
+	
+	<definition name="printLayout"   template="/jsp/public/layout/printLayout.jsp">
+		<put-attribute name="title" value="Foresee" />
+		<put-attribute name="content" value="" />
+	</definition>
+	
+	<definition name="errorMassagePage" extends="empty">
+		<put-attribute name="title" value="Foresee" />
+		<put-attribute name="content" value="/jsp/error.jsp" />
+	</definition>
+	
+	<definition name="noneRolePage" extends="common">
+		<put-attribute name="title" value="Foresee" />
+		<put-attribute name="content" value="/jsp/fbrp/none_role.jsp" />
+	</definition>
+	
+	<definition name="help" extends="empty">
+		<put-attribute name="title" value="Foresee" />
+		<put-attribute name="content" value="/jsp/public/help.jsp" />
+	</definition>
+	
+	<definition name="ztree_common" template="/jsp/public/layout/ztree_common.jsp">
+		<put-attribute name="title" value="Foresee" />
+		<put-attribute name="content" value="" />
+	</definition>
+	
+</tiles-definitions>

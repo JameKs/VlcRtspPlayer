@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<bean id="fbrp_infrastructure_propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:fbrp.properties</value>
+				<value>classpath*:META-INF/conf/properties/*.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="fbrp_infrastructure_fbrpConfigInfo" 
+		class="com.mqm.frame.infrastructure.FbrpConfigInfo">
+		<property name="customPageSize" value="[10],20,50,100,200"/>
+	</bean>
+	
+	<bean id="messageSourceProxy" class="com.mqm.frame.infrastructure.messages.MessageResources">
+		<property name="baseNames">
+		<list>
+			<value>classpath*:META-INF/conf/messages/*.properties</value>
+		</list>
+		</property>
+	</bean>
+
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+		<list>
+			<value>classpath*:META-INF/conf/messages/*.properties</value>
+		</list>
+		</property>
+	</bean>
+
+	<bean id="fbrp_infrastructure_auditLogger" 
+		class="com.mqm.frame.infrastructure.auditlog.service.NullAuditLoggerImpl" lazy-init="true"/>
+
+	<bean id="fbrp_infrastructure_defaultService"
+		class="com.mqm.frame.infrastructure.service.impl.DefaultServiceImpl">
+		<property name="serverTime" ref="fbrp_infrastructure_serverTime" />
+		<property name="keyGen" ref="fbrp_infrastructure_keyGen" />
+		<property name="dataSource" ref="${defaultDs}"/>
+		<property name="simpleJdbcTemplate" ref="fbrp_infrastructure_simpleJdbcTemplate" />
+		<property name="sqlSessionTemplate" ref="fbrp_infrastructure_sqlSessionTemplate" />
+		<property name="auditLogger" ref="${audit.logger}" />
+		<property name="lobHandler" ref="${jdbc.lobHandler}" />
+		<property name="productionFlag" value="${fbrp.productionFlag}"/>
+	</bean>
+
+	<bean id="fbrp_infrastructure_jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="${defaultDs}"/>
+		<property name="fetchSize" value="${jdbc.fetchSize}"/>
+	</bean>
+
+	<bean id="fbrp_infrastructure_simpleJdbcTemplate" 
+		class="org.springframework.jdbc.core.simple.SimpleJdbcTemplate">
+		<constructor-arg ref="fbrp_infrastructure_jdbcTemplate"/>
+	</bean>
+	
+	<bean id="fbrp_infrastructure_sqlSessionFactoryBean" class="com.mqm.frame.infrastructure.persistence.factory.FbrpSqlSessionFactoryBean">
+		<property name="configLocation">
+			<value>classpath:/META-INF/conf/mybatis/${mybatis.config.file}</value>
+		</property>
+		<property name="mapperLocations">
+			<value>classpath*:/META-INF/conf/mybatis/**/*-mapper.xml</value>
+		</property>
+		<property name="dataSource" ref="${defaultDs}" />
+	</bean>
+	
+	<bean id="fbrp_infrastructure_sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="fbrp_infrastructure_sqlSessionFactoryBean"/>
+	</bean>
+	
+	<bean id="fbrp_infrastructure_serverTime"
+		class="com.mqm.frame.infrastructure.service.impl.ServerTimeImpl">
+	</bean>
+
+	<bean id="fbrp_infrastructure_keyGen"
+		class="com.mqm.frame.infrastructure.service.impl.KeyGenImpl">
+	</bean>
+
+	<bean id="fbrp_infrastructure_threadPoolTaskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="${threadpool.corePoolSize}" />
+		<property name="keepAliveSeconds" value="${threadpool.keepAliveSeconds}" />
+		<property name="maxPoolSize" value="${threadpool.maxPoolSize}" />
+		<property name="queueCapacity" value="${threadpool.queueCapacity}" />
+	</bean>
+
+	<bean id="fbrp_infrastructure_ajaxResourceRegister" class="com.mqm.frame.infrastructure.web.AjaxResourceRegister">
+		<property name="map">
+			<map>
+				<entry key="/portal/loadLayouts" value="portalLayoutAction/loadLayouts" />
+				<entry key="/portal/loadMenus" value="portalLayoutAction/loadMenus" />
+				<entry key="/portal/loadReports" value="portalLayoutAction/loadReports" />
+				<entry key="/portal/createLayout" value="portalLayoutAction/createLayout" />
+				<entry key="/portal/updateLayout" value="portalLayoutAction/updateLayout" />
+				<entry key="/portal/deleteLayout" value="portalLayoutAction/deleteLayout" />
+				<entry key="/portal/createPage" value="portalPageAction/createPage" />
+				<entry key="/portal/getPage" value="portalPageAction/getPage" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="fbrp_infrastructure_sessionContextHolder"
+		class="com.mqm.frame.infrastructure.util.ContextHolder"
+		scope="session" />
+
+	<bean id="fbrp_infrastructure_requestContextHolder"
+		class="com.mqm.frame.infrastructure.util.ContextHolder"
+		scope="request" />
+
+	<bean id="fbrp_infrastructure_applicationContextHolder"
+		class="com.mqm.frame.infrastructure.util.ContextHolder" />
+
+	<bean id="fbrp_infrastructure_dataSourceDBCP" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" lazy-init="true" primary="true">
+		<property name="driverClassName">
+			<value>${jdbc.driverClassName}</value>
+		</property>
+		<property name="url">
+			<value>${jdbc.url}</value>
+		</property>
+		<property name="username">
+			<value>${jdbc.username}</value>
+		</property>
+		<property name="password">
+			<value>${jdbc.password}</value>
+		</property>
+		<property name="validationQuery">
+			<value>${jdbc.validationQuery}</value>
+		</property>
+		<property name="initialSize" value="${jdbc.initialSize}"/>
+		<property name="maxActive" value="${jdbc.maxActive}"/>
+		<property name="minIdle" value="${jdbc.minIdle}"/>
+		<property name="maxIdle" value="${jdbc.maxIdle}"/>
+	</bean>
+	
+	
+	<bean id="fbrp_infrastructure_dataSourceJNDI" class="org.springframework.jndi.JndiObjectFactoryBean"
+		lazy-init="true">
+		<property name="jndiName">
+			<value>${dataSource.jndiName}</value>
+		</property>
+		<property name="lookupOnStartup" value="false" />
+		<property name="proxyInterface" value="javax.sql.DataSource" />
+		<property name="resourceRef" value="false" />
+	</bean>
+
+	<bean id="fbrp_infrastructure_fbrpDataSource" class="com.mqm.frame.infrastructure.dao.FbrpDataSource">
+		<property name="dataSource">
+			<ref bean="${defaultDs}" />
+		</property>
+	</bean>
+
+	<bean id="fbrp_infrastructure_oracleLobHandler" class="org.springframework.jdbc.support.lob.OracleLobHandler"
+		lazy-init="true">
+		<property name="nativeJdbcExtractor" ref="${jdbc.nativeJdbcExtractor}" />
+	</bean>
+
+	<bean id="fbrp_infrastructure_defaultLobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler"
+		lazy-init="true" />
+
+	<bean id="fbrp_infrastructure_simpleNativeJdbcExtractor"
+		class="org.springframework.jdbc.support.nativejdbc.SimpleNativeJdbcExtractor"
+		lazy-init="true" />
+
+	<bean id="fbrp_infrastructure_webLogicNativeJdbcExtractor"
+		class="org.springframework.jdbc.support.nativejdbc.WebLogicNativeJdbcExtractor"
+		lazy-init="true" />
+
+	<bean id="fbrp_infrastructure_webSphereNativeJdbcExtractor"
+		class="org.springframework.jdbc.support.nativejdbc.WebSphereNativeJdbcExtractor"
+		lazy-init="true" />
+
+	<bean id="fbrp_infrastructure_dataSourceTransactionManager" 
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager" lazy-init="true">
+		<property name="dataSource" ref="${defaultDs}"/>
+	</bean>
+
+	<tx:advice id="fbrp_infrastructure_txAdvice" transaction-manager="${transactionManager}">
+		<tx:attributes>
+			<tx:method name="get*" isolation="DEFAULT" propagation="REQUIRED"
+				read-only="true" />
+			<tx:method name="load*" isolation="DEFAULT" propagation="REQUIRED"
+				read-only="true" />
+			<tx:method name="loadUserByUsername" isolation="DEFAULT" read-only="false"
+				propagation="REQUIRED"/>
+			<tx:method name="list*" isolation="DEFAULT" propagation="REQUIRED"
+				read-only="true" />
+			<tx:method name="find*" isolation="DEFAULT" propagation="REQUIRED"
+				read-only="true" />
+			<tx:method name="select*" isolation="DEFAULT" propagation="REQUIRED"
+				read-only="true" />
+			<tx:method name="query*" isolation="DEFAULT" propagation="REQUIRED"
+				read-only="true" />
+			<tx:method name="criteria*" isolation="DEFAULT"
+				propagation="REQUIRED" read-only="true" />
+
+			<tx:method name="onSuccessfulAuthentication" read-only="false"/>
+			<tx:method name="onUnsuccessfulAuthentication" read-only="false"/>
+
+			<tx:method name="auditLog*" isolation="DEFAULT" read-only="false"
+				propagation="REQUIRES_NEW"/>
+
+			<tx:method name="synchro*" isolation="DEFAULT" read-only="false"
+				propagation="REQUIRED"/>
+			<tx:method name="init*" isolation="DEFAULT" read-only="false"
+				propagation="REQUIRED"/>
+			<tx:method name="insert*" isolation="DEFAULT" read-only="false"
+				propagation="REQUIRED"/>
+			<tx:method name="update*" isolation="DEFAULT" read-only="false"
+				propagation="REQUIRED"/>
+			<tx:method name="save*" isolation="DEFAULT" read-only="false"
+				propagation="REQUIRED"/>
+			<tx:method name="add*" isolation="DEFAULT" read-only="false"
+				propagation="REQUIRED"/>
+			<tx:method name="create*" isolation="DEFAULT" read-only="false"
+				propagation="REQUIRED"/>
+			<tx:method name="del*" isolation="DEFAULT" read-only="false"
+				propagation="REQUIRED"/>
+			<tx:method name="undel*" isolation="DEFAULT" read-only="false"
+				propagation="REQUIRED"/>
+			<tx:method name="remove*" isolation="DEFAULT" read-only="false"
+				propagation="REQUIRED"/>
+			<tx:method name="batch*" isolation="DEFAULT"
+				read-only="false" propagation="REQUIRED"/>
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="fbrp_infrastructure_serviceOperation"
+			expression="execution(* com.foresee..*Service.*(..))" />
+		<aop:advisor pointcut-ref="fbrp_infrastructure_serviceOperation" advice-ref="fbrp_infrastructure_txAdvice" />
+	</aop:config>
+	<bean id="fbrp_default_localValidator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+	
+	</bean>
+</beans>

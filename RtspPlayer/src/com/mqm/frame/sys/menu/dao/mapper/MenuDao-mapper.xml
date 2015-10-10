@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE mapper
+	    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+	    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.mqm.frame.sys.menu.dao.impl.MenuDaoImpl">
+	<resultMap id="menuMapper" type="MenuVO">
+		<result column="ID" property="id" />
+		<result column="CD_DM" property="cdDm" />
+		<result column="CN_NAME" property="cnName" />
+		<result column="EN_NAME" property="enName" />
+		<result column="URL" property="url" />
+		<result column="IMAGE_URL" property="imageUrl" />
+		<result column="P_ID" property="pId" />
+		<result column="SORT_NO" property="sortNo" />
+		<result column="LEAF" property="leaf" />
+		<result column="CJR" property="cjr" />
+		<result column="CJ_SJ" property="cjSj" />
+		<result column="XGR" property="xgr" />
+		<result column="XG_SJ" property="xgSj" />
+	</resultMap>
+	
+
+	<insert id="insert" parameterType="MenuVO">
+		insert into T_MQM_MENU
+		(CD_DM,CN_NAME, EN_NAME,URL,P_ID,LEAF,CJR,SORT_NO)
+		values (#{cdDm}, #{cnName}, #{enName}, #{url},
+		 #{pId}, #{leaf},#{cjr},#{sortNo})
+	</insert>
+
+	<delete id="delete" parameterType="string">
+		delete from T_MQM_MENU where id = #{id}
+	</delete>
+
+	<update id="update" parameterType="MenuVO">
+		update T_MQM_MENU set xgr = #{xgr} ,xg_sj = sysdate,
+			CN_NAME=#{cnName},EN_NAME=#{enName} ,
+			URL=#{url} ,SORT_NO=#{sortNo},LEAF=#{leaf}
+		where id = #{id}
+	</update>
+
+	<select id="findById" parameterType="string" resultMap="menuMapper">
+		SELECT * FROM T_MQM_MENU where id = #{id}
+	</select>
+
+	<select id="findAll" resultMap="menuMapper">
+		SELECT * FROM T_MQM_MENU 
+	</select>
+	
+	<select id="findMenuByUserId" parameterType="string"
+		resultMap="menuMapper">
+		select c.*
+		from T_MQM_MENU C, T_MQM_ROLE ROLE, T_MQM_USER_ROLE RR, T_MQM_ROLE_MENU rc
+		where rr.role_ID = role.ID
+			and role.ID = rc.role_ID
+			and C.ID = rc.CD_ID
+			and c.p_id != '0'
+			and rr.USER_ID = #{userId}
+			order by c.sort_no
+	</select>
+
+</mapper>

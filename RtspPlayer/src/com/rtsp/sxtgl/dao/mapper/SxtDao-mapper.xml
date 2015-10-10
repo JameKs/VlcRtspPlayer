@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE mapper
+	    PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+	    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.rtsp.sxtgl.vo.Sxt.ISxtglDao">
+	<resultMap type="Sxt" id="SxtMapper">
+		<result column="ID" property="id" />
+		<result column="URL" property="url" />
+		<result column="DESCRIPTION" property="description" />
+		
+		<result column="CJR" property="cjr" />
+		<result column="CJ_SJ" property="cjSj" />
+		<result column="XGR" property="xgr" />
+		<result column="XG_SJ" property="xgSj" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="Sxt">
+		<selectKey resultType="String" keyProperty = "id" order="BEFORE">
+			select SYS_GUID() FROM DUAL
+		</selectKey>
+        insert into T_RTSP_SXT(id, kssj, jssj, qjyy, rwlx_dm, USER_ID, cjr)
+        values(#{id}, #{kssj}, #{jssj}, #{qjyy}, #{rwlxDm}, #{userId}, #{cjr})
+    </insert>
+    
+    <insert id="deleteById" parameterType="Sxt">
+		delete from T_RTSP_SXT where id = #{id}
+    </insert>
+    
+    <update id="update" parameterType="Sxt">
+        update T_RTSP_SXT set xgr = #{xgr}, xg_sj =sysdate,
+        	kssj = #{kssj}, jssj = #{jssj}, qjyy = #{qjyy},
+        	rw_id = #{rwId}, rwlx_dm = #{rwlxDm} 
+        where ID = #{id}
+    </update>
+    
+    <select id="findById" parameterType="string" resultMap="SxtMapper">
+        select * from T_RTSP_SXT T WHERE T.ID = #{id}
+    </select>
+    
+    <select id="findList" parameterType="Sxt" resultMap="SxtMapper">
+        select * from T_RTSP_SXT T WHERE T.ID = #{id}
+    </select>
+    
+    <select id="findListPage" parameterType="Sxt" resultMap="SxtMapper">
+        select * from T_RTSP_SXT T WHERE T.ID = #{id}
+    </select>
+    
+    <select id="findListCount" parameterType="Sxt" resultType="int">
+        select count(1) from T_RTSP_SXT T WHERE T.ID = #{id}
+    </select>
+    
+</mapper>
