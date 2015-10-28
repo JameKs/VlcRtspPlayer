@@ -360,12 +360,12 @@
 		</dependency>
 		
 		<!-- slf4j start -->
-		<!--
+		
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.12</version>
-		</dependency> -->
+		</dependency>
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -413,6 +413,7 @@
 			<artifactId>json-lib</artifactId>
 			<version>2.4</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
